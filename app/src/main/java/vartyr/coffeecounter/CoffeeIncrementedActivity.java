@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.aerserv.sdk.AerServBanner;
 import com.aerserv.sdk.AerServConfig;
 import com.aerserv.sdk.AerServInterstitial;
 
@@ -18,6 +17,9 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
     // This view will provide an interstitial
     private AerServInterstitial interstitial;
 
+    private static final String LOG_TAG = "CoffeeCounter_SampleApp";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +29,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
 
-//        loadInterstitial();
+        loadInterstitial();
 
         String message = Integer.toString(intent.getIntExtra("COFFEE_COUNT", 0));
 
@@ -36,14 +38,16 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
         textView.setText(message);
     }
 
-//    public void loadInterstitial() {
-//        final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
-//                .setEventListener(listener)
-//                .setKeywords(keywords)
-//                .setDebug(true)
-//                .setVerbose(true);
-//        interstitial = new AerServInterstitial(config);
-//        interstitial.show();
-//    }
+    public void loadInterstitial() {
+
+        Log.d(LOG_TAG, "~~~ Loading Interstitial ");
+
+
+        final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
+                .setDebug(true)
+                .setVerbose(true);
+        interstitial = new AerServInterstitial(config);
+        interstitial.show();
+    }
 
 }

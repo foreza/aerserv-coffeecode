@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity  {
 
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     private static final String LOG_TAG = "CoffeeCounter_SampleApp";
-    public static final String DEFAULT_PLC = "380003";
+    public static final String DEFAULT_PLC = "380000";
     public static final String APP_ID = "380000";
     private List<String> keywords = Arrays.asList("keyword1", "keyword2");
 
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity  {
         updateCoffeeCountInView();
 
         // Load this banner on the page.
-        loadBanner();
+        // loadBanner();
 
     }
 
@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity  {
         final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
                 .setEventListener(listener)
                 .setRefreshInterval(10)
+                .setPrecache(true)
                 .setKeywords(keywords)
                 .setDebug(true)
                 .setVerbose(true);
@@ -159,5 +160,22 @@ public class MainActivity extends AppCompatActivity  {
         // Start the activity.
         startActivity(intent);
 
+
     }
+
+
+//    public void showInterstitialBanner() {
+//
+//        final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
+//        .setEventListener(listener)
+//                .setPrecache(true)
+//                .setKeywords(keywords)
+//                .setDebug(true)
+//                .setVerbose(true);
+//        interstitial = new AerServInterstitial(config);
+//        interstitial.show();
+//
+//
+//
+//    }
 }
