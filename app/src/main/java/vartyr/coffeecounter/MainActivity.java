@@ -22,15 +22,14 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity  {
 
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
-    private static final String LOG_TAG = "CoffeeCounter_SampleApp";
-    public static final String DEFAULT_PLC = "380000";
-    public static final String APP_ID = "380000";
-    private List<String> keywords = Arrays.asList("keyword1", "keyword2");
-
-
-    public static int COFFEE_COUNT = 0;
-
     private AerServBanner banner;
+
+    private String LOG_TAG;
+    public String DEFAULT_PLC;
+    public String APP_ID;
+    private List<String> keywords;
+    public int COFFEE_COUNT;
+
 
 
     // Set up a listener to listen to incoming events
@@ -54,17 +53,6 @@ public class MainActivity extends AppCompatActivity  {
                             }
                             break;
 
-                        // JC's custom events to see what fires
-                        case AD_CLICKED:
-                            msg = "[JC] AD WAS CLICKED!";  // Intended behavior - fire off something indicating we know the ad was clicked
-                            break;
-                        case AD_LOADED:
-                            msg = "[JC] AD WAS loaded!";  // Intended behavior - fire off something indicating we know the ad was clicked
-                            break;
-
-
-                        default:
-                            msg = event.toString() + " event fired with args: " + args.toString();
                     }
                     Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     Log.d(LOG_TAG, msg);
@@ -78,19 +66,31 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+
+        LOG_TAG = globalVariable.getLogTag();
+        DEFAULT_PLC = globalVariable.getDefaultPlc();
+        APP_ID = globalVariable.getAppId();
+        keywords = globalVariable.getKeywords();
+        COFFEE_COUNT = globalVariable.getCOFFEE_COUNT();
+
         // Log the SDK version
         TextView version = (TextView) findViewById(R.id.sdkVersion);
         version.setText("v" + UrlBuilder.VERSION);
 
-        Log.d(LOG_TAG, "Running SDK version: " + UrlBuilder.VERSION);
+        // Call the init function only once and toggle it to false after it has been called.
+        if (globalVariable.getHasInit()){
+            AerServSdk.init(this, globalVariable.getAppId() );
+            Log.d(globalVariable.getLogTag(), "Running init with site app ID: " + globalVariable.getAppId());
+            globalVariable.setInit();
+        }
+
+        Log.d(globalVariable.getLogTag(), "Running SDK version: " + UrlBuilder.VERSION);
 
 
-        // Call the init function
-        AerServSdk.init(this, APP_ID);
-        Log.d(LOG_TAG, "Running init with site app ID: " + APP_ID);
 
         // Update the view each time it is being created.
-        updateCoffeeCountInView();
+        // updateCoffeeCountInView(COFFEE_COUNT);
 
         // Load this banner on the page.
         // loadBanner();
@@ -119,9 +119,9 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
-    public void updateCoffeeCountInView() {
+    public void updateCoffeeCountInView(int counter) {
 
-        String message = Integer.toString(COFFEE_COUNT, 0);
+        String message = Integer.toString(counter, 0);
 
         Log.v("Updating counter: ", message);
 
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity  {
         EditText editText = (EditText) findViewById(R.id.editText);
 
         String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
+        // intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
 
     }
@@ -151,31 +151,30 @@ public class MainActivity extends AppCompatActivity  {
 
         Intent intent = new Intent(this, CoffeeIncrementedActivity.class);
 
-        // Increment the coffee counter in this activity ;
-        COFFEE_COUNT++;
-
         intent.putExtra("COFFEE_COUNT", COFFEE_COUNT);
-        intent.putExtra("PLC_ID", DEFAULT_PLC );
+        intent.putExtra("PLC_ID", DEFAULT_PLC);
 
         // Start the activity.
-        startActivity(intent);
-
+        startActivityForResult(intent,1);
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-//    public void showInterstitialBanner() {
-//
-//        final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
-//        .setEventListener(listener)
-//                .setPrecache(true)
-//                .setKeywords(keywords)
-//                .setDebug(true)
-//                .setVerbose(true);
-//        interstitial = new AerServInterstitial(config);
-//        interstitial.show();
-//
-//
-//
-//    }
+        Log.d(LOG_TAG, " On activity result");
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                int amt = data.getIntExtra("INCREMENT_AMT", 0);
+                Log.d(LOG_TAG, "~~~ Result from Interstitial View ~~~ " + Integer.toString(amt));
+//                globalVariable.setCOFFEE_COUNT(globalVariable.getCOFFEE_COUNT() + amt);
+                Log.d(LOG_TAG, " UPDATED TOTAL =" + COFFEE_COUNT);
+
+            }
+        }
+    }
+
+
 }
