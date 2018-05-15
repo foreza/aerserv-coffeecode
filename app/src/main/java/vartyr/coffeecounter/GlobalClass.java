@@ -11,23 +11,24 @@ import java.util.List;
 
 public class GlobalClass extends Application{
 
-    private static final String LOG_TAG = "CoffeeCounter_SampleApp";
-    public static String DEFAULT_PLC = "380004";
-    public static final String APP_ID = "380000";
-    private List<String> keywords = Arrays.asList("keyword1", "keyword2");
-    public int COFFEE_COUNT = 0;
-    public boolean hasInit = false;
-
+    // Define your global variables here
+    private static final String LOG_TAG = "CoffeeCounter";
+    private static String DEFAULT_AD_PLC = "380000";
+    private static String DEFAULT_INTERSTITIAL_PLC = "380004";
+    private static final String APP_ID = "380000";
+    private List<String> keywords = Arrays.asList("coffee", "beans");
+    private int COFFEE_COUNT = 0;
+    private boolean hasInit = false;
 
 
     // Temp getter for PLC
-    public String getDefaultPlc(){
-        return DEFAULT_PLC;
-    }
-
-    // Temp setter for PLC
-    public void setDefaultPlc(String aPLC){
-        DEFAULT_PLC = aPLC;
+    public String getDefaultPlc(int i){
+        if (i == 0){
+            return DEFAULT_AD_PLC;
+        } else if (i == 1){
+            return DEFAULT_INTERSTITIAL_PLC;
+        }
+        return DEFAULT_AD_PLC;
     }
 
     // Getter for App ID (must remain unchanged)

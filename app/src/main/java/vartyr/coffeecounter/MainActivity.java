@@ -21,16 +21,13 @@ import java.util.List;
 // Main Activity is the entry point into our application.
 public class MainActivity extends AppCompatActivity  {
 
-    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     private AerServBanner banner;
 
     private String LOG_TAG;
-    public String DEFAULT_PLC;
-    public String APP_ID;
+    private String DEFAULT_PLC;
+    private String APP_ID;
     private List<String> keywords;
-    public int COFFEE_COUNT;
-
-
+    private int COFFEE_COUNT;
 
     // Set up a listener to listen to incoming events
     protected AerServEventListener listener = new AerServEventListener(){
@@ -39,7 +36,7 @@ public class MainActivity extends AppCompatActivity  {
             MainActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    String msg = null;
+                    String msg = "";
                     switch (event) {
                         case AD_FAILED:
                             if (args.size() > 1) {
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity  {
                             break;
 
                     }
-                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     Log.d(LOG_TAG, msg);
                 }
             });
@@ -69,50 +66,44 @@ public class MainActivity extends AppCompatActivity  {
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
 
         LOG_TAG = globalVariable.getLogTag();
-        DEFAULT_PLC = globalVariable.getDefaultPlc();
+        DEFAULT_PLC = globalVariable.getDefaultPlc(0);
         APP_ID = globalVariable.getAppId();
         keywords = globalVariable.getKeywords();
         COFFEE_COUNT = globalVariable.getCOFFEE_COUNT();
 
-        // Log the SDK version
-        TextView version = (TextView) findViewById(R.id.sdkVersion);
-        version.setText("v" + UrlBuilder.VERSION);
 
         // Call the init function only once and toggle it to false after it has been called.
-        if (globalVariable.getHasInit()){
+        // Use this to print the debug state of the application and any other useful pieces of information
+        if (!globalVariable.getHasInit()){
+
+            // Call the init function only once and toggle it to false after it has been called.
+
             AerServSdk.init(this, globalVariable.getAppId() );
-            Log.d(globalVariable.getLogTag(), "Running init with site app ID: " + globalVariable.getAppId());
             globalVariable.setInit();
+
+            // Log the SDK version
+            TextView version = (TextView) findViewById(R.id.sdkVersion);
+            version.setText("v" + UrlBuilder.VERSION);
+
+            // Any sort of init log messages should be printed here
+            Log.d(LOG_TAG, "Running init with site app ID: " + APP_ID);
+            Log.d(LOG_TAG, "Currently running SDK version: " + UrlBuilder.VERSION);
+
         }
-
-        Log.d(globalVariable.getLogTag(), "Running SDK version: " + UrlBuilder.VERSION);
-
-
-
-        // Update the view each time it is being created.
-        // updateCoffeeCountInView(COFFEE_COUNT);
 
         // Load this banner on the page.
-        // loadBanner();
+         loadBanner();
 
     }
 
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        if(banner != null){
-            banner.kill();
-        }
-    }
 
     public void loadBanner() {
         final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
                 .setEventListener(listener)
-                .setRefreshInterval(10)
-                .setPrecache(true)
-                .setKeywords(keywords)
-                .setDebug(true)
-                .setVerbose(true);
+//                .setRefreshInterval(60)
+                .setKeywords(keywords);
+//                .setDebug(true)
+//                .setVerbose(true);
         banner = (AerServBanner) findViewById(R.id.banner);
         banner.configure(config).show();
     }
@@ -121,28 +112,13 @@ public class MainActivity extends AppCompatActivity  {
 
     public void updateCoffeeCountInView(int counter) {
 
-        String message = Integer.toString(counter, 0);
+        String message = Integer.toString(counter, 0) + " Beans!";
 
         Log.v("Updating counter: ", message);
 
         // Capture the layout's TextView and set the string as its text
         TextView textView = findViewById(R.id.coffeeCounterView_Main);
         textView.setText(message);
-
-    }
-
-
-    /** Called when the user taps the Send button */
-
-    public void sendMessage(View view) {
-        // Do something in response to button
-
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
-        EditText editText = (EditText) findViewById(R.id.editText);
-
-        String message = editText.getText().toString();
-        // intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
 
     }
 
@@ -162,19 +138,35 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+
         Log.d(LOG_TAG, " On activity result");
 
         super.onActivityResult(requestCode, resultCode, data);
+
+        // If the request code is 1, the CoffeeIncrementedActivity is providing a result.
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
                 int amt = data.getIntExtra("INCREMENT_AMT", 0);
-                Log.d(LOG_TAG, "~~~ Result from Interstitial View ~~~ " + Integer.toString(amt));
-//                globalVariable.setCOFFEE_COUNT(globalVariable.getCOFFEE_COUNT() + amt);
-                Log.d(LOG_TAG, " UPDATED TOTAL =" + COFFEE_COUNT);
-
+                Log.d(LOG_TAG, "Attempt to increment amount by" + Integer.toString(amt));
+                globalVariable.setCOFFEE_COUNT(globalVariable.getCOFFEE_COUNT() + amt);
+                Log.d(LOG_TAG, " UPDATED TOTAL =" + globalVariable.getCOFFEE_COUNT());
+                updateCoffeeCountInView(globalVariable.getCOFFEE_COUNT());
             }
         }
     }
+
+
+    // TODO: Do any sort of cleanup methods here
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        if(banner != null){
+            banner.kill();
+        }
+    }
+
 
 
 }
