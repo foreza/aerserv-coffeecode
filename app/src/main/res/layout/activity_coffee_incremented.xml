@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/coffeeCountView_Incremented"
         android:layout_width="279dp"
-        android:layout_height="122dp"
+        android:layout_height="68dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -26,7 +26,7 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="36dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -35,4 +35,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/coffee" />
+
+    <Button
+        android:id="@+id/button_coffee_showInterstitial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@android:color/holo_green_light"
+        android:onClick="showInterstitial"
+        android:text="@string/button_showInterstitial_coffee"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coffeeCountView_Incremented" />
 </android.support.constraint.ConstraintLayout>

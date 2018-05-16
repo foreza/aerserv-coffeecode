@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +23,8 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
     // This view will provide an interstitial
     private AerServInterstitial interstitial;
-    public int INCREMENT_AMT = 0;
+    private int INCREMENT_AMT = 0;
+    private boolean interstitialLoaded = false;
 
     // Global variables TODO: Remove the ones we do not need
     private String LOG_TAG;
@@ -41,6 +44,11 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
                 public void run() {
                     String msg = "[coffeeIncrement]";
                     switch (event) {
+                        case PRELOAD_READY:
+                            interstitialLoaded = true;
+                            findViewById(R.id.button_coffee_showInterstitial).setVisibility(View.VISIBLE);
+                            Log.d(LOG_TAG, "Listener heard preload ready for interstitial");
+                            break;
                         case VC_REWARDED:
                             AerServVirtualCurrency vc = (AerServVirtualCurrency) args.get(0);
                             // do something here with your virtual currency!
@@ -49,6 +57,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
                             msg = "You've obtained beans (" + INCREMENT_AMT+ ")";
                             setMessageOfCounter(INCREMENT_AMT);
                             Toast.makeText(CoffeeIncrementedActivity.this, msg, Toast.LENGTH_SHORT).show();
+                            break;
                     }
                 }
             });
@@ -60,37 +69,46 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_coffee_incremented);
 
+        // Access singleton and populate with values for this activity scope
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
-
         LOG_TAG = globalVariable.getLogTag();
         DEFAULT_PLC = globalVariable.getDefaultPlc(1);
         APP_ID = globalVariable.getAppId();
         keywords = globalVariable.getKeywords();
         COFFEE_COUNT = globalVariable.getCOFFEE_COUNT();
 
-
-        setContentView(R.layout.activity_coffee_incremented);
-
-        loadInterstitial();
-
-
+        // Begin routine to load Interstitial.
+        preloadInterstitial();
     }
 
-    public void loadInterstitial() {
+    // TODO: Remove setDebug / Verbose to optimize performance
+    public void preloadInterstitial() {
 
-        Log.d(LOG_TAG, "Loading Interstitial on Coffee Increment ");
+        Log.d(LOG_TAG, "Preloading Interstitial on CoffeeCounter");
 
         final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
                 .setDebug(true)
                 .setEventListener(listener)
+                .setPreload(true)
                 .setVerbose(true);
+
         interstitial = new AerServInterstitial(config);
-        interstitial.show();
+    }
+
+
+
+    // Show the interstitial only if the flag is set to true
+    public void showInterstitial(View view) {
+        if (interstitialLoaded) {
+            findViewById(R.id.button_coffee_showInterstitial).setVisibility(View.INVISIBLE);
+            interstitial.show();
+            Log.d(LOG_TAG, "Interstitial shown in Coffee Incremented");
+        }
+        else
+            Log.d(LOG_TAG, "Interstitial not ready / not shown in Coffee Incremented");
     }
 
 

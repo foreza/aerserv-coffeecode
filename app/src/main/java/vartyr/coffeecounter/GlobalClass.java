@@ -47,7 +47,7 @@ public class GlobalClass extends Application{
     }
 
     // Setter for COFFEE_COUNT
-    public void setCOFFEE_COUNT(int amt){
+    public void incrementCOFFEE_COUNT(int amt){
         COFFEE_COUNT += amt;
     }
 

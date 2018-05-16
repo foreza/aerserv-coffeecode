@@ -38,20 +38,23 @@ public class MainActivity extends AppCompatActivity  {
                 public void run() {
                     String msg = "";
                     switch (event) {
+                        case PRELOAD_READY:
+                            banner.show();
+                            Log.d(LOG_TAG, "Preload Ready for banner");
                         case AD_FAILED:
                             if (args.size() > 1) {
+                                Log.d(LOG_TAG, "AD FAILED");
                                 Integer adFailedCode =
                                         (Integer) args.get(AerServEventListener.AD_FAILED_CODE);
                                 String adFailedReason =
                                         (String) args.get(AerServEventListener.AD_FAILED_REASON);
-                                msg = "Ad failed with code=" + adFailedCode + ", reason=" + adFailedReason;
+                                // msg = "Ad failed with code=" + adFailedCode + ", reason=" + adFailedReason;
                             } else {
-                                msg = "Ad Failed with message: " + args.get(0).toString();
+                                // msg = "Ad Failed with message: " + args.get(0).toString();
                             }
                             break;
 
                     }
-//                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     Log.d(LOG_TAG, msg);
                 }
             });
@@ -91,7 +94,7 @@ public class MainActivity extends AppCompatActivity  {
 
         }
 
-        // Load this banner on the page.
+        // Preload this banner on the page.
          loadBanner();
 
     }
@@ -100,12 +103,13 @@ public class MainActivity extends AppCompatActivity  {
     public void loadBanner() {
         final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
                 .setEventListener(listener)
+                .setPreload(true)
 //                .setRefreshInterval(60)
                 .setKeywords(keywords);
 //                .setDebug(true)
 //                .setVerbose(true);
         banner = (AerServBanner) findViewById(R.id.banner);
-        banner.configure(config).show();
+        banner.configure(config);
     }
 
 
@@ -149,7 +153,7 @@ public class MainActivity extends AppCompatActivity  {
             if(resultCode == RESULT_OK) {
                 int amt = data.getIntExtra("INCREMENT_AMT", 0);
                 Log.d(LOG_TAG, "Attempt to increment amount by" + Integer.toString(amt));
-                globalVariable.setCOFFEE_COUNT(globalVariable.getCOFFEE_COUNT() + amt);
+                globalVariable.incrementCOFFEE_COUNT(amt);
                 Log.d(LOG_TAG, " UPDATED TOTAL =" + globalVariable.getCOFFEE_COUNT());
                 updateCoffeeCountInView(globalVariable.getCOFFEE_COUNT());
             }
