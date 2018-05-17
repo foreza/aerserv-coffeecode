@@ -1,5 +1,6 @@
 package vartyr.coffeecounter;
 
+import android.app.Activity;
 import android.app.Application;
 import android.provider.Settings;
 import android.util.Log;
@@ -19,6 +20,16 @@ public class GlobalClass extends Application{
     private List<String> keywords = Arrays.asList("coffee", "beans");
     private int COFFEE_COUNT = 0;
     private boolean hasInit = false;
+    private boolean hasGDPRConsent = false;
+
+    //
+    public boolean getGDPRConsent(){
+        return hasGDPRConsent;
+    }
+
+    public void setGDPRConsent(boolean v) {
+        hasGDPRConsent = v;
+    }
 
 
     // Temp getter for PLC
