@@ -72,9 +72,17 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee_incremented);
 
+
         // Access singleton and populate with values for this activity scope
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
         LOG_TAG = globalVariable.getLogTag();
+
+
+        // If the save file is empty
+        if (globalVariable.readSaveFile() == "") {
+            Log.d(LOG_TAG, "File not found in Coffee incremented");
+        }
+
         DEFAULT_PLC = globalVariable.getDefaultPlc(1);
         APP_ID = globalVariable.getAppId();
         keywords = globalVariable.getKeywords();
@@ -82,6 +90,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
         // Begin routine to load Interstitial.
         preloadInterstitial();
+
     }
 
     // TODO: Remove setDebug / Verbose to optimize performance
@@ -156,6 +165,13 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
         if(interstitial != null){
             interstitial.kill();
         }
+
+        // Get an instance of the singleton
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+
+        // Save the current coffee count
+        globalVariable.saveCoffeeCount();
+
     }
 
 }

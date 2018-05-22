@@ -68,14 +68,13 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
 
+
+        globalVariable.initSaveFile();      // Will create a save file if not yet created.
+
         LOG_TAG = globalVariable.getLogTag();
-        DEFAULT_PLC = globalVariable.getDefaultPlc(0);
-        APP_ID = globalVariable.getAppId();
-        keywords = globalVariable.getKeywords();
-        COFFEE_COUNT = globalVariable.getCOFFEE_COUNT();
+
 
         // First check if consent has been given. If it has not been given, don't bother doing anything else in the view.
         // Short terminate and start the GDPR Consent activity instead.
@@ -94,21 +93,6 @@ public class MainActivity extends AppCompatActivity  {
             AerServSdk.init(this, globalVariable.getAppId() );
             globalVariable.setInit();
 
-            // Log the SDK version
-            TextView version = (TextView) findViewById(R.id.sdkVersion);
-            version.setText("v" + UrlBuilder.VERSION);
-
-            // Get the GDPR consent flag and save it to the singleton class
-            // Show the status of the consent above
-            globalVariable.setGDPRConsent(AerServSdk.getGdprConsentFlag((Activity) this));
-            TextView gdprconsentview = (TextView) findViewById(R.id.gdprStatus);
-            if (!globalVariable.getGDPRConsent()) {
-                gdprconsentview.setText("You have not consented to GDPR requirements");
-                gdprconsentview.setTextColor(Color.parseColor("#C40824"));
-            } else {
-                gdprconsentview.setText("Thank you for giving consent per GDPR requirements!");
-                gdprconsentview.setTextColor(Color.parseColor("#5BB55E"));
-            }
 
             // Any sort of init log messages should be printed here
             Log.d(LOG_TAG, "Running init with site app ID: " + APP_ID);
@@ -119,6 +103,37 @@ public class MainActivity extends AppCompatActivity  {
 
         // Preload this banner on the page.
          loadBanner();
+
+
+
+        DEFAULT_PLC = globalVariable.getDefaultPlc(0);
+        APP_ID = globalVariable.getAppId();
+        keywords = globalVariable.getKeywords();
+        COFFEE_COUNT = globalVariable.getCOFFEE_COUNT();
+
+        // Handle the rest of the view objects that are rendered each time the screen might be rotated, etc..
+
+
+        // Log the SDK version
+        TextView version = (TextView) findViewById(R.id.sdkVersion);
+        version.setText("v" + UrlBuilder.VERSION);
+
+        // Get the GDPR consent flag and save it to the singleton class
+        // Show the status of the consent above
+        globalVariable.setGDPRConsent(AerServSdk.getGdprConsentFlag((Activity) this));
+        TextView gdprconsentview = (TextView) findViewById(R.id.gdprStatus);
+        if (!globalVariable.getGDPRConsent()) {
+            gdprconsentview.setText("You have not consented to GDPR requirements");
+            gdprconsentview.setTextColor(Color.parseColor("#C40824"));
+        } else {
+            gdprconsentview.setText("Thank you for giving consent per GDPR requirements!");
+            gdprconsentview.setTextColor(Color.parseColor("#5BB55E"));
+        }
+
+        TextView coffeeAmt = findViewById(R.id.coffeeCounterView_Main);
+        coffeeAmt.setText(Integer.toString(globalVariable.getCOFFEE_COUNT(), 0) + " Beans!");
+
+
 
     }
 
@@ -143,6 +158,8 @@ public class MainActivity extends AppCompatActivity  {
         // Capture the layout's TextView and set the string as its text
         TextView textView = findViewById(R.id.coffeeCounterView_Main);
         textView.setText(message);
+
+
 
     }
 
@@ -186,6 +203,8 @@ public class MainActivity extends AppCompatActivity  {
                 globalVariable.incrementCOFFEE_COUNT(amt);
                 Log.d(LOG_TAG, " UPDATED TOTAL =" + globalVariable.getCOFFEE_COUNT());
                 updateCoffeeCountInView(globalVariable.getCOFFEE_COUNT());
+
+
             }
         }
     }
@@ -197,6 +216,12 @@ public class MainActivity extends AppCompatActivity  {
     protected void onDestroy(){
 
         Log.d(LOG_TAG, "MAINACTIVITY CLEANUP");
+
+        // Get an instance of the singleton
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+
+        // Save the current coffee count
+        globalVariable.saveCoffeeCount();
 
         super.onDestroy();
         if(banner != null){
