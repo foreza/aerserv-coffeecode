@@ -78,13 +78,13 @@ public class MainActivity extends AppCompatActivity  {
 
         // First check if consent has been given. If it has not been given, don't bother doing anything else in the view.
         // Short terminate and start the GDPR Consent activity instead.
-        if (!AerServSdk.getGdprConsentFlag((Activity) this)) {
-
-            Intent intent = new Intent(this, GDPRConsent.class);
-            // Start the activity.
-            startActivityForResult(intent,0);
-
-        }
+//        if (!AerServSdk.getGdprConsentFlag((Activity) this)) {
+//
+//            Intent intent = new Intent(this, GDPRConsent.class);
+//            // Start the activity.
+//            startActivityForResult(intent,0);
+//
+//        }
         // Call the init function only once and toggle it to false after it has been called.
         // Use this to print the debug state of the application and any other useful pieces of information
         if (!globalVariable.getHasInit()){
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity  {
 
         // Get the GDPR consent flag and save it to the singleton class
         // Show the status of the consent above
-        globalVariable.setGDPRConsent(AerServSdk.getGdprConsentFlag((Activity) this));
+        // globalVariable.setGDPRConsent(AerServSdk.getGdprConsentFlag((Activity) this));
         TextView gdprconsentview = (TextView) findViewById(R.id.gdprStatus);
         if (!globalVariable.getGDPRConsent()) {
             gdprconsentview.setText("You have not consented to GDPR requirements");
@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity  {
         final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
                 .setEventListener(listener)
                 .setPreload(true)
+                .setRefreshInterval(60)
                 .setKeywords(keywords);
         banner = (AerServBanner) findViewById(R.id.banner);
         banner.configure(config);
