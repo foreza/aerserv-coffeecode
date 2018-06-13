@@ -27,7 +27,7 @@ public class GDPRConsent extends AppCompatActivity {
     }
 
     public void acceptConsent(View view) {
-        AerServSdk.setGdprConsentFlag(this, true);
+//        AerServSdk.setGdprConsentFlag(this, true);
         Log.d(LOG_TAG, "GDPR Consent indicated");
         Intent returnIntent = this.getIntent();
         setResult(RESULT_OK, returnIntent);
