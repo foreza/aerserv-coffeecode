@@ -23,9 +23,9 @@ public class GlobalClass extends Application{
 
     // Define your global variables here for the singleton class
     private static final String LOG_TAG = "CoffeeCounter";
-    private static String DEFAULT_AD_PLC = "380000";
+    private static String DEFAULT_AD_PLC = "1016927";
     private static String DEFAULT_INTERSTITIAL_PLC = "380004";
-    private static final String APP_ID = "380000";
+    private static final String APP_ID = "1001865";
     private List<String> keywords = Arrays.asList("coffee", "beans");
     private int COFFEE_COUNT = 0;
     private boolean hasInit = false;

@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity  {
                     String msg = "";
                     switch (event) {
                         case PRELOAD_READY:
-                            banner.show();
+                            // banner.show();
                             Log.d(LOG_TAG, "Preload Ready for banner");
                         case AD_FAILED:
                             if (args.size() > 1) {
@@ -75,16 +75,6 @@ public class MainActivity extends AppCompatActivity  {
 
         LOG_TAG = globalVariable.getLogTag();
 
-
-        // First check if consent has been given. If it has not been given, don't bother doing anything else in the view.
-        // Short terminate and start the GDPR Consent activity instead.
-//        if (!AerServSdk.getGdprConsentFlag((Activity) this)) {
-//
-//            Intent intent = new Intent(this, GDPRConsent.class);
-//            // Start the activity.
-//            startActivityForResult(intent,0);
-//
-//        }
         // Call the init function only once and toggle it to false after it has been called.
         // Use this to print the debug state of the application and any other useful pieces of information
         if (!globalVariable.getHasInit()){
@@ -101,8 +91,6 @@ public class MainActivity extends AppCompatActivity  {
 
         }
 
-        // Preload this banner on the page.
-         loadBanner();
 
 
 
@@ -133,19 +121,24 @@ public class MainActivity extends AppCompatActivity  {
         TextView coffeeAmt = findViewById(R.id.coffeeCounterView_Main);
         coffeeAmt.setText(Integer.toString(globalVariable.getCOFFEE_COUNT(), 0) + " Beans!");
 
-
+        // Preload this banner on the page.
+        loadBanner();
 
     }
 
 
     public void loadBanner() {
+        Log.d(LOG_TAG, "Banner load called");
+
+
         final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
-                .setEventListener(listener)
-                .setPreload(true)
-                .setRefreshInterval(60)
-                .setKeywords(keywords);
+                .setEventListener(listener);
         banner = (AerServBanner) findViewById(R.id.banner);
         banner.configure(config);
+        banner.show();
+
+        Log.d(LOG_TAG, "Banner configured and showing");
+
     }
 
 
