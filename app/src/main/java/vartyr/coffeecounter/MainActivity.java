@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity  {
         }
 
         // Preload this banner on the page.
-         loadBanner();
+          // loadBanner();
 
 
 
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity  {
         final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
                 .setEventListener(listener)
                 .setPreload(true)
-                .setRefreshInterval(60)
+                .setRefreshInterval(0)
                 .setKeywords(keywords);
         banner = (AerServBanner) findViewById(R.id.banner);
         banner.configure(config);
