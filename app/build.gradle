@@ -1,4 +1,23 @@
 apply plugin: 'com.android.application'
+apply plugin: 'safedk'
+safedk {
+    appId "9a66e94e2f401a8b008ce0c949fd3861"
+    apiKey "ed66f880db4ce23cc0a7b10f97235e1c"
+
+    enabled true
+    showVersions true
+//    disableIf productFlavor: 'demo', buildType: 'debug'
+//    disableIf productFlavor: 'experimental'
+}
+
+buildscript {
+    repositories {
+        maven { url 'http://download.safedk.com/maven' }
+    }
+    dependencies {
+        classpath "com.safedk:SafeDKGradlePlugin:1.+"
+    }
+}
 
 android {
     compileSdkVersion 27
@@ -28,3 +47,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation files('libs/aerserv-sdk.jar')
 }
+
+
+
+
+

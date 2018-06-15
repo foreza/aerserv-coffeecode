@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
         final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
+                .setRefreshInterval(10)
                 .setEventListener(listener);
         banner = (AerServBanner) findViewById(R.id.banner);
         banner.configure(config);
