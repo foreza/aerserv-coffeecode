@@ -1,5 +1,6 @@
 package vartyr.coffeecounter;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,12 +20,12 @@ import com.aerserv.sdk.AerServVirtualCurrency;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoffeeIncrementedActivity extends AppCompatActivity {
+public class CoffeeIncrementedActivity extends Activity {
 
 
     // This view will provide an interstitial
     private AerServInterstitial interstitial;
-    private AerServInterstitial interstitialExtra;
+    // private AerServInterstitial interstitialExtra;
     private int INCREMENT_AMT = 0;
     private boolean interstitialLoaded = false;
     private boolean interstitialExtraLoaded = false;
@@ -40,7 +41,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
     // Set up a listener to listen to incoming events.
     // TODO: Handle any fail cases gracefully
-    protected AerServEventListener listener = new AerServEventListener(){
+    private AerServEventListener listener = new AerServEventListener(){
         @Override
         public void onAerServEvent(final AerServEvent event, final List<Object> args){
             CoffeeIncrementedActivity.this.runOnUiThread(new Runnable() {
@@ -53,7 +54,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
                             Log.d(LOG_TAG, "ARGS IN PRELOAD READY check? / break");
 
                             interstitialLoaded = true;
-                            findViewById(R.id.button_coffee_showInterstitial).setVisibility(View.VISIBLE);
+                            // findViewById(R.id.button_coffee_showInterstitial).setVisibility(View.VISIBLE);
                             Log.d(LOG_TAG, "Listener heard preload ready for interstitial");
 
                              interstitial.show();
@@ -103,7 +104,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
         // Begin routine to load Interstitial.
         preloadInterstitial();
-        preloadExtraInterstitial();
+        // preloadExtraInterstitial();
 
     }
 
@@ -121,23 +122,23 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
         interstitial = new AerServInterstitial(config);
     }
 
-    // PII 515 troubleshooting
-    public void preloadExtraInterstitial() {
-
-        Log.d(LOG_TAG, "Preloading Extra Interstitial on CoffeeCounter");
-
-        List<String> list = new ArrayList<String>();
-        list.add("Extra");
-
-        final AerServConfig configExtra = new AerServConfig(this, DEFAULT_PLC)
-                .setDebug(true)
-                .setEventListener(listener)
-                .setPreload(true)
-                .setKeywords(list)
-                .setVerbose(true);
-
-        interstitialExtra = new AerServInterstitial(configExtra);
-    }
+//    // PII 515 troubleshooting
+//    public void preloadExtraInterstitial() {
+//
+//        Log.d(LOG_TAG, "Preloading Extra Interstitial on CoffeeCounter");
+//
+//        List<String> list = new ArrayList<String>();
+//        list.add("Extra");
+//
+//        final AerServConfig configExtra = new AerServConfig(this, DEFAULT_PLC)
+//                .setDebug(true)
+//                .setEventListener(listener)
+//                .setPreload(true)
+//                .setKeywords(list)
+//                .setVerbose(true);
+//
+//        interstitialExtra = new AerServInterstitial(configExtra);
+//    }
 
 
 
@@ -197,9 +198,9 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
         if(interstitial != null){
             interstitial.kill();
         }
-        if(interstitialExtra != null){
-            interstitialExtra.kill();
-        }
+//        if(interstitialExtra != null){
+//            interstitialExtra.kill();
+//        }
 
 
         // Get an instance of the singleton
