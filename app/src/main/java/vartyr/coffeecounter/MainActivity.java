@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -138,6 +139,7 @@ public class MainActivity extends AppCompatActivity  {
 
         // Preload this banner on the page.
          loadBanner();
+        //loadBannerDynamic();
 
 
 
@@ -167,16 +169,16 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-
+    // Loads a banner into a defined spot
     public void loadBanner() {
         final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
                 .setEventListener(listener)
+                .setRefreshInterval(60)
                 .setPreload(true)
                 .setKeywords(keywords);
         banner = (AerServBanner) findViewById(R.id.banner);
         banner.configure(config);
     }
-
 
 
     public void updateCoffeeCountInView(int counter) {
