@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;    // App compatability for minimum / target API versions
 import android.os.Bundle;                           //
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -31,6 +33,15 @@ public class MainActivity extends AppCompatActivity  {
     private List<String> keywords;
     private int COFFEE_COUNT;
 
+    // We'll iterate through a recycler view of items
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
+    // Hard-coded dataset
+    String [] myDataSet = new String [] {"Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla"};
+
+
     // Set up a listener to listen to incoming events
     protected AerServEventListener listener = new AerServEventListener(){
         @Override
@@ -55,7 +66,12 @@ public class MainActivity extends AppCompatActivity  {
                                 // msg = "Ad Failed with message: " + args.get(0).toString();
                             }
                             break;
-
+                        case AD_IMPRESSION:
+                            Log.d(LOG_TAG, "AD IMPRESSION");
+                            break;
+                        case AD_LOADED:
+                            Log.d(LOG_TAG, "AD loaded");
+                            break;
                     }
                     Log.d(LOG_TAG, msg);
                 }
@@ -68,7 +84,26 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Set up the recycler view
+        mRecyclerView = findViewById(R.id.dessert_recycler);
+        // mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+
+        mAdapter = new CustomViewAdapter(myDataSet);
+        mRecyclerView.setAdapter(mAdapter);
+
+
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+
+        DEFAULT_PLC = globalVariable.getDefaultPlc(0);
+        APP_ID = globalVariable.getAppId();
+        keywords = globalVariable.getKeywords();
+        COFFEE_COUNT = globalVariable.getCOFFEE_COUNT();
 
 
         globalVariable.initSaveFile();      // Will create a save file if not yet created.
@@ -106,10 +141,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
-        DEFAULT_PLC = globalVariable.getDefaultPlc(0);
-        APP_ID = globalVariable.getAppId();
-        keywords = globalVariable.getKeywords();
-        COFFEE_COUNT = globalVariable.getCOFFEE_COUNT();
+
 
         // Handle the rest of the view objects that are rendered each time the screen might be rotated, etc..
 
@@ -132,8 +164,6 @@ public class MainActivity extends AppCompatActivity  {
 
         TextView coffeeAmt = findViewById(R.id.coffeeCounterView_Main);
         coffeeAmt.setText(Integer.toString(globalVariable.getCOFFEE_COUNT(), 0) + " Beans!");
-
-
 
     }
 
