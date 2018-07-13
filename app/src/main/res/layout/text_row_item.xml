@@ -10,4 +10,22 @@
         android:layout_height="wrap_content"
         android:text="@string/element_text"/>
 
+    <com.aerserv.sdk.AerServBanner
+        android:id="@+id/banner_recycle"
+        android:layout_width="320dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom|center_horizontal" />
+
+    <TextView
+        android:id="@+id/banner_placeholder"
+        android:layout_width="320dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+
+        android:gravity="bottom|center_horizontal" />
+
+
 </android.support.constraint.ConstraintLayout>

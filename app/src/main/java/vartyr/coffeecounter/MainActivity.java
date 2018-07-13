@@ -10,10 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aerserv.sdk.*;
 import com.aerserv.sdk.utils.UrlBuilder;
@@ -98,6 +95,11 @@ public class MainActivity extends AppCompatActivity  {
         mAdapter = new CustomViewAdapter(myDataSet);
         mRecyclerView.setAdapter(mAdapter);
 
+        runOnUiThread(new Runnable() {
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
 
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
 
@@ -139,10 +141,6 @@ public class MainActivity extends AppCompatActivity  {
 
         // Preload this banner on the page.
          loadBanner();
-        //loadBannerDynamic();
-
-
-
 
 
         // Handle the rest of the view objects that are rendered each time the screen might be rotated, etc..
@@ -168,6 +166,8 @@ public class MainActivity extends AppCompatActivity  {
         coffeeAmt.setText(Integer.toString(globalVariable.getCOFFEE_COUNT(), 0) + " Beans!");
 
     }
+
+
 
     // Loads a banner into a defined spot
     public void loadBanner() {

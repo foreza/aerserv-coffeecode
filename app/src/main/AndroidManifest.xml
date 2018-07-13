@@ -54,9 +54,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".GDPRConsent">
-
-        </activity>
+        <activity android:name=".GDPRConsent"></activity>
     </application>
 
 </manifest>
