@@ -25,17 +25,11 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
     private AerServInterstitial interstitial;
     private int INCREMENT_AMT = 0;
     private boolean interstitialLoaded = false;
-
-    // Global variables TODO: Remove the ones we do not need
     private String LOG_TAG;
-    public String DEFAULT_PLC;
-    public String APP_ID;
-    private List<String> keywords;
-    public int COFFEE_COUNT;
+    private GlobalClass globalVariable;
 
 
     // Set up a listener to listen to incoming events.
-    // TODO: Handle any fail cases gracefully
     protected AerServEventListener listener = new AerServEventListener(){
         @Override
         public void onAerServEvent(final AerServEvent event, final List<Object> args){
@@ -45,8 +39,8 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
                     String msg = "[coffeeIncrement]";
                     switch (event) {
                         case PRELOAD_READY:
-                            interstitialLoaded = true;
                             findViewById(R.id.button_coffee_showInterstitial).setVisibility(View.VISIBLE);
+                            interstitialLoaded = true;
                             Log.d(LOG_TAG, "Listener heard preload ready for interstitial");
                             break;
                         case VC_REWARDED:
@@ -54,8 +48,8 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
                             // do something here with your virtual currency!
                             Log.d(LOG_TAG, "VC rewarded: " + vc.getAmount() + " " + vc.getName());
                             INCREMENT_AMT = vc.getAmount().intValueExact();
-                            msg = "You've obtained beans (" + INCREMENT_AMT+ ")";
                             setMessageOfCounter(INCREMENT_AMT);
+                            msg = "You've obtained beans (" + INCREMENT_AMT+ ")";
                             Toast.makeText(CoffeeIncrementedActivity.this, msg, Toast.LENGTH_SHORT).show();
                             break;
                     }
@@ -73,8 +67,8 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_coffee_incremented);
 
 
-        // Access singleton and populate with values for this activity scope
-        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        // Save an instance of our singleton
+        globalVariable = (GlobalClass) getApplicationContext();
         LOG_TAG = globalVariable.getLogTag();
 
 
@@ -82,11 +76,6 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
         if (globalVariable.readSaveFile() == "") {
             Log.d(LOG_TAG, "File not found in Coffee incremented");
         }
-
-        DEFAULT_PLC = globalVariable.getDefaultPlc(1);
-        APP_ID = globalVariable.getAppId();
-        keywords = globalVariable.getKeywords();
-        COFFEE_COUNT = globalVariable.getCOFFEE_COUNT();
 
         // Begin routine to load Interstitial.
         preloadInterstitial();
@@ -98,7 +87,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
         Log.d(LOG_TAG, "Preloading Interstitial on CoffeeCounter");
 
-        final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
+        final AerServConfig config = new AerServConfig(this, globalVariable.getDefaultPlc(1))
                 .setDebug(true)
                 .setEventListener(listener)
                 .setPreload(true)
@@ -112,8 +101,8 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
     // Show the interstitial only if the flag is set to true
     public void showInterstitial(View view) {
         if (interstitialLoaded) {
-            findViewById(R.id.button_coffee_showInterstitial).setVisibility(View.INVISIBLE);
             interstitial.show();
+            findViewById(R.id.button_coffee_showInterstitial).setVisibility(View.INVISIBLE);
             Log.d(LOG_TAG, "Interstitial shown in Coffee Incremented");
         }
         else
@@ -165,9 +154,6 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
         if(interstitial != null){
             interstitial.kill();
         }
-
-        // Get an instance of the singleton
-        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
 
         // Save the current coffee count
         globalVariable.saveCoffeeCount();

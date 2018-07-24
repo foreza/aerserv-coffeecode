@@ -8,20 +8,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aerserv.sdk.AerServBanner;
 import com.aerserv.sdk.AerServConfig;
 
 import org.w3c.dom.Text;
 
+import java.util.Random;
+
 /**
  * Provide views to RecyclerView with data from mDataSet.
  */
 public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.ViewHolder> {
     private static final String TAG = "CustomViewAdapter";
-
+    private int[] placementDataSet;
     private String[] mDataSet;
+    private int[] mColorSet;
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
 
     /**
@@ -30,9 +35,13 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView textView;
+        private final Button buttonView;
         private final TextView placeholderView;
         private final Context context;
         private AerServBanner banner = null;
+        public int color = Color.TRANSPARENT;
+        public String plc = "1038928";
+        public Boolean bannerDisplaying = false;
 
         public ViewHolder(View v) {
             super(v);
@@ -50,29 +59,33 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
             });
             textView = (TextView) v.findViewById(R.id.textView);
             placeholderView = (TextView) v.findViewById(R.id.banner_placeholder);
+            buttonView = (Button) v.findViewById(R.id.button_send);
             banner = (AerServBanner) v.findViewById(R.id.banner_recycle);
             context = (Context) v.getContext();
         }
 
-        public TextView getTextView() {
-            Log.d(TAG, "TextView getTextView");
-            return textView;
+        /** Called when the user touches the button */
+        public void doSomething(View view) {
+            Log.d(TAG, "Detected a button press");
         }
+
 
         public TextView getPlaceholderView() {
             return placeholderView;
         }
+
+        public Button getButtonView(){ return buttonView;}
 
         public AerServBanner getBanner() {
             Log.d(TAG, "getBanner getBanner");
             return banner;
         }
 
+
         public Context getContext() {
             Log.d(TAG, "getContext");
             return context;
         }
-
 
     }
     // END_INCLUDE(recyclerViewSampleViewHolder)
@@ -82,9 +95,11 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public CustomViewAdapter(String[] dataSet) {
+    public CustomViewAdapter(String[] dataSet, int[] colorSet) {
         mDataSet = dataSet;
-        Log.d(TAG, "DataSet created");
+        placementDataSet = new int[dataSet.length];
+        mColorSet = colorSet;
+        Log.d(TAG, "DataSet created of size: " + placementDataSet.length);
 
     }
 
@@ -96,51 +111,30 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
 
         Log.d(TAG, "ViewHolder onCreateViewHolder");
 
-
         // Create a new view.
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.text_row_item, viewGroup, false);
 
-
         return new ViewHolder(v);
     }
 
-    // END_INCLUDE(recyclerViewOnCreateViewHolder)
-
-    // BEGIN_INCLUDE(recyclerViewOnBindViewHolder)
-    // Replace the contents of a view (invoked by the layout manager)
-//    @Override
-//    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-//        Log.d(TAG, "Element " + position + " set.");
-//
-//        // Get element from your dataset at this position and replace the contents of the view
-//        // with that element
-//        viewHolder.getTextView().setText(mDataSet[position]);
-//
-//        if (position % 5 == 0) {
-//            Log.d(TAG, "ADDING AN AD");
-//            showBanner(viewHolder);
-//            // viewHolder.getPlaceholderView().setBackgroundColor(Color.RED);
-//
-//        } else {
-//            killBanner(viewHolder);
-//            // viewHolder.getPlaceholderView().setBackgroundColor(Color.BLUE);
-//
-//        }
-//
-//    }
-
-
     public void showBanner(ViewHolder viewHolder) {
-        AerServConfig config = new AerServConfig(viewHolder.getContext(), "380000");
+        AerServConfig config = new AerServConfig(viewHolder.getContext(), viewHolder.plc);
         AerServBanner banner = (AerServBanner) viewHolder.getBanner();
+        viewHolder.bannerDisplaying = true;
         banner.configure(config).show();
     }
 
     public void killBanner(ViewHolder viewHolder) {
         AerServBanner banner = (AerServBanner) viewHolder.getBanner();
+        viewHolder.bannerDisplaying = false;
         banner.kill();
     }
+
+
+
+
+
 
     // END_INCLUDE(recyclerViewOnBindViewHolder)
 
@@ -151,19 +145,52 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
     }
 
 
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        Log.d(TAG, "Element " + position + " set.");
+    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
+        Log.d(TAG, "Element " + position + " set to - " + mDataSet[position]);
 
         // Get element from your dataset at this position, and replace
-        if (position % 5 == 0) {
-            Log.d(TAG, "ADDING AN AD");
-            showBanner(viewHolder);
+        if (position % 10 == 0)
+        {
+            Log.d(TAG, "This spot should have an ad and no color");
+            viewHolder.getPlaceholderView().setText("");
+            viewHolder.getButtonView().setVisibility(View.INVISIBLE);
 
+            if (!viewHolder.bannerDisplaying){
+                Log.d(TAG, "ADDING AD");
+                placementDataSet[position] = -1;
+                showBanner(viewHolder);
+            }
         } else {
-            Log.d(TAG, "KILLING THE AD");
-            killBanner(viewHolder);
+
+            Log.d(TAG, "This spot should have no ad and no data");
+
+            if (viewHolder.bannerDisplaying) {
+                Log.d(TAG, "KILLING AD");
+                placementDataSet[position] = 0;
+                killBanner(viewHolder);
+            }
+
+
+            viewHolder.getPlaceholderView().setText(mDataSet[position]);
+            viewHolder.getButtonView().setVisibility(View.VISIBLE);
+            viewHolder.getPlaceholderView().setBackgroundColor(placementDataSet[position]);
+            viewHolder.getButtonView().setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.d(TAG, "Clicked on: " + position + " -> " + mDataSet[position]);
+                    String msg = "Clicked on: " + position + " -> " + mDataSet[position];
+                    Toast.makeText(viewHolder.getContext(), msg, Toast.LENGTH_SHORT).show();
+                    final int random = new Random().nextInt(6);
+                    placementDataSet[position] = mColorSet[random];
+                    viewHolder.getPlaceholderView().setBackgroundColor(placementDataSet[position]);
+                }
+            });
+
 
         }
+
+
+
+
 
     }
 

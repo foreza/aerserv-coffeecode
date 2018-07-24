@@ -3,6 +3,7 @@ package vartyr.coffeecounter;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Color;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -17,35 +18,40 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GlobalClass extends Application{
 
     // Define your global variables here for the singleton class
     private static final String LOG_TAG = "CoffeeCounter";
-    private static String DEFAULT_AD_PLC = "1038928"; //   380000, 1038928
-    private static String DEFAULT_INTERSTITIAL_PLC = "380003";
+    private static String DEFAULT_AD_PLC = "380000"; //   380000, 1038928
+    private static String DEFAULT_INTERSTITIAL_PLC = "380004";
     private static final String APP_ID = "380000"; // 380000, 1009188
-    private List<String> keywords = Arrays.asList("coffee", "beans");
+    private static Map<String, String> pubKeys = new HashMap<String, String>();
     private int COFFEE_COUNT = 0;
     private boolean hasInit = false;
     private boolean hasGDPRConsent = false;
+
+
+    // Public Test params / datasets
+    public String [] dessertDataSet = new String [] {"Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla"};
+    public int [] colorDataSet = new int [] {Color.GRAY, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.YELLOW, Color.WHITE, Color.BLACK};
 
     // File I/O
     FileOutputStream outputStream;
 
 
-    //
     public boolean getGDPRConsent(){
         return hasGDPRConsent;
     }
-
     public void setGDPRConsent(boolean v) {
         hasGDPRConsent = v;
     }
 
 
-    // Temp getter for PLC
     public String getDefaultPlc(int i){
         if (i == 0){
             return DEFAULT_AD_PLC;
@@ -55,14 +61,17 @@ public class GlobalClass extends Application{
         return DEFAULT_AD_PLC;
     }
 
+
+
+
     // Getter for App ID (must remain unchanged)
     public String getAppId(){
         return APP_ID;
     }
 
     // Getter for get keywords
-    public List<String> getKeywords(){
-        return keywords;
+    public Map<String, String> getPubKeys(){
+        return pubKeys;
     }
 
     // Getter for COFFEE_COUNT (todo - should be hitting some backend DB in v2)
@@ -71,6 +80,12 @@ public class GlobalClass extends Application{
     }
 
     public void setCoffeeCount(int amt) {COFFEE_COUNT = amt;}
+
+    public void setPubKeys() {
+        pubKeys.put("type",  "expresso");
+        pubKeys.put("content_rating",  "5 stars");
+
+    }
 
     public void saveCoffeeCount() {
         writeSaveFile(String.valueOf(COFFEE_COUNT));

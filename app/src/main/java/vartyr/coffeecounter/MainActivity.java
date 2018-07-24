@@ -25,19 +25,14 @@ public class MainActivity extends AppCompatActivity  {
 
     private AerServBanner banner;
 
+    private GlobalClass globalVariable;
+
     private String LOG_TAG;
-    private String DEFAULT_PLC;
-    private String APP_ID;
-    private List<String> keywords;
-    private int COFFEE_COUNT;
 
     // We'll iterate through a recycler view of items
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
-    // Hard-coded dataset
-    String [] myDataSet = new String [] {"Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla"};
 
 
     // Set up a listener to listen to incoming events
@@ -82,17 +77,18 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        globalVariable = (GlobalClass) getApplicationContext();
+        LOG_TAG = globalVariable.getLogTag();
+
         // Set up the recycler view
         mRecyclerView = findViewById(R.id.dessert_recycler);
-        // mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
-
-        mAdapter = new CustomViewAdapter(myDataSet);
+        // specify an adapter and give it sample datasets to display
+        mAdapter = new CustomViewAdapter(globalVariable.dessertDataSet, globalVariable.colorDataSet);
         mRecyclerView.setAdapter(mAdapter);
 
         runOnUiThread(new Runnable() {
@@ -101,17 +97,7 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
-
-        DEFAULT_PLC = globalVariable.getDefaultPlc(0);
-        APP_ID = globalVariable.getAppId();
-        keywords = globalVariable.getKeywords();
-        COFFEE_COUNT = globalVariable.getCOFFEE_COUNT();
-
-
         globalVariable.initSaveFile();      // Will create a save file if not yet created.
-
-        LOG_TAG = globalVariable.getLogTag();
 
 
         // First check if consent has been given. If it has not been given, don't bother doing anything else in the view.
@@ -121,19 +107,21 @@ public class MainActivity extends AppCompatActivity  {
             Intent intent = new Intent(this, GDPRConsent.class);
             // Start the activity.
             startActivityForResult(intent,0);
-
+        } else {
+            handleGDPRDisplay();
         }
+
         // Call the init function only once and toggle it to false after it has been called.
         // Use this to print the debug state of the application and any other useful pieces of information
         if (!globalVariable.getHasInit()){
 
             // Call the init function only once and toggle it to false after it has been called.
-            AerServSdk.init(this, globalVariable.getAppId() );
+            AerServSdk.init(this, globalVariable.getAppId());
             globalVariable.setInit();
 
 
             // Any sort of init log messages should be printed here
-            Log.d(LOG_TAG, "Running init with site app ID: " + APP_ID);
+            Log.d(LOG_TAG, "Running init with site app ID: " + globalVariable.getAppId());
             Log.d(LOG_TAG, "Currently running SDK version: " + UrlBuilder.VERSION);
             Log.d(LOG_TAG, "GDPR consent has been given to AerServ SDK: " + Boolean.toString(globalVariable.getGDPRConsent()));
 
@@ -143,16 +131,22 @@ public class MainActivity extends AppCompatActivity  {
          loadBanner();
 
 
-        // Handle the rest of the view objects that are rendered each time the screen might be rotated, etc..
-
-
         // Log the SDK version
         TextView version = (TextView) findViewById(R.id.sdkVersion);
         version.setText("v" + UrlBuilder.VERSION);
 
+        TextView coffeeAmt = findViewById(R.id.coffeeCounterView_Main);
+        coffeeAmt.setText(Integer.toString(globalVariable.getCOFFEE_COUNT(), 0) + " Beans!");
+
+    }
+
+    // Call this function to update the GDPR state
+    public void handleGDPRDisplay(){
+
         // Get the GDPR consent flag and save it to the singleton class
         // Show the status of the consent above
         globalVariable.setGDPRConsent(AerServSdk.getGdprConsentFlag((Activity) this));
+
         TextView gdprconsentview = (TextView) findViewById(R.id.gdprStatus);
         if (!globalVariable.getGDPRConsent()) {
             gdprconsentview.setText("You have not consented to GDPR requirements");
@@ -162,20 +156,17 @@ public class MainActivity extends AppCompatActivity  {
             gdprconsentview.setTextColor(Color.parseColor("#5BB55E"));
         }
 
-        TextView coffeeAmt = findViewById(R.id.coffeeCounterView_Main);
-        coffeeAmt.setText(Integer.toString(globalVariable.getCOFFEE_COUNT(), 0) + " Beans!");
-
     }
 
 
 
     // Loads a banner into a defined spot
     public void loadBanner() {
-        final AerServConfig config = new AerServConfig(this, DEFAULT_PLC)
+        final AerServConfig config = new AerServConfig(this, globalVariable.getDefaultPlc(0))
                 .setEventListener(listener)
-                .setRefreshInterval(60)
+                .setRefreshInterval(10)
                 .setPreload(true)
-                .setKeywords(keywords);
+                .setPubKeys(globalVariable.getPubKeys());
         banner = (AerServBanner) findViewById(R.id.banner);
         banner.configure(config);
     }
@@ -200,9 +191,6 @@ public class MainActivity extends AppCompatActivity  {
 
         Intent intent = new Intent(this, CoffeeIncrementedActivity.class);
 
-        intent.putExtra("COFFEE_COUNT", COFFEE_COUNT);
-        intent.putExtra("PLC_ID", DEFAULT_PLC);
-
         // Start the activity.
         startActivityForResult(intent,1);
 
@@ -210,8 +198,6 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
 
         Log.d(LOG_TAG, " On activity result");
 
@@ -247,20 +233,17 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onDestroy(){
 
-        Log.d(LOG_TAG, "MAINACTIVITY CLEANUP");
-
-        // Get an instance of the singleton
-        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        Log.d(LOG_TAG, "MAIN ACTIVITY CLEANUP");
 
         // Save the current coffee count
         globalVariable.saveCoffeeCount();
 
         super.onDestroy();
+
         if(banner != null){
             banner.kill();
         }
     }
-
 
 
 }
