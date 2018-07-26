@@ -27,18 +27,24 @@ public class GlobalClass extends Application{
 
     // Define your global variables here for the singleton class
     private static final String LOG_TAG = "CoffeeCounter";
-    private static String DEFAULT_AD_PLC = "380000";
+    private static String DEFAULT_AD_PLC = "380883";
     private static String DEFAULT_INTERSTITIAL_PLC = "380004";
     private static final String APP_ID = "380000";
     private static Map<String, String> pubKeys = new HashMap<String, String>();
     private int COFFEE_COUNT = 0;
     private boolean hasInit = false;
     private boolean hasGDPRConsent = false;
+    public boolean supportA9 = true;
+    public boolean hasLoadedA9 = false;
 
 
     // Public Test params / datasets
     public String [] dessertDataSet = new String [] {"Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla"};
     public int [] colorDataSet = new int [] {Color.GRAY, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.YELLOW, Color.WHITE, Color.BLACK};
+
+    public static final String A9_APP_KEY = "a9_onboarding_app_id";
+    public static final String A9_SLOT_320x50 = "54fb2d08-c222-40b1-8bbe-4879322dc04b";
+    public static final String A9_SLOT_INTERSTITIAL = "4e918ac0-5c68-4fe1-8d26-4e76e8f74831";
 
     // File I/O
     FileOutputStream outputStream;

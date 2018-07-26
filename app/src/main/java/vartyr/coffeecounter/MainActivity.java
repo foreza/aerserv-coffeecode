@@ -15,7 +15,9 @@ import android.widget.TextView;
 import com.aerserv.sdk.*;
 import com.aerserv.sdk.utils.UrlBuilder;
 
+import com.amazon.device.ads.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,6 +35,10 @@ public class MainActivity extends AppCompatActivity  {
     private RecyclerView.LayoutManager mLayoutManager;
 
 
+    private List<DTBAdResponse> responses;
+
+
+
     // Set up a listener to listen to incoming AS events
     protected AerServEventListener listener = new AerServEventListener(){
         @Override
@@ -41,13 +47,18 @@ public class MainActivity extends AppCompatActivity  {
                 @Override
                 public void run() {
                     String msg = "";
+
+                    Log.d(LOG_TAG, "GOT EVENT! : " + event.toString());
+
+
                     switch (event) {
                         case PRELOAD_READY:
                             banner.show();
-                            Log.d(LOG_TAG, "Preload Ready for banner");
+                            Log.d(LOG_TAG, "Preload Ready for banner! A9 loaded here:" + globalVariable.hasLoadedA9);
                         case AD_FAILED:
                             if (args.size() > 1) {
-                                Log.d(LOG_TAG, "AD FAILED");
+                                Log.d(LOG_TAG, "AD FAILED / not loaded. A9 loaded here?" + globalVariable.hasLoadedA9);
+
                                 Integer adFailedCode =
                                         (Integer) args.get(AerServEventListener.AD_FAILED_CODE);
                                 String adFailedReason =
@@ -74,6 +85,7 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         // Get an instance of the singleton class
         globalVariable = (GlobalClass) getApplicationContext();
@@ -127,7 +139,24 @@ public class MainActivity extends AppCompatActivity  {
         }
 
         // Preload this banner on the page.
-         loadBanner();
+
+        if (globalVariable.supportA9){
+
+
+            Log.d(LOG_TAG, "Loading A9 as globalVariable.supportA9 is set to true");
+
+            // Initialize DTB (A9) SDK
+            AdRegistration.getInstance(globalVariable.A9_APP_KEY, this);
+            AdRegistration.enableLogging(true);
+            AdRegistration.enableTesting(true);
+            AdRegistration.useGeoLocation(true);
+            loadA9Banner();
+
+        } else {
+            loadBanner();
+        }
+
+
 
         // Handle Text View loading
         handleTextViews();
@@ -170,11 +199,56 @@ public class MainActivity extends AppCompatActivity  {
     public void loadBanner() {
         final AerServConfig config = new AerServConfig(this, globalVariable.getDefaultPlc(0))
                 .setEventListener(listener)
+                .setA9AdResponses(null)
 //                .setRefreshInterval(10) // Uncomment to set / configure refresh
                 .setPreload(true)
                 .setPubKeys(globalVariable.getPubKeys());
         banner = (AerServBanner) findViewById(R.id.banner);
         banner.configure(config);
+    }
+
+
+    public void loadA9Banner(){
+
+        final DTBAdRequest loader = new DTBAdRequest();
+        loader.setSizes(new DTBAdSize(300, 250, globalVariable.A9_SLOT_320x50));
+
+        loader.loadAd(new DTBAdCallback() {
+            @Override
+
+            // If A9 fails to fill, call loadBanner a
+            public void onFailure(AdError adError) {
+
+                Log.e(LOG_TAG, "A9 - Failed to get ad from Amazon");
+                globalVariable.hasLoadedA9 = false;
+                loadBanner();
+            }
+
+            @Override
+            public void onSuccess(DTBAdResponse dtbAdResponse) {
+
+                responses = new ArrayList<DTBAdResponse>();
+                responses.add(dtbAdResponse);
+
+                Log.d(LOG_TAG, "A9 - Successfully got " + dtbAdResponse.getDTBAds().size()
+                        + " banner ad from Amazon");
+
+                final AerServConfig config = new AerServConfig(MainActivity.this, globalVariable.getDefaultPlc(0))
+                        .setA9AdResponses(responses)
+                        .setEventListener(listener)
+                        .setPreload(true)
+                        .setPubKeys(globalVariable.getPubKeys());
+                banner = (AerServBanner) findViewById(R.id.banner);
+                globalVariable.hasLoadedA9 = true;  // NOTE: this does not gurantee a9 will fill!!!
+                banner.configure(config);
+
+                Log.d(LOG_TAG, "A9 - config set up");
+            }
+        });
+
+
+
+
     }
 
 
