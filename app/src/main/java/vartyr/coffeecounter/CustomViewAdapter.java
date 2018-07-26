@@ -14,19 +14,18 @@ import android.widget.Toast;
 
 import com.aerserv.sdk.AerServBanner;
 import com.aerserv.sdk.AerServConfig;
-
-import org.w3c.dom.Text;
-
 import java.util.Random;
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
  */
 public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.ViewHolder> {
+
     private static final String TAG = "CustomViewAdapter";
     private int[] placementDataSet;
     private String[] mDataSet;
     private int[] mColorSet;
+
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
 
     /**
@@ -34,13 +33,12 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView textView;
         private final Button buttonView;
         private final TextView placeholderView;
         private final Context context;
         private AerServBanner banner = null;
         public int color = Color.TRANSPARENT;
-        public String plc = "1038928";
+        public String plc = "380000";
         public Boolean bannerDisplaying = false;
 
         public ViewHolder(View v) {
@@ -57,7 +55,6 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
 
                 }
             });
-            textView = (TextView) v.findViewById(R.id.textView);
             placeholderView = (TextView) v.findViewById(R.id.banner_placeholder);
             buttonView = (Button) v.findViewById(R.id.button_send);
             banner = (AerServBanner) v.findViewById(R.id.banner_recycle);
@@ -122,13 +119,13 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
         AerServConfig config = new AerServConfig(viewHolder.getContext(), viewHolder.plc);
         AerServBanner banner = (AerServBanner) viewHolder.getBanner();
         viewHolder.bannerDisplaying = true;
-        banner.configure(config).show();
+//        banner.configure(config).show();
     }
 
     public void killBanner(ViewHolder viewHolder) {
         AerServBanner banner = (AerServBanner) viewHolder.getBanner();
         viewHolder.bannerDisplaying = false;
-        banner.kill();
+//        banner.kill();
     }
 
 

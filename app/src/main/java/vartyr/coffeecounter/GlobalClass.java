@@ -27,9 +27,9 @@ public class GlobalClass extends Application{
 
     // Define your global variables here for the singleton class
     private static final String LOG_TAG = "CoffeeCounter";
-    private static String DEFAULT_AD_PLC = "380000"; //   380000, 1038928
+    private static String DEFAULT_AD_PLC = "380000";
     private static String DEFAULT_INTERSTITIAL_PLC = "380004";
-    private static final String APP_ID = "380000"; // 380000, 1009188
+    private static final String APP_ID = "380000";
     private static Map<String, String> pubKeys = new HashMap<String, String>();
     private int COFFEE_COUNT = 0;
     private boolean hasInit = false;
@@ -84,7 +84,6 @@ public class GlobalClass extends Application{
     public void setPubKeys() {
         pubKeys.put("type",  "expresso");
         pubKeys.put("content_rating",  "5 stars");
-
     }
 
     public void saveCoffeeCount() {

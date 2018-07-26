@@ -24,9 +24,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity  {
 
     private AerServBanner banner;
-
     private GlobalClass globalVariable;
-
     private String LOG_TAG;
 
     // We'll iterate through a recycler view of items
@@ -35,7 +33,7 @@ public class MainActivity extends AppCompatActivity  {
     private RecyclerView.LayoutManager mLayoutManager;
 
 
-    // Set up a listener to listen to incoming events
+    // Set up a listener to listen to incoming AS events
     protected AerServEventListener listener = new AerServEventListener(){
         @Override
         public void onAerServEvent(final AerServEvent event, final List<Object> args){
@@ -77,6 +75,7 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Get an instance of the singleton class
         globalVariable = (GlobalClass) getApplicationContext();
         LOG_TAG = globalVariable.getLogTag();
 
@@ -130,13 +129,8 @@ public class MainActivity extends AppCompatActivity  {
         // Preload this banner on the page.
          loadBanner();
 
-
-        // Log the SDK version
-        TextView version = (TextView) findViewById(R.id.sdkVersion);
-        version.setText("v" + UrlBuilder.VERSION);
-
-        TextView coffeeAmt = findViewById(R.id.coffeeCounterView_Main);
-        coffeeAmt.setText(Integer.toString(globalVariable.getCOFFEE_COUNT(), 0) + " Beans!");
+        // Handle Text View loading
+        handleTextViews();
 
     }
 
@@ -158,13 +152,25 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
+    // Handle generic text updates
+    public void handleTextViews(){
+
+        // Log the SDK version
+        TextView version = (TextView) findViewById(R.id.sdkVersion);
+        version.setText("v" + UrlBuilder.VERSION);
+
+        TextView coffeeAmt = findViewById(R.id.coffeeCounterView_Main);
+        coffeeAmt.setText(Integer.toString(globalVariable.getCOFFEE_COUNT(), 0) + " Beans!");
+
+    }
+
 
 
     // Loads a banner into a defined spot
     public void loadBanner() {
         final AerServConfig config = new AerServConfig(this, globalVariable.getDefaultPlc(0))
                 .setEventListener(listener)
-                .setRefreshInterval(10)
+//                .setRefreshInterval(10) // Uncomment to set / configure refresh
                 .setPreload(true)
                 .setPubKeys(globalVariable.getPubKeys());
         banner = (AerServBanner) findViewById(R.id.banner);
@@ -175,8 +181,6 @@ public class MainActivity extends AppCompatActivity  {
     public void updateCoffeeCountInView(int counter) {
 
         String message = Integer.toString(counter, 0) + " Beans!";
-
-        Log.v("Updating counter: ", message);
 
         // Capture the layout's TextView and set the string as its text
         TextView textView = findViewById(R.id.coffeeCounterView_Main);
