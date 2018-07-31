@@ -21,7 +21,7 @@ public class GDPRConsent extends AppCompatActivity {
         // Get needed values from singleton class
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
 
-        LOG_TAG = globalVariable.getLogTag();
+        LOG_TAG = globalVariable.LOG_TAG;
 
 
     }

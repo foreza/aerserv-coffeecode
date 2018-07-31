@@ -1,13 +1,9 @@
 package vartyr.coffeecounter;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Color;
-import android.provider.Settings;
 import android.util.Log;
-
-import com.aerserv.sdk.AerServSdk;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,47 +13,38 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class GlobalClass extends Application{
+public class GlobalClass extends Application {
 
-    // Define your global variables here for the singleton class
-    private static final String LOG_TAG = "CoffeeCounter";
-    private static String DEFAULT_AD_PLC = "380883";
-    private static String DEFAULT_INTERSTITIAL_PLC = "380004";
-    private static final String APP_ID = "380000";
-    private static Map<String, String> pubKeys = new HashMap<String, String>();
-    private int COFFEE_COUNT = 0;
+    public final String LOG_TAG = "CoffeeCounter";
+    public final String APP_ID = "380000"; // Default TestPub: 380000 || CoffeeCounter: 1010277
+    public final String DEFAULT_AD_PLC = "380883"; // A9: 380883 || Test Rhythm One Perk Vast: 380883
+    public String DEFAULT_INTERSTITIAL_PLC = "1046757"; // Test Rhythm One Perk Vast: 380883
+    public final String A9_APP_KEY = "a9_onboarding_app_id";
+    public final String A9_SLOT_320x50 = "5ab6a4ae-4aa5-43f4-9da4-e30755f2b295";             // Price point(amznslots): o320x50p1
+    public final String A9_SLOT_300x250 = "54fb2d08-c222-40b1-8bbe-4879322dc04b";            // Price point(amznslots): o300x250p1
+    public final String A9_SLOT_INTERSTITIAL = "4e918ac0-5c68-4fe1-8d26-4e76e8f74831";       // ointerstitialp1
+
+    private int CoffeeCount = 0;
     private boolean hasInit = false;
     private boolean hasGDPRConsent = false;
-    public boolean supportA9 = true;
-    public boolean hasLoadedA9 = false;
+    private boolean supportA9 = false;
+    private static Map<String, String> pubKeys = new HashMap<String, String>();
 
 
     // Public Test params / datasets
+
+
     public String [] dessertDataSet = new String [] {"Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla"};
     public int [] colorDataSet = new int [] {Color.GRAY, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.YELLOW, Color.WHITE, Color.BLACK};
 
-    public static final String A9_APP_KEY = "a9_onboarding_app_id";
-    public static final String A9_SLOT_320x50 = "54fb2d08-c222-40b1-8bbe-4879322dc04b";
-    public static final String A9_SLOT_INTERSTITIAL = "4e918ac0-5c68-4fe1-8d26-4e76e8f74831";
-
-    // File I/O
-    FileOutputStream outputStream;
 
 
-    public boolean getGDPRConsent(){
-        return hasGDPRConsent;
-    }
-    public void setGDPRConsent(boolean v) {
-        hasGDPRConsent = v;
-    }
 
 
+    // TODO: Extend this to hit an endpoint to get PLCs
     public String getDefaultPlc(int i){
         if (i == 0){
             return DEFAULT_AD_PLC;
@@ -68,52 +55,54 @@ public class GlobalClass extends Application{
     }
 
 
+    // GET METHODS to access private variables
 
 
-    // Getter for App ID (must remain unchanged)
-    public String getAppId(){
-        return APP_ID;
+    public int getCoffeeCount(){
+        return CoffeeCount;
     }
-
-    // Getter for get keywords
+    public boolean getHasInit(){
+        return hasInit;
+    }
+    public boolean getGDPRConsent(){
+        return hasGDPRConsent;
+    }
+    public boolean getSupportA9() {return supportA9; }
     public Map<String, String> getPubKeys(){
         return pubKeys;
     }
 
-    // Getter for COFFEE_COUNT (todo - should be hitting some backend DB in v2)
-    public int getCOFFEE_COUNT(){
-        return COFFEE_COUNT;
+
+
+
+    // MUTATOR METHODS to access private variables
+
+
+    public void setCoffeeCount(int amt) {CoffeeCount = amt;}
+    public void setInit(){
+        hasInit = true;
     }
-
-    public void setCoffeeCount(int amt) {COFFEE_COUNT = amt;}
-
+    public void setGDPRConsent(boolean v) {
+        hasGDPRConsent = v;
+    }
+    public void setSupportA9(boolean v) {supportA9 = v; }
     public void setPubKeys() {
         pubKeys.put("type",  "expresso");
         pubKeys.put("content_rating",  "5 stars");
     }
 
     public void saveCoffeeCount() {
-        writeSaveFile(String.valueOf(COFFEE_COUNT));
+        writeSaveFile(String.valueOf(CoffeeCount));
     }
-
-    // Setter for COFFEE_COUNT
     public void incrementCOFFEE_COUNT(int amt){
-        COFFEE_COUNT += amt;
+        CoffeeCount += amt;
     }
 
-    // Getter for log tag (must remain unchanged)
-    public String getLogTag(){
-        return LOG_TAG;
-    }
 
-    // Getter for hasInit()
-    public boolean getHasInit(){
-        return hasInit;
-    }
 
-    public void setInit(){
-        hasInit = true;
-    }
+
+    // FILE I/O METHODS
+
 
     public void writeSaveFile (String data) {
         try {
@@ -133,14 +122,14 @@ public class GlobalClass extends Application{
 
     public void initSaveFile(){
         // If the save file is empty
-        if (readSaveFile() == "") {
+        if (readSaveFile().equals("")) {
             Log.d(LOG_TAG, "File not found, making new one");
             createSaveFile();
             writeSaveFile("0");     // For now, we'll just store the counter there and parse out the string / convert it
         } else {
             String output = readSaveFile();
             Log.d(LOG_TAG, "Contained in file: " + output);
-            COFFEE_COUNT = Integer.parseInt(output);
+            CoffeeCount = Integer.parseInt(output);
         }
     }
 
@@ -154,7 +143,7 @@ public class GlobalClass extends Application{
             if ( inputStream != null ) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
+                String receiveString;
                 StringBuilder stringBuilder = new StringBuilder();
 
                 while ( (receiveString = bufferedReader.readLine()) != null ) {

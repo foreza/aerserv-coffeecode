@@ -69,7 +69,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
         // Save an instance of our singleton
         globalVariable = (GlobalClass) getApplicationContext();
-        LOG_TAG = globalVariable.getLogTag();
+        LOG_TAG = globalVariable.LOG_TAG;
 
 
         // If the save file is empty
@@ -87,7 +87,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
         Log.d(LOG_TAG, "Preloading Interstitial on CoffeeCounter");
 
-        final AerServConfig config = new AerServConfig(this, globalVariable.getDefaultPlc(1))
+        final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_INTERSTITIAL_PLC)
                 .setDebug(true)
                 .setEventListener(listener)
                 .setPreload(true)
