@@ -8,7 +8,6 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,7 +20,7 @@ public class GlobalClass extends Application {
     public final String LOG_TAG = "CoffeeCounter";
     public final String APP_ID = "380000"; // Default TestPub: 380000 || CoffeeCounter: 1010277
     public final String DEFAULT_AD_PLC = "380883"; // A9: 380883 || Test Rhythm One Perk Vast: 380883
-    public String DEFAULT_INTERSTITIAL_PLC = "1046757"; // Test Rhythm One Perk Vast: 380883
+    public String DEFAULT_INTERSTITIAL_PLC = "380889"; // Test Rhythm One Perk Vast: 380883 | 1046757 - coffeecounter interstitial
     public final String A9_APP_KEY = "a9_onboarding_app_id";
     public final String A9_SLOT_320x50 = "5ab6a4ae-4aa5-43f4-9da4-e30755f2b295";             // Price point(amznslots): o320x50p1
     public final String A9_SLOT_300x250 = "54fb2d08-c222-40b1-8bbe-4879322dc04b";            // Price point(amznslots): o300x250p1

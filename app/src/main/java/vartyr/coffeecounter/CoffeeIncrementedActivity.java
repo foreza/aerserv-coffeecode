@@ -15,17 +15,21 @@ import com.aerserv.sdk.AerServEvent;
 import com.aerserv.sdk.AerServEventListener;
 import com.aerserv.sdk.AerServInterstitial;
 import com.aerserv.sdk.AerServVirtualCurrency;
+import com.amazon.device.ads.*;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CoffeeIncrementedActivity extends AppCompatActivity {
 
+    private AerServInterstitial interstitial;   // AS Interstitial
+    private List<DTBAdResponse> responses;      // A9 AD responses
 
-    // This view will provide an interstitial
-    private AerServInterstitial interstitial;
+
     private int INCREMENT_AMT = 0;
     private boolean interstitialLoaded = false;
-    private String LOG_TAG;
+    private static String LOG_TAG;
     private GlobalClass globalVariable;
 
 
@@ -78,7 +82,13 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
         }
 
         // Begin routine to load Interstitial.
-        preloadInterstitial();
+
+        if (globalVariable.getSupportA9()) {
+            Log.d(LOG_TAG, "Loading A9 as support A9 is set to true");
+            preloadA9Interstitial();
+        } else {
+            preloadInterstitial();
+        }
 
     }
 
@@ -89,11 +99,49 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_INTERSTITIAL_PLC)
                 .setDebug(true)
+                .setA9AdResponses(null)
                 .setEventListener(listener)
                 .setPreload(true)
                 .setVerbose(true);
 
         interstitial = new AerServInterstitial(config);
+    }
+
+    public void preloadA9Interstitial() {
+
+        Log.d(LOG_TAG, "Preloading (A9) Interstitial on CoffeeCounter");
+
+
+        final DTBAdRequest loader = new DTBAdRequest();
+        loader.setSizes(new DTBAdSize.DTBInterstitialAdSize(globalVariable.A9_SLOT_INTERSTITIAL));
+        loader.loadAd(new DTBAdCallback() {
+            @Override
+
+            // If A9 fails to fill, call preloadInterstitial
+            public void onFailure(AdError adError) {
+                Log.e(LOG_TAG, "A9 - Failed to get interstitial ad from Amazon");
+                preloadInterstitial();
+            }
+
+            @Override
+            public void onSuccess(DTBAdResponse dtbAdResponse) {
+                responses = new ArrayList<DTBAdResponse>();
+                responses.add(dtbAdResponse);
+
+                Log.d(LOG_TAG, "A9 - Successfully got " + dtbAdResponse.getDTBAds().size()
+                        + " interstitial ad from Amazon");
+
+
+                final AerServConfig config = new AerServConfig(CoffeeIncrementedActivity.this, globalVariable.DEFAULT_INTERSTITIAL_PLC)
+                        .setA9AdResponses(responses)
+                        .setEventListener(listener)
+                        .setPreload(true)
+                        .setPubKeys(globalVariable.getPubKeys());
+                interstitial = new AerServInterstitial(config);
+
+            }
+        });
+
     }
 
 
