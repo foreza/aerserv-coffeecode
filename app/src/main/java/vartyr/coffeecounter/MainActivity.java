@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
 
 
+
     // Set up a listener to listen to incoming AS events
     protected AerServEventListener listener = new AerServEventListener() {
         @Override
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     String msg = "";
+                    AerServTransactionInformation ti = null;
                     switch (event) {
                         case PRELOAD_READY:
                             banner.show();
@@ -56,11 +58,23 @@ public class MainActivity extends AppCompatActivity {
 //                                Log.d(LOG_TAG, "Ad Failed with message: " + args.get(0).toString());
                                 Log.d(LOG_TAG, "AD FAILED, no other info");
                             }
+                        case LOAD_TRANSACTION:
+                            if (args.size() > 1) {
+                                ti = (AerServTransactionInformation) args.get(0);
+                                Log.d(LOG_TAG, "Load Transaction Information PLC has:"
+                                        + "\n buyerName=" + ti.getBuyerName()
+                                        + "\n buyerPrice=" + ti.getBuyerPrice());
+                            }
+                            else {
+                                Log.d(LOG_TAG, "Load Transaction Information PLC has no information");
+                            }
+                            break;
                         case AD_IMPRESSION:
                             Log.d(LOG_TAG, "AD IMPRESSION");
                             break;
                         case AD_LOADED:
                             Log.d(LOG_TAG, "AD loaded");
+
                             break;
                     }
                 }

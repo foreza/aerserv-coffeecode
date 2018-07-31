@@ -25,6 +25,7 @@ public class GlobalClass extends Application {
     public final String A9_SLOT_320x50 = "5ab6a4ae-4aa5-43f4-9da4-e30755f2b295";             // Price point(amznslots): o320x50p1
     public final String A9_SLOT_300x250 = "54fb2d08-c222-40b1-8bbe-4879322dc04b";            // Price point(amznslots): o300x250p1
     public final String A9_SLOT_INTERSTITIAL = "4e918ac0-5c68-4fe1-8d26-4e76e8f74831";       // ointerstitialp1
+    public final String ADMOB_320x50 = "ca-app-pub-8808655139492822/6206424794";            // Not actually used, here for reference
 
     private int CoffeeCount = 0;
     private boolean hasInit = false;
