@@ -18,8 +18,8 @@ import java.util.Map;
 public class GlobalClass extends Application {
 
     public final String LOG_TAG = "CoffeeCounter";
-    public final String APP_ID = "380000"; // Default TestPub: 380000 || CoffeeCounter: 1010277
-    public final String DEFAULT_AD_PLC = "380883"; // A9: 380883 || Test Rhythm One Perk Vast: 380883
+    public final String APP_ID = "1010277"; // Default TestPub: 380000 || CoffeeCounter: 1010277
+    public final String DEFAULT_AD_PLC = "1047721"; // A9: 380883 || Test Rhythm One Perk Vast: 380883
     public String DEFAULT_INTERSTITIAL_PLC = "380889"; // Test Rhythm One Perk Vast: 380883 | 1046757 - coffeecounter interstitial
     public final String A9_APP_KEY = "a9_onboarding_app_id";
     public final String A9_SLOT_320x50 = "5ab6a4ae-4aa5-43f4-9da4-e30755f2b295";             // Price point(amznslots): o320x50p1

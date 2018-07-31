@@ -1,6 +1,4 @@
 package vartyr.coffeecounter;
-
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -119,13 +117,13 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
         AerServConfig config = new AerServConfig(viewHolder.getContext(), viewHolder.plc);
         AerServBanner banner = (AerServBanner) viewHolder.getBanner();
         viewHolder.bannerDisplaying = true;
-//        banner.configure(config).show();
+        banner.configure(config).show();
     }
 
     public void killBanner(ViewHolder viewHolder) {
         AerServBanner banner = (AerServBanner) viewHolder.getBanner();
         viewHolder.bannerDisplaying = false;
-//        banner.kill();
+        banner.kill();
     }
 
 
