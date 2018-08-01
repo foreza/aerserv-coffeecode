@@ -31,10 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
     private GlobalClass globalVariable;
     private static String LOG_TAG;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-
 
 
     // Set up a listener to listen to incoming AS events
@@ -44,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    String msg = "";
-                    AerServTransactionInformation ti = null;
+                    AerServTransactionInformation ti;
                     switch (event) {
                         case PRELOAD_READY:
                             banner.show();
@@ -55,11 +50,10 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d(LOG_TAG, "AD FAILED / not loaded. A9 supported here?" + globalVariable.getSupportA9()
                                         + " Error code: " + AerServEventListener.AD_FAILED_CODE + ", reason=" + AerServEventListener.AD_FAILED_REASON);
                             } else {
-//                                Log.d(LOG_TAG, "Ad Failed with message: " + args.get(0).toString());
                                 Log.d(LOG_TAG, "AD FAILED, no other info");
                             }
                         case LOAD_TRANSACTION:
-                            if (args.size() > 1) {
+                            if (args.size() >= 1) {
                                 ti = (AerServTransactionInformation) args.get(0);
                                 Log.d(LOG_TAG, "Load Transaction Information PLC has:"
                                         + "\n buyerName=" + ti.getBuyerName()
@@ -93,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         // First check if consent has been given.
         // If it has not been given, don't bother doing anything else in the view.
         // Short terminate and start the GDPR Consent activity instead.
-        if (!AerServSdk.getGdprConsentFlag((Activity) this)) {
+        if (!AerServSdk.getGdprConsentFlag(this)) {
             Intent intent = new Intent(this, GDPRConsent.class);
             startActivityForResult(intent, 0);
         } else {
@@ -129,15 +123,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Get the GDPR consent flag and save it to the singleton class
         // Show the status of the consent above
-        globalVariable.setGDPRConsent(AerServSdk.getGdprConsentFlag((Activity) this));
+        globalVariable.setGDPRConsent(AerServSdk.getGdprConsentFlag(this));
 
-        TextView gdprconsentview = (TextView) findViewById(R.id.gdprStatus);
+        TextView GDPRConsentView = findViewById(R.id.gdprStatus);
         if (!globalVariable.getGDPRConsent()) {
-            gdprconsentview.setText("You have not consented to GDPR requirements");             // TODO: Use Android strings
-            gdprconsentview.setTextColor(Color.parseColor("#C40824"));
+            GDPRConsentView.setText(R.string.gdprconsentview_notConsent);
+            GDPRConsentView.setTextColor(Color.parseColor("#C40824"));
         } else {
-            gdprconsentview.setText("Thank you for giving consent per GDPR requirements!");     // TODO: Use Android strings
-            gdprconsentview.setTextColor(Color.parseColor("#5BB55E"));
+            GDPRConsentView.setText(R.string.gdprconsentview_didConsent);
+            GDPRConsentView.setTextColor(Color.parseColor("#5BB55E"));
         }
 
     }
@@ -147,10 +141,10 @@ public class MainActivity extends AppCompatActivity {
     private void initializeRecyclerView() {
 
         // Set up the recycler view, use a linear layoutmanager, feed data sets
-        mRecyclerView = findViewById(R.id.dessert_recycler);
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView mRecyclerView = findViewById(R.id.dessert_recycler);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new CustomViewAdapter(globalVariable.dessertDataSet, globalVariable.colorDataSet);
+        final RecyclerView.Adapter mAdapter = new CustomViewAdapter(globalVariable.dessertDataSet, globalVariable.colorDataSet);
         mRecyclerView.setAdapter(mAdapter);
         runOnUiThread(new Runnable() {
             public void run() {
@@ -190,11 +184,12 @@ public class MainActivity extends AppCompatActivity {
     public void initializeTextView() {
 
         // Log the SDK version
-        TextView version = (TextView) findViewById(R.id.sdkVersion);
-        version.setText("v" + UrlBuilder.VERSION);                       // TODO: Use Android strings
+        TextView version = findViewById(R.id.sdkVersion);
+        version.setText(getString(R.string.aerserv_sdk_version, UrlBuilder.VERSION));                       // TODO: Use Android strings
 
         TextView coffeeAmt = findViewById(R.id.coffeeCounterView_Main);
-        coffeeAmt.setText(Integer.toString(globalVariable.getCoffeeCount(), 0) + " Beans!");     // TODO: Use Android strings
+        coffeeAmt.setText(getString(R.string.coffee_bean_count, globalVariable.getCoffeeCount()));
+//                Integer.toString(globalVariable.getCoffeeCount(), 0) + " Beans!");     // TODO: Use Android strings
 
     }
 
@@ -206,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                 .setA9AdResponses(null)
                 .setPreload(true)
                 .setPubKeys(globalVariable.getPubKeys());
-        banner = (AerServBanner) findViewById(R.id.banner);
+        banner = findViewById(R.id.banner);
         banner.configure(config);
     }
 
@@ -239,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                         .setEventListener(listener)
                         .setPreload(true)
                         .setPubKeys(globalVariable.getPubKeys());
-                banner = (AerServBanner) findViewById(R.id.banner);
+                banner = findViewById(R.id.banner);
                 banner.configure(config);
 
             }

@@ -13,6 +13,11 @@
     <!-- Optional.  If excluded, ads will not be cached. -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!--For InMobi rich media ads-->
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
     <application
         android:name=".GlobalClass"
         android:allowBackup="true"
@@ -76,6 +81,14 @@
         <activity
             android:name="com.mopub.mobileads.RewardedMraidActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
+
+        <activity
+            android:name="com.inmobi.rendering.InMobiAdActivity"
+            android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:resizeableActivity="false"
+            android:theme="@android:style/Theme.NoTitleBar"
+            tools:ignore="UnusedAttribute"></activity>
 
         <meta-data
             android:name="preloaded_fonts"

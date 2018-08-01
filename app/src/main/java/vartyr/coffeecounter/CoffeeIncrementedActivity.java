@@ -161,7 +161,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
     // This sets the amount of coffee beans just obtained
     public void setMessageOfCounter(int amount) {
         TextView textView = findViewById(R.id.coffeeCountView_Incremented);
-        textView.setText("You have earned this many beans: " + INCREMENT_AMT);
+        textView.setText(getString(R.string.coffee_bean_increment_amount, INCREMENT_AMT));
     }
 
 
@@ -182,7 +182,6 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
             case android.R.id.home:
 
                 Log.i("DATA", "Hit Actionbar Back Button");
-
                 Log.d(LOG_TAG, "Back button(nav bar) pressed");
                 Intent returnIntent = this.getIntent();
                 returnIntent.putExtra("INCREMENT_AMT", INCREMENT_AMT);

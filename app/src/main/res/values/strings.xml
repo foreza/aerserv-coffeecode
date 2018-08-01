@@ -1,11 +1,29 @@
 <resources>
     <string name="app_name">CoffeeCounter</string>
-    <string name="button_coffee">Drink Coffee!</string>
-    <string name="button_showInterstitial_coffee">Play Ad, collect beans!</string>
+    <string name="button_coffee">Break time! Drink Coffee!</string>
+    <string name="gdprconsentview_notConsent_detailed">You have not consented to EU GDPR requirements. As such, if you are in the EU, the content we show may not be as accurate. Thank you for your understanding.</string>
+    <string name="gdprconsentview_didConsent_detailed">You have consented to EU GDPR requirements. Thanks! We will do the best we can to provide relevant traffic to you.</string>
+    <string name="gdprconsentview_notConsent">GDPR Consent not given</string>
+    <string name="gdprconsentview_didConsent">GDPR Consent given!</string>
+
+    <string name="button_showInterstitial_coffee">Watch, sip coffee, collect beans!</string>
+    <string name="aerserv_sdk_version">AerServ SDK v%1$s</string>
+    <string name="coffee_bean_count">%1$d beans</string>
+    <string name="coffee_bean_increment_amount">You earned %1$d beans! Thanks for joining us on your coffee break.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="element_text">Dessert</string>
 
+    <!--GDPR Specific, credits to https://github.com/MFlisar/GDPRDialog -->
+
+    <string name="gdpr_dialog_title">Hold on, partner...</string>
+    <string name="gdpr_dialog_text1_part1">We care about your privacy and data security.</string>
+    <string name="gdpr_dialog_text1_part2">We keep this app free by using third party services.</string>
+    <string name="gdpr_dialog_text2_singular">We use the AerServ and InMobi monetization SDKs in this app. This service (including its partners) collects unique identifiers and other personal data. You can change your choice at any time in the app settings.</string>
+    <string name="gdpr_dialog_question">Can we continue to use your data for these purposes?</string>
+    <string name="gdpr_dialog_text3">By agreeing, you are confirming that you are over the age of 16.</string>
+    <string name="gdpr_user_consent">Yes, I consent</string>
+    <string name="gdpr_user_no_consent">No</string>
 
 </resources>
