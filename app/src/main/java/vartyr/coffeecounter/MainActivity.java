@@ -105,6 +105,10 @@ public class MainActivity extends AppCompatActivity {
         // Use this to print the debug state of the application and any other useful pieces of information
         if (!globalVariable.getHasInit()) {
             initializeSDK();
+
+            // Start this activity for testing purposes
+            Intent intent = new Intent(this, SipAndSwipe.class);
+            startActivity(intent);
         }
 
         // Preload banner on this activity
