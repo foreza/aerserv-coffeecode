@@ -49,15 +49,14 @@ public class SipAndSwipe extends Activity {
                             } else {
                                 Log.d(LOG_TAG, "AD FAILED, no other info");
                             }
+                            break;
                         case LOAD_TRANSACTION:
                             msg = msg + "LOAD_TRANSACTION";
                             Toast.makeText(SipAndSwipe.this, msg, Toast.LENGTH_SHORT).show();
-                            if (args.size() >= 1) {
-                                Log.d(LOG_TAG, "Load Transaction Information PLC has:" + args.get(0));
-                            }
-                            else {
-                                Log.d(LOG_TAG, "Load Transaction Information PLC has no information");
-                            }
+                            ti = (AerServTransactionInformation) args.get(0);
+                            msg = "Load Transaction Information PLC has:"
+                                    + "\n buyerName=" + ti.getBuyerName()
+                                    + "\n buyerPrice=" + ti.getBuyerPrice();
                             break;
                         case AD_IMPRESSION:
                             msg = msg + "AD_IMPRESSION";
@@ -68,7 +67,6 @@ public class SipAndSwipe extends Activity {
                             msg = msg + "AD_LOADED";
                             Toast.makeText(SipAndSwipe.this, msg, Toast.LENGTH_SHORT).show();
                             Log.d(LOG_TAG, "AD loaded");
-
                             break;
                     }
                 }

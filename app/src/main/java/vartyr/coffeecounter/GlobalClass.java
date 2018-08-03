@@ -19,8 +19,8 @@ import java.util.Map;
 public class GlobalClass extends Application {
 
     public final String LOG_TAG = "CoffeeCounter";
-    public final String APP_ID = "1010277"; // Default TestPub: 380000 || CoffeeCounter: 1010277
-    public final String DEFAULT_AD_PLC = "1047721"; // A9: 380883 || Test Rhythm One Perk Vast: 380883
+    public final String APP_ID = "380000"; // Default TestPub: 380000 || CoffeeCounter: 1010277
+    public final String DEFAULT_AD_PLC = "380000"; // A9: 380883 || Test Rhythm One Perk Vast: 380883
     public String DEFAULT_INTERSTITIAL_PLC = "380004"; // Test Rhythm One Perk Vast: 380883 | 1046757 - coffeecounter interstitial | A9: 380889
     public String DEFAULT_300X250TEST_PLC = "380066"; // Test Rhythm One Perk Vast: 380883 | 1048445 - coffeecounter interstitial | A9: 380889
     public final String A9_APP_KEY = "a9_onboarding_app_id";
@@ -41,6 +41,8 @@ public class GlobalClass extends Application {
     public String [] dessertDataSet = new String [] {"Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla"};
     public int [] colorDataSet = new int [] {Color.GRAY, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.YELLOW, Color.WHITE, Color.BLACK};
     public String [] PLC_TEST_SEQUENCE = new String [] {"380004", "380062", "380066", "380078", "380020", "380756", "380049"};
+    public String [] PLC_TEST_SEQUENCE_v2 = new String [] {"380062", "380066"};
+
     public int PLC_TEST_COUNTER = -1;
 
 
@@ -50,8 +52,8 @@ public class GlobalClass extends Application {
         }
         else{
             PLC_TEST_COUNTER++;     // Increment test counter
-            Log.d(LOG_TAG, "Showing: " + PLC_TEST_SEQUENCE[PLC_TEST_COUNTER]);
-            return PLC_TEST_SEQUENCE[PLC_TEST_COUNTER];
+            Log.d(LOG_TAG, "Showing: " + PLC_TEST_SEQUENCE_v2[PLC_TEST_COUNTER]);
+            return PLC_TEST_SEQUENCE_v2[PLC_TEST_COUNTER];
         }
     }
 

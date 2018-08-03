@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                             banner.show();
                             Log.d(LOG_TAG, "Preload Ready for banner! A9 supported here:" + globalVariable.getSupportA9());
                         case AD_FAILED:
-                            if (args.size() > 1) {
+                            if (args.size() > 0) {
                                 Log.d(LOG_TAG, "AD FAILED / not loaded. A9 supported here?" + globalVariable.getSupportA9()
                                         + " Error code: " + AerServEventListener.AD_FAILED_CODE + ", reason=" + AerServEventListener.AD_FAILED_REASON);
                             } else {
@@ -54,10 +54,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         case LOAD_TRANSACTION:
                             if (args.size() >= 1) {
-                                ti = (AerServTransactionInformation) args.get(0);
-                                Log.d(LOG_TAG, "Load Transaction Information PLC has:"
-                                        + "\n buyerName=" + ti.getBuyerName()
-                                        + "\n buyerPrice=" + ti.getBuyerPrice());
+                                Log.d(LOG_TAG, "Load Transaction Information PLC has:" + args.get(0));
                             }
                             else {
                                 Log.d(LOG_TAG, "Load Transaction Information PLC has no information");
@@ -167,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Initialize DTB (A9) SDK
-        globalVariable.setSupportA9(true);
+//        globalVariable.setSupportA9(true);
         AdRegistration.getInstance(globalVariable.A9_APP_KEY, this);
         AdRegistration.enableLogging(true);
         AdRegistration.enableTesting(true);
@@ -200,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
     public void loadBanner() {
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_AD_PLC)
                 .setEventListener(listener)
+                .setRefreshInterval(10)
                 .setA9AdResponses(null)
                 .setPreload(true)
                 .setPubKeys(globalVariable.getPubKeys());
