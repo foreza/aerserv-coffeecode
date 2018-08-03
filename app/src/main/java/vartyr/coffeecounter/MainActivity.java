@@ -187,13 +187,11 @@ public class MainActivity extends AppCompatActivity {
     // Handle generic text updates
     public void initializeTextView() {
 
-        // Log the SDK version
         TextView version = findViewById(R.id.sdkVersion);
-        version.setText(getString(R.string.aerserv_sdk_version, UrlBuilder.VERSION));                       // TODO: Use Android strings
+        version.setText(getString(R.string.aerserv_sdk_version, UrlBuilder.VERSION));
 
         TextView coffeeAmt = findViewById(R.id.coffeeCounterView_Main);
         coffeeAmt.setText(getString(R.string.coffee_bean_count, globalVariable.getCoffeeCount()));
-//                Integer.toString(globalVariable.getCoffeeCount(), 0) + " Beans!");     // TODO: Use Android strings
 
     }
 

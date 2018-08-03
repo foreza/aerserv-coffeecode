@@ -11,7 +11,7 @@
     <string name="coffee_bean_count">%1$d beans</string>
     <string name="coffee_bean_increment_amount">You earned %1$d beans! Thanks for joining us on your coffee break.</string>
 
-    <string name="sip_welcome">Welcome to CoffeeCounter! Sip and enjoy.</string>
+    <string name="sip_welcome">Welcome to CoffeeCounter!</string>
     <string name="begin_drink">Begin Caffeination Sequence</string>
 
     <!-- TODO: Remove or change this placeholder text -->

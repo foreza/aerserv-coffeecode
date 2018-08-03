@@ -22,15 +22,15 @@
 
     <TextView
         android:id="@+id/sipWelcome"
-        android:layout_width="304dp"
-        android:layout_height="60dp"
+        android:layout_width="232dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="15dp"
         android:text="@string/sip_welcome"
-        android:textSize="18dp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -58,8 +58,11 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginStart="10dp"
-        android:text="@string/begin_drink"
+        android:background="@android:color/holo_green_dark"
         android:onClick="startMainActivity"
+        android:text="@string/begin_drink"
+        android:textColor="@android:color/holo_orange_light"
+        android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/bannerSwipe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
