@@ -16,7 +16,7 @@ import java.util.TimerTask;
 public class SipAndSwipe extends Activity {
 
     private AerServBanner banner;               // AS Banner
-
+    private Timer timer;
     private GlobalClass globalVariable;
     private static String LOG_TAG;
 
@@ -80,7 +80,8 @@ public class SipAndSwipe extends Activity {
 
     public void configureLooper() {
         final long period = 30000;
-        new Timer().schedule(new TimerTask() {
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 Log.d(LOG_TAG, " - Looper now calling load banner");
@@ -139,6 +140,9 @@ public class SipAndSwipe extends Activity {
         super.onDestroy();
 
         // TODO: Do any sort of cleanup methods here
+
+        timer.cancel();
+        timer.purge();
 
         if (banner != null) {
             banner.kill();
