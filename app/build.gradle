@@ -29,6 +29,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation files('libs/aerserv-sdk.jar')
     implementation 'com.google.android.gms:play-services-ads:15.0.1'
+    implementation 'com.google.firebase:firebase-ads:15.0.1'
     //    implementation 'com.google.android.gms:play-services-basement:15.0.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation files('libs/AudienceNetwork.aar')

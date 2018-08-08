@@ -7,18 +7,19 @@
     tools:context=".SipAndSwipe">
 
 
+    // Currently being used for testing MREC placements (300x250)
     <com.aerserv.sdk.AerServBanner
         android:id="@+id/bannerSwipe"
         android:layout_width="300dp"
         android:layout_height="250dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/sipWelcome"
@@ -53,18 +54,18 @@
         android:id="@+id/button"
         android:layout_width="300dp"
         android:layout_height="45dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
         android:background="@android:color/holo_green_dark"
         android:onClick="startMainActivity"
         android:text="@string/begin_drink"
         android:textColor="@android:color/holo_orange_light"
         android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/bannerSwipe"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
 </android.support.constraint.ConstraintLayout>

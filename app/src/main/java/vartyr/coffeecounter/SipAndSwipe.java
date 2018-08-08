@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.aerserv.sdk.*;
+import com.google.android.gms.ads.AdRequest;
+
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,6 +29,8 @@ public class SipAndSwipe extends Activity {
         globalVariable = (GlobalClass) getApplicationContext();     // Get app context for GV
         LOG_TAG = globalVariable.LOG_TAG;
         configureLooper();
+
+        AerServConfig.setTestMode(true);
     }
 
 
@@ -99,9 +103,10 @@ public class SipAndSwipe extends Activity {
     }
 
 
+    // Note: disabled so we can test something else
     private Runnable Timer_Tick = new Runnable() {
         public void run() {
-            loadBanner();
+             loadBanner();
         }
     };
 
@@ -115,8 +120,9 @@ public class SipAndSwipe extends Activity {
 
         String plc = globalVariable.getNextPLCForTest();
 
-        final AerServConfig config = new AerServConfig(this, plc )
+        AerServConfig config = new AerServConfig(this, plc )
                 .setEventListener(listener)
+                .setDebug(true)
                 .setPubKeys(globalVariable.getPubKeys());
         banner = findViewById(R.id.bannerSwipe);
         banner.configure(config);
@@ -124,6 +130,7 @@ public class SipAndSwipe extends Activity {
         Toast.makeText(SipAndSwipe.this, msg, Toast.LENGTH_SHORT).show();
         banner.show();
     }
+
 
     public void startMainActivity(View view) {
         Intent intent = new Intent(this, MainActivity.class);
