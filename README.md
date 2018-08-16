@@ -1,9 +1,7 @@
 
-Basic learning application for AerServ's SDK. 
+# InMobi / Aerserv - Android SDK PII example app
 
-Hi, I'm working at InMobi / AerServ, so I'd like to learn how to use their SDKs.
-
-
+Hi, i am a mem
 
 Sample Android SDK application utilizing MoPub SDK
 

@@ -44,6 +44,8 @@ public class GlobalClass extends Application {
     public String [] PLC_TEST_SEQUENCE_v2 = new String [] {"1036754", "380000", "380004", "380066"};
     public String [] PLC_TEST_SEQUENCE_v3 = new String [] {"380841", "380842", "380843", "380844", "380845"};
     public String [] PLC_TEST_SEQUENCE_v4 = new String [] {"1041551", "1041551", "1041551", "1041551", "1041551"};
+    public String [] PLC_TEST_SEQUENCE_v5 = new String [] {"380003", "380004"};
+
 
 
     public int PLC_TEST_COUNTER = -1;
@@ -61,6 +63,24 @@ public class GlobalClass extends Application {
             return PLC_TESTS[PLC_TEST_COUNTER];
         }
     }
+
+    public int PLC_INT_TEST_COUNTER = -1;
+
+
+    public String getNextInterstitialPLCForTest() {
+
+        String [] PLC_TESTS = PLC_TEST_SEQUENCE_v5;
+
+        if (PLC_INT_TEST_COUNTER > PLC_TESTS.length-2){
+            return DEFAULT_INTERSTITIAL_PLC;
+        }
+        else{
+            PLC_INT_TEST_COUNTER++;     // Increment test counter
+            Log.d(LOG_TAG, "Showing: " + PLC_TESTS[PLC_INT_TEST_COUNTER]);
+            return PLC_TESTS[PLC_INT_TEST_COUNTER];
+        }
+    }
+
 
 
 

@@ -7,7 +7,6 @@
     tools:context=".SipAndSwipe">
 
 
-    // Currently being used for testing MREC placements (300x250)
     <com.aerserv.sdk.AerServBanner
         android:id="@+id/bannerSwipe"
         android:layout_width="300dp"
