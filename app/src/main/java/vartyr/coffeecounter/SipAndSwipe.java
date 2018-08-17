@@ -118,7 +118,7 @@ public class SipAndSwipe extends Activity {
             banner.kill();      // kill the previous instance of the banner
         }
 
-        String plc = globalVariable.getNextPLCForTest();
+        String plc = globalVariable.DEFAULT_AD_PLC;
 
         AerServConfig config = new AerServConfig(this, plc )
                 .setEventListener(listener)
