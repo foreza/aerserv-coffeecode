@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-A
     // TODO: COMMENT
     private void initializeRecyclerView() {
 

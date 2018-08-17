@@ -1,5 +1,6 @@
 package vartyr.coffeecounter;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import com.aerserv.sdk.AerServEvent;
 import com.aerserv.sdk.AerServEventListener;
 import com.aerserv.sdk.AerServInterstitial;
 import com.aerserv.sdk.AerServVirtualCurrency;
+
+
 import com.amazon.device.ads.*;
 
 import java.util.ArrayList;
@@ -21,19 +24,16 @@ import java.util.List;
 
 public class CoffeeIncrementedActivity extends AppCompatActivity {
 
-
     private AerServInterstitial interstitial;   // AS Interstitial
     private List<DTBAdResponse> responses;      // A9 AD responses
 
-
     private int INCREMENT_AMT = 0;
-    private boolean interstitialLoaded = false;
     private static String LOG_TAG;
     private GlobalClass globalVariable;
 
 
     // Set up a listener to listen to incoming events.
-    protected AerServEventListener listener = new AerServEventListener(){
+    private AerServEventListener listener = new AerServEventListener(){
         @Override
         public void onAerServEvent(final AerServEvent event, final List<Object> args){
             CoffeeIncrementedActivity.this.runOnUiThread(new Runnable() {
@@ -42,8 +42,8 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
                     String msg = "[coffeeIncrement]";
                     switch (event) {
                         case PRELOAD_READY:
-                            findViewById(R.id.button_coffee_showInterstitial).setVisibility(View.VISIBLE);
-                            interstitialLoaded = true;
+                            globalVariable.CoffeeIncrementedInterstitialPreloaded = true;
+                            setLoadedButtonVisible();
                             Log.d(LOG_TAG, "Listener heard preload ready for interstitial");
                             break;
                         case VC_REWARDED:
@@ -65,6 +65,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee_incremented);
 
@@ -73,19 +74,29 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
         globalVariable = (GlobalClass) getApplicationContext();
         LOG_TAG = globalVariable.LOG_TAG;
 
-
-        // Begin routine to load Interstitial.
-        if (globalVariable.getSupportA9()) {
-            preloadA9Interstitial();
+        // Check to see if an interstitial is loaded already
+        if (globalVariable.CoffeeIncrementedInterstitialPreloaded) {
+            Log.d(LOG_TAG, "Interstitial is already loaded do not load another");
+            setLoadedButtonVisible();
         } else {
-            preloadInterstitial();
+            Log.d(LOG_TAG, "Interstitial is not loaded");
+            setLoadedButtonInvisible();
+            // Begin routine to load Interstitial.
+            if (globalVariable.getSupportA9()) {
+                preloadA9Interstitial();
+            } else {
+                preloadInterstitial();
+            }
         }
+
+
+
 
     }
 
     public void preloadInterstitial() {
 
-        final AerServConfig config = new AerServConfig(this, globalVariable.getNextInterstitialPLCForTest())
+        final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_INTERSTITIAL_PLC)
                 .setDebug(true)
                 .setA9AdResponses(null)
                 .setEventListener(listener)
@@ -93,6 +104,14 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
                 .setVerbose(true);
 
         interstitial = new AerServInterstitial(config);
+    }
+
+    public void setLoadedButtonVisible() {
+        findViewById(R.id.button_coffee_showInterstitial).setVisibility(View.VISIBLE);
+    }
+
+    public void setLoadedButtonInvisible() {
+        findViewById(R.id.button_coffee_showInterstitial).setVisibility(View.INVISIBLE);
     }
 
 
@@ -135,12 +154,15 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
     // Show the interstitial only if the flag is set to true
     public void showInterstitial(View view) {
-        if (interstitialLoaded) {
-            interstitial.show();
-            findViewById(R.id.button_coffee_showInterstitial).setVisibility(View.INVISIBLE);
-            Log.d(LOG_TAG, "Interstitial shown in Coffee Incremented");
-        }
-        else
+        if (globalVariable.CoffeeIncrementedInterstitialPreloaded) {
+            if (interstitial != null) {
+                interstitial.show();
+                Log.d(LOG_TAG, "Interstitial shown in Coffee Incremented");
+                globalVariable.CoffeeIncrementedInterstitialPreloaded = false;
+                setLoadedButtonInvisible();
+            }
+            Log.d(LOG_TAG, "Interstitial is null");
+        }  else
             Log.d(LOG_TAG, "Interstitial not ready / not shown in Coffee Incremented");
     }
 
@@ -185,9 +207,6 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        if(interstitial != null){
-            interstitial.kill();
-        }
 
         // Save the current coffee count
         globalVariable.saveCoffeeCount();

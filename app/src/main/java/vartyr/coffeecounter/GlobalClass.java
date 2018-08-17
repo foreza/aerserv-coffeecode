@@ -21,18 +21,22 @@ public class GlobalClass extends Application {
     public final String LOG_TAG = "CoffeeCounter";
     public final String APP_ID = "380000";
     public final String DEFAULT_AD_PLC = "380000";
-    public String DEFAULT_INTERSTITIAL_PLC = "380000";
+    public String DEFAULT_INTERSTITIAL_PLC = "380004";
     public String DEFAULT_300X250TEST_PLC = "380066";
     public final String A9_APP_KEY = "a9_onboarding_app_id";
     public final String A9_SLOT_320x50 = "5ab6a4ae-4aa5-43f4-9da4-e30755f2b295";             // Price point(amznslots): o320x50p1
     public final String A9_SLOT_300x250 = "54fb2d08-c222-40b1-8bbe-4879322dc04b";            // Price point(amznslots): o300x250p1
     public final String A9_SLOT_INTERSTITIAL = "4e918ac0-5c68-4fe1-8d26-4e76e8f74831";       // ointerstitialp1
 
+    public boolean CoffeeIncrementedInterstitialPreloaded = false;
+
     private int CoffeeCount = 0;
     private boolean hasInit = false;
     private boolean hasGDPRConsent = false;
     private boolean supportA9 = false;
     private static Map<String, String> pubKeys = new HashMap<String, String>();
+
+
 
 
     // Public Test params / datasets
