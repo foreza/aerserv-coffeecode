@@ -56,7 +56,7 @@ public class GlobalClass extends Application {
 
     public String getNextPLCForTest() {
 
-        String [] PLC_TESTS = PLC_TEST_SEQUENCE_v4;
+        String [] PLC_TESTS = PLC_TEST_SEQUENCE_v5;
 
         if (PLC_TEST_COUNTER > PLC_TESTS.length-2){
             return DEFAULT_AD_PLC;

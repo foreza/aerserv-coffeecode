@@ -9,6 +9,8 @@
 /captures
 .externalNativeBuild
 
+/app/release
+
 .idea/
 
 # Built application files
