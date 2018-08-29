@@ -7,6 +7,7 @@
     tools:context=".MainActivity"
     tools:layout_editor_absoluteY="81dp">
 
+
     <com.aerserv.sdk.AerServBanner
         android:id="@+id/banner"
         android:layout_width="match_parent"
@@ -67,6 +68,7 @@
         android:layout_marginTop="28dp"
         android:textColor="@android:color/holo_red_light"
         android:textStyle="italic"
+        android:onClick="modifyGDPRStatus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -80,6 +82,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/gdpr_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 
 </android.support.constraint.ConstraintLayout>

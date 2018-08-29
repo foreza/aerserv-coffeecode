@@ -5,6 +5,9 @@ package vartyr.coffeecounter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;    // App compatability for minimum / target API versions
 import android.os.Bundle;                           //
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,7 +26,7 @@ import com.amazon.device.ads.*;
 
 
 // Main Activity is the entry point into our application.
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnFragmentInteractionListener{
 
     private AerServBanner banner;               // AS Banner
     private List<DTBAdResponse> responses;      // A9 AD responses
@@ -31,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
 
     private GlobalClass globalVariable;
     private static String LOG_TAG;
+
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
 
     // Set up a listener to listen to incoming AS events
@@ -76,21 +82,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         globalVariable = (GlobalClass) getApplicationContext();     // Get an instance of the singleton class before anything else is done
+
+        fragmentManager = getSupportFragmentManager();
+        // FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 
         // First check if consent has been given.
         // If it has not been given, don't bother doing anything else in the view.
         // Short terminate and start the GDPR Consent activity instead.
         if (!AerServSdk.getGdprConsentFlag(this)) {
-            Intent intent = new Intent(this, GDPRConsent.class);
-            startActivityForResult(intent, 0);
-        } else {
+            // modifyGDPRStatus(null, savedInstanceState);
+            if (savedInstanceState == null) {
+                fragmentManager
+                        .beginTransaction()
+                        .add(R.id.gdpr_frame, GDPR_Fragment.newInstance("test", "test2"), "gdpr")
+                        .commit();
+                Log.d("[CC", "Created frag");
+            }
+        }
+        // Otherwise, if consent has been given, display the rest
+        else {
             handleGDPRDisplay();
         }
-
 
         LOG_TAG = globalVariable.LOG_TAG;                           // Save LOG_TAG since we frequently access
         initializeRecyclerView();                                   // Init the recycler view
@@ -104,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
             initializeSDK();
 
             // Start this activity for testing purposes
-            Intent intent = new Intent(this, SipAndSwipe.class);
-            startActivity(intent);
+//            Intent intent = new Intent(this, SipAndSwipe.class);
+//            startActivity(intent);
         }
 
         // Preload banner on this activity
@@ -116,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
             loadBanner();
         }
 
+
+        Log.d(LOG_TAG, "Reached end of onCreate for MainActivity");
 
     }
 
@@ -260,6 +277,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void modifyGDPRStatus(View view) {
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.gdpr_frame, GDPR_Fragment.newInstance("test", "test2"), "gdpr")
+                    .commit();
+            Log.d("[CC", "Created frag");
+        }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -305,4 +330,27 @@ public class MainActivity extends AppCompatActivity {
             banner.kill();
         }
     }
+
+    // Required for GDPR fragment
+    public void onFragmentInteraction(Uri uri){
+
+        Log.d("[CC", "MAIN onFragmentInteraction");
+
+        // leaving this empty, this was 'required'
+
+    }
+
+    public void onSelection(Boolean sel) {
+
+
+        fragmentManager
+                .beginTransaction()
+                .remove(getSupportFragmentManager().findFragmentById(R.id.gdpr_frame))
+                .commit();
+
+        Log.d("[CC", "MAIN onSelection GDPR Consent status: " + sel.toString());
+        handleGDPRDisplay();
+    }
+
+
 }
