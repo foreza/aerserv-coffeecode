@@ -31,12 +31,9 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     private AerServBanner banner;               // AS Banner
     private List<DTBAdResponse> responses;      // A9 AD responses
 
-
-    private GlobalClass globalVariable;
-    private static String LOG_TAG;
-
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
+    public FragmentManager fragmentManager;     // For any fragments we need to call / add
+    private GlobalClass globalVariable;         // To grab VC or anything we need
+    private static String LOG_TAG;              // Log tag
 
 
     // Set up a listener to listen to incoming AS events
@@ -79,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,18 +84,13 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         globalVariable = (GlobalClass) getApplicationContext();     // Get an instance of the singleton class before anything else is done
 
         fragmentManager = getSupportFragmentManager();
-        // FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
 
         // First check if consent has been given.
-        // If it has not been given, don't bother doing anything else in the view.
-        // Short terminate and start the GDPR Consent activity instead.
         if (!AerServSdk.getGdprConsentFlag(this)) {
-            // modifyGDPRStatus(null, savedInstanceState);
-            if (savedInstanceState == null) {
+            if (savedInstanceState == null) {       // TODO: Is this check necessary?
                 fragmentManager
                         .beginTransaction()
-                        .add(R.id.gdpr_frame, GDPR_Fragment.newInstance("test", "test2"), "gdpr")
+                        .add(R.id.gdpr_fragment, GDPR_Fragment.newInstance())
                         .commit();
                 Log.d("[CC", "Created frag");
             }
@@ -117,18 +110,20 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         // Use this to print the debug state of the application and any other useful pieces of information
         if (!globalVariable.getHasInit()) {
             initializeSDK();
-
-            // Start this activity for testing purposes
-//            Intent intent = new Intent(this, SipAndSwipe.class);
-//            startActivity(intent);
         }
 
-        // Preload banner on this activity
-        if (globalVariable.getSupportA9()) {
-            Log.d(LOG_TAG, "Loading A9 as support A9 is set to true");
-            loadA9Banner();
+        // For automated testing, change the value of the globalVariable
+        if (globalVariable.sipAndSwipeMode) {
+            Intent intent = new Intent(this, SipAndSwipe.class);
+            startActivity(intent);
         } else {
-            loadBanner();
+            // Preload banner on this activity
+            if (globalVariable.getSupportA9()) {
+                Log.d(LOG_TAG, "Loading A9 as support A9 is set to true");
+                loadA9Banner();
+            } else {
+                loadBanner();
+            }
         }
 
 
@@ -180,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
 
         // Initialize DTB (A9) SDK
-//        globalVariable.setSupportA9(true);
+        globalVariable.setSupportA9(true);
         AdRegistration.getInstance(globalVariable.A9_APP_KEY, this);
         AdRegistration.enableLogging(true);
         AdRegistration.enableTesting(true);
@@ -194,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
 
         globalVariable.setInit();               // Indicate that we've initialized all SDKs
+
     }
 
 
@@ -221,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         banner.configure(config);
     }
 
-
+    // Load an A9 banner, which will call loadBanner after the DTBAdloader returns a response
     public void loadA9Banner() {
 
         final DTBAdRequest loader = new DTBAdRequest();
@@ -277,12 +273,15 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
     }
 
+    // Update the GDPR status view
     public void modifyGDPRStatus(View view) {
+
             fragmentManager
                     .beginTransaction()
-                    .add(R.id.gdpr_frame, GDPR_Fragment.newInstance("test", "test2"), "gdpr")
+                    .add(R.id.gdpr_fragment, GDPR_Fragment.newInstance())
                     .commit();
             Log.d("[CC", "Created frag");
+
         }
 
 
@@ -291,14 +290,16 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         super.onActivityResult(requestCode, resultCode, data);
 
-
         // If the request code is 0, the GDPRConsent Activity is providing a result.
         if (requestCode == 0) {
-            if (resultCode == RESULT_CANCELED) {
-                Log.d(LOG_TAG, "Consent not given");
-            } else if (resultCode == RESULT_OK) {
-                Log.d(LOG_TAG, "Consent given!");
-            }
+
+            // TODO: Use request code for something else, now that we are using fragments instead of activity passback
+//
+//            if (resultCode == RESULT_CANCELED) {
+//                Log.d(LOG_TAG, "Consent not given");
+//            } else if (resultCode == RESULT_OK) {
+//                Log.d(LOG_TAG, "Consent given!");
+//            }
             handleGDPRDisplay();
         }
 
@@ -331,24 +332,17 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         }
     }
 
-    // Required for GDPR fragment
-    public void onFragmentInteraction(Uri uri){
 
-        Log.d("[CC", "MAIN onFragmentInteraction");
-
-        // leaving this empty, this was 'required'
-
-    }
-
+    // Required interface method for GDPR fragment
     public void onSelection(Boolean sel) {
 
-
+        // Start the GDPR fragment
         fragmentManager
                 .beginTransaction()
-                .remove(getSupportFragmentManager().findFragmentById(R.id.gdpr_frame))
+                .remove(getSupportFragmentManager().findFragmentById(R.id.gdpr_fragment))
                 .commit();
 
-        Log.d("[CC", "MAIN onSelection GDPR Consent status: " + sel.toString());
+        Log.d(LOG_TAG, "MAIN onSelection GDPR Consent status: " + sel.toString());
         handleGDPRDisplay();
     }
 

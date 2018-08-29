@@ -43,8 +43,6 @@
             android:parentActivityName=".MainActivity"
             android:configChanges="orientation|screenSize">
 
-
-
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -96,10 +94,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
-        <!--<activity android:name=".GDPRConsent" />-->
-
-
 
         <activity android:name=".SipAndSwipe"></activity>
     </application>

@@ -29,6 +29,7 @@ public class GlobalClass extends Application {
     public final String A9_SLOT_INTERSTITIAL = "4e918ac0-5c68-4fe1-8d26-4e76e8f74831";       // ointerstitialp1
 
     public boolean CoffeeIncrementedInterstitialPreloaded = false;
+    public boolean sipAndSwipeMode = false;                                                 // Toggle this for sip and swipe mode to test PLC EASILY
 
     private int CoffeeCount = 0;
     private boolean hasInit = false;
