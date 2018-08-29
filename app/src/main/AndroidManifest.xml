@@ -27,7 +27,7 @@
         android:roundIcon="@mipmap/coffee_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:minSdkVersion="15"
+        android:minSdkVersion="16"
         android:installLocation="preferExternal"
         tools:targetApi="n">
 
