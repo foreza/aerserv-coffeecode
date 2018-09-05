@@ -56,7 +56,9 @@ Recycler view: In the main activity, we demonstrate how you might put a banner i
 x We updated the moat library. However, due to the fact SDK unification is around the corner, I decided to hold off on doing anything. BTW - Moat will cause some issues if you try to package jars. 
 
 **3.1.1 - GDPR**
-* Added a dialogue for tracking GDPR consent state as an EXAMPLE. For each of your mediation partners, you (the publisher) are responsible in securing permissions for each platform. This is covered lightly in GDPRConsent activity.
+* Added a dialogue for tracking GDPR consent state as an EXAMPLE. For each of your mediation partners, you (the publisher) are responsible in securing permissions for each platform. This is covered lightly in GDPRConsent fragment. 
+
+As of 8/29, This has now been implemented with as a fragment, a step up from the original activity based implementation. 
 
 
 
