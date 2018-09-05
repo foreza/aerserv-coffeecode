@@ -37,16 +37,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="332dp"
-        android:layout_height="61dp"
-        android:layout_marginTop="70dp"
-        android:onClick="incrementCoffeeCount"
-        android:text="@string/button_coffee"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/coffeeCounterView_Main"
@@ -79,6 +69,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:textColor="@android:color/holo_green_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="332dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="70dp"
+        android:onClick="incrementCoffeeCount"
+        android:text="@string/button_coffee"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

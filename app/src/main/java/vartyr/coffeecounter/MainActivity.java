@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                         case PRELOAD_READY:
                             banner.show();
                             Log.d(LOG_TAG, "Preload Ready for banner! A9 supported here:" + globalVariable.getSupportA9());
+                            break;
                         case AD_FAILED:
                             if (args.size() > 0) {
                                 Log.d(LOG_TAG, "AD FAILED / not loaded. A9 supported here?" + globalVariable.getSupportA9()
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                             } else {
                                 Log.d(LOG_TAG, "AD FAILED, no other info");
                             }
+                            break;
                         case LOAD_TRANSACTION:
                             if (args.size() >= 1) {
                                 Log.d(LOG_TAG, "Load Transaction Information PLC has:" + args.get(0));
@@ -67,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                             Log.d(LOG_TAG, "AD IMPRESSION");
                             break;
                         case AD_LOADED:
-                            Log.d(LOG_TAG, "AD loaded");
-
+                            Log.d(LOG_TAG, "AD LOADED");
+                            banner.show();
                             break;
                     }
                 }
@@ -85,7 +88,15 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         fragmentManager = getSupportFragmentManager();
 
-        // First check if consent has been given.
+
+
+        LOG_TAG = globalVariable.LOG_TAG;                           // Save LOG_TAG since we frequently access
+        initializeRecyclerView();                                   // Init the recycler view
+        initializeTextView();                                       // Handle Text View loading
+        globalVariable.initSaveFile();                              // Will create a save file if not yet created.
+
+
+        // Check if consent has been given.
         if (!AerServSdk.getGdprConsentFlag(this)) {
             if (savedInstanceState == null) {       // TODO: Is this check necessary?
                 fragmentManager
@@ -93,18 +104,17 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                         .add(R.id.gdpr_fragment, GDPR_Fragment.newInstance())
                         .commit();
                 Log.d("[CC", "Created frag");
+
+                // Clean up view (TODO: why is the button bleeding over?)
+                hideDrinkButton();
+
             }
         }
         // Otherwise, if consent has been given, display the rest
         else {
             handleGDPRDisplay();
+            showDrinkButton();
         }
-
-        LOG_TAG = globalVariable.LOG_TAG;                           // Save LOG_TAG since we frequently access
-        initializeRecyclerView();                                   // Init the recycler view
-        initializeTextView();                                       // Handle Text View loading
-        globalVariable.initSaveFile();                              // Will create a save file if not yet created.
-
 
         // Call the init function only once and toggle it to false after it has been called.
         // Use this to print the debug state of the application and any other useful pieces of information
@@ -122,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                 Log.d(LOG_TAG, "Loading A9 as support A9 is set to true");
                 loadA9Banner();
             } else {
+                Log.d(LOG_TAG, "Not loading A9 as support A9 is set to false");
                 loadBanner();
             }
         }
@@ -175,7 +186,6 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
 
         // Initialize DTB (A9) SDK
-        globalVariable.setSupportA9(true);
         AdRegistration.getInstance(globalVariable.A9_APP_KEY, this);
         AdRegistration.enableLogging(true);
         AdRegistration.enableTesting(true);
@@ -204,9 +214,21 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
     }
 
+    public void hideDrinkButton(){
+        Button drink = findViewById(R.id.button2);
+        drink.setVisibility(View.INVISIBLE);
+    }
+
+    public void showDrinkButton(){
+        Button drink = findViewById(R.id.button2);
+        drink.setVisibility(View.VISIBLE);
+    }
+
+
 
     // Loads a banner into a defined spot
     public void loadBanner() {
+
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_AD_PLC)
                 .setEventListener(listener)
                 .setRefreshInterval(10)
@@ -243,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
                 final AerServConfig config = new AerServConfig(MainActivity.this, globalVariable.getDefaultPlc(0))
                         .setA9AdResponses(responses)
-                        .setEventListener(listener)
+                         .setEventListener(listener)
                         .setPreload(true)
                         .setPubKeys(globalVariable.getPubKeys());
                 banner = findViewById(R.id.banner);
@@ -281,6 +303,8 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                     .add(R.id.gdpr_fragment, GDPR_Fragment.newInstance())
                     .commit();
             Log.d("[CC", "Created frag");
+
+            hideDrinkButton();
 
         }
 
@@ -344,6 +368,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         Log.d(LOG_TAG, "MAIN onSelection GDPR Consent status: " + sel.toString());
         handleGDPRDisplay();
+        showDrinkButton();
     }
 
 
