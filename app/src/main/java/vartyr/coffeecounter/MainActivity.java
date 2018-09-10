@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         setContentView(R.layout.activity_main);
         globalVariable = (GlobalClass) getApplicationContext();     // Get an instance of the singleton class before anything else is done
 
+
         fragmentManager = getSupportFragmentManager();
 
         // First check if consent has been given.
@@ -128,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
 
         Log.d(LOG_TAG, "Reached end of onCreate for MainActivity");
+
+        globalVariable.beginPreloadBannerInBGView();   // Attempt to begin preloading a banner in the background
 
     }
 
@@ -274,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     }
 
 
-    // When we click 'getDetailedStats', load the
+    // When we click 'getDetailedStats', load the view for detailed stats
     public void getDetailedStats(View view) {
 
         Intent intent = new Intent(this, BackGroundBanner.class);

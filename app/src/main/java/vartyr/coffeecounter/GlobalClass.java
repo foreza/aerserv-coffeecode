@@ -2,9 +2,20 @@ package vartyr.coffeecounter;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.aerserv.sdk.AerServBanner;
+import com.aerserv.sdk.AerServConfig;
+import com.aerserv.sdk.AerServEvent;
+import com.aerserv.sdk.AerServEventListener;
+import com.aerserv.sdk.AerServTransactionInformation;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GlobalClass extends Application {
@@ -38,6 +50,9 @@ public class GlobalClass extends Application {
     private static Map<String, String> pubKeys = new HashMap<String, String>();
 
 
+    private AerServBanner banner;                              // AS Banner, which we will load in the background
+    private String backgroundPLC = "380004";                   // TEMP: the PLC that we need
+    private Boolean preloadReady = false;
 
 
     // Public Test params / datasets
@@ -51,6 +66,104 @@ public class GlobalClass extends Application {
     public String [] PLC_TEST_SEQUENCE_v4 = new String [] {"1041551", "1041551", "1041551", "1041551", "1041551"};
     public String [] PLC_TEST_SEQUENCE_v5 = new String [] {"380003", "380004"};
 
+
+
+    protected AerServEventListener bListener = new AerServEventListener() {
+        @Override
+        public void onAerServEvent(final AerServEvent event, final List<Object> args) {
+
+            // Make a new runnable since we're using the application context
+            Runnable comeCloseAndListen = new Runnable() {
+                @Override
+                public void run() {
+                    AerServTransactionInformation ti;
+                    switch (event) {
+                        case PRELOAD_READY:
+                            Log.d(LOG_TAG, "Preload Ready for banner!");
+                            preloadReady = true;
+                            break;
+                        case AD_FAILED:
+                            if (args.size() > 0) {
+                                Log.d(LOG_TAG, "AD FAILED / not loaded. Error code: " + AerServEventListener.AD_FAILED_CODE + ", reason=" + AerServEventListener.AD_FAILED_REASON);
+                            } else {
+                                Log.d(LOG_TAG, "AD FAILED, no other info");
+                            }
+                            break;
+                        case LOAD_TRANSACTION:
+                            if (args.size() >= 1) {
+                                Log.d(LOG_TAG, "Load Transaction Information PLC has:" + args.get(0));
+                            }
+                            else {
+                                Log.d(LOG_TAG, "Load Transaction Information PLC has no information");
+                            }
+                            break;
+                        case AD_IMPRESSION:
+                            Log.d(LOG_TAG, "AD IMPRESSION");
+                            break;
+                        case AD_LOADED:
+                            Log.d(LOG_TAG, "AD loaded");
+                            break;
+                    }
+                }
+            };
+            // Run the .. runnable.
+            comeCloseAndListen.run();
+            Log.d(LOG_TAG, "Begin run the runnable, so comeCloseAndListen");
+
+        }
+    };
+
+    // Preload the ad using the backgroundPLC
+    public void beginPreloadBannerInBGView(){
+
+        final AerServConfig config = new AerServConfig(this, backgroundPLC)
+                .setEventListener(bListener)        // Use the bListener declared above
+                .setRefreshInterval(0)              // Do not allow refresh
+                .setA9AdResponses(null)             // No A9 support
+                .setPreload(true);                  // Support preloading
+
+
+
+        /**
+         * Setting the height and width of the banner. This was previously done in the xml.
+         */
+//        Resources r = getResources();
+//
+//        float width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 320, r.getDisplayMetrics());
+//        float height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
+
+        banner = new AerServBanner(this);
+//        banner.setLayoutParams(new RelativeLayout.LayoutParams(Math.round(width), Math.round(height))); // Note: doc says layoutparam, missing the 's'
+
+
+//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(Math.round(width), Math.round(height));
+//        TextView tv = (TextView)
+//        lp.addRule(RelativeLayout.BELOW, tv1.getId());
+
+
+        banner.configure(config);
+    }
+
+    // Inject the banner into the view
+    public View injectBanner() {
+        return banner;
+    }
+
+
+    // Attempt to show the ad.
+    public void attemptShowAd(){
+
+        if (preloadReady){
+            banner.show();
+            preloadReady = false;
+            Log.d(LOG_TAG, "PreloadReady is true, showing banner");
+        }
+        else {
+            Log.d(LOG_TAG, "PreloadReady is false, NOT showing banner");
+
+        }
+
+    }
 
 
     public int PLC_TEST_COUNTER = -1;
