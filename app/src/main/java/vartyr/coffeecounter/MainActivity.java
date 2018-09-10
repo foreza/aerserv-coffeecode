@@ -273,6 +273,15 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
     }
 
+
+    // When we click 'getDetailedStats', load the
+    public void getDetailedStats(View view) {
+
+        Intent intent = new Intent(this, BackGroundBanner.class);
+        startActivityForResult(intent, 0);
+
+    }
+
     // Update the GDPR status view
     public void modifyGDPRStatus(View view) {
 
