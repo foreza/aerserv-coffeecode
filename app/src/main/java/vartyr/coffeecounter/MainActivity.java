@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         setContentView(R.layout.activity_main);
         globalVariable = (GlobalClass) getApplicationContext();     // Get an instance of the singleton class before anything else is done
 
+
         fragmentManager = getSupportFragmentManager();
 
 
@@ -139,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
 
         Log.d(LOG_TAG, "Reached end of onCreate for MainActivity");
+
+        globalVariable.beginPreloadBannerInBGView();   // Attempt to begin preloading a banner in the background
 
     }
 
@@ -295,6 +298,17 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
     }
 
+
+    // When we click 'getDetailedStats', load the view for detailed stats
+    public void getDetailedStats(View view) {
+
+        if (globalVariable.checkAdPreloadReady()){
+            Intent intent = new Intent(this, BackGroundBanner.class);
+            startActivityForResult(intent, 2);
+        }
+
+    }
+
     // Update the GDPR status view
     public void modifyGDPRStatus(View view) {
 
@@ -337,6 +351,16 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                 Log.d(LOG_TAG, " UPDATED TOTAL =" + globalVariable.getCoffeeCount());
                 updateCoffeeCountInView(globalVariable.getCoffeeCount());
 
+            }
+        }
+
+        else if (requestCode == 2) {
+            Log.d(LOG_TAG, "Returned from background banner, begin loading new ad");
+            if (!globalVariable.checkAdPreloadReady()){
+                // Handle case that banner has already played; load new one
+                globalVariable.beginPreloadBannerInBGView();
+            } else {
+                Log.d(LOG_TAG, "Banner has not yet played");
             }
         }
     }
