@@ -280,8 +280,10 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     // When we click 'getDetailedStats', load the view for detailed stats
     public void getDetailedStats(View view) {
 
-        Intent intent = new Intent(this, BackGroundBanner.class);
-        startActivityForResult(intent, 0);
+        if (globalVariable.checkAdPreloadReady()){
+            Intent intent = new Intent(this, BackGroundBanner.class);
+            startActivityForResult(intent, 2);
+        }
 
     }
 
@@ -329,7 +331,13 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         }
 
         else if (requestCode == 2) {
-            // DO something
+            Log.d(LOG_TAG, "Returned from background banner, begin loading new ad");
+            if (!globalVariable.checkAdPreloadReady()){
+                // Handle case that banner has already played; load new one
+                globalVariable.beginPreloadBannerInBGView();
+            } else {
+                Log.d(LOG_TAG, "Banner has not yet played");
+            }
         }
     }
 

@@ -141,9 +141,12 @@ public class GlobalClass extends Application {
         }
         else {
             Log.d(LOG_TAG, "PreloadReady is false, NOT showing banner");
-
         }
 
+    }
+
+    public boolean checkAdPreloadReady(){
+        return preloadReady;
     }
 
 
