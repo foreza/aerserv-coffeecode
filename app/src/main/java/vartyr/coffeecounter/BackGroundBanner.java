@@ -7,37 +7,27 @@ import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.aerserv.sdk.*;
-
 public class BackGroundBanner extends AppCompatActivity {
 
-    private GlobalClass globalVariable;         // To grab VC or anything we need
+    private GlobalClass globalVariable;                                                 // We'll be accessing the background banner here
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_back_ground_banner);
-        globalVariable = (GlobalClass) getApplicationContext();     // Get an instance of the singleton class before anything else is done
 
-
-
-        //  TODO: Configure the layout params so that we position the banner below
-//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT);
+        globalVariable = (GlobalClass) getApplicationContext();                         // Get an instance of the singleton class before anything else is done
+        RelativeLayout parent = (RelativeLayout) findViewById(R.id.bgbannerholder);     // Get a reference to the relative layout
 
         Resources r = getResources();
-        float width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 320, r.getDisplayMetrics());
         float height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
 
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, Math.round(height)); // Note: doc says layoutparam, missing the 's'
+        lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        lp.bottomMargin = 50;
 
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(Math.round(width), Math.round(height)); // Note: doc says layoutparam, missing the 's'
-
-
-        lp.addRule(RelativeLayout.BELOW, findViewById(R.id.bgbanner).getId());
-
-
-        ((ViewGroup) findViewById(android.R.id.content)).addView(globalVariable.injectBanner(),lp);
-        globalVariable.attemptShowAd();
+        parent.addView(globalVariable.injectBanner(), lp);                              // Inject our banner into the view
+        globalVariable.attemptShowAd();                                                 // Show the ad
     }
 
 

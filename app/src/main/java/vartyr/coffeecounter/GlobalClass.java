@@ -106,10 +106,9 @@ public class GlobalClass extends Application {
                     }
                 }
             };
+
             // Run the .. runnable.
             comeCloseAndListen.run();
-            Log.d(LOG_TAG, "Begin run the runnable, so comeCloseAndListen");
-
         }
     };
 
@@ -122,25 +121,7 @@ public class GlobalClass extends Application {
                 .setA9AdResponses(null)             // No A9 support
                 .setPreload(true);                  // Support preloading
 
-
-
-        /**
-         * Setting the height and width of the banner. This was previously done in the xml.
-         */
-//        Resources r = getResources();
-//
-//        float width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 320, r.getDisplayMetrics());
-//        float height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
-
         banner = new AerServBanner(this);
-//        banner.setLayoutParams(new RelativeLayout.LayoutParams(Math.round(width), Math.round(height))); // Note: doc says layoutparam, missing the 's'
-
-
-//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(Math.round(width), Math.round(height));
-//        TextView tv = (TextView)
-//        lp.addRule(RelativeLayout.BELOW, tv1.getId());
-
-
         banner.configure(config);
     }
 

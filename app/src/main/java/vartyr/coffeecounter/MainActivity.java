@@ -327,6 +327,10 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
             }
         }
+
+        else if (requestCode == 2) {
+            // DO something
+        }
     }
 
 
