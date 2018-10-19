@@ -94,6 +94,23 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
     }
 
+
+    // Stop the banner from doing anything
+    @Override
+    protected void onPause(){
+        super.onPause();
+
+        if (interstitial != null){
+            interstitial.kill();
+        }
+        interstitial = null;
+        globalVariable.CoffeeIncrementedInterstitialPreloaded = false;
+        setLoadedButtonInvisible();
+
+    }
+
+
+
     public void preloadInterstitial() {
 
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_INTERSTITIAL_PLC)
