@@ -2,6 +2,8 @@
     <string name="app_name">CoffeeCounter</string>
     <string name="button_coffee">Break time! Drink Coffee!</string>
     <string name="button_stats">View Detailed Stats</string>
+    <string name="button_loadBanner">PreLoad Banner</string>
+    <string name="button_showBanner">Show Preloaded Banner</string>
 
     <string name="gdprconsentview_notConsent_detailed">You have not consented to EU GDPR requirements. As such, if you are in the EU, the content we show may not be as accurate. Thank you for your understanding.</string>
     <string name="gdprconsentview_didConsent_detailed">You have consented to EU GDPR requirements. Thanks! We will do the best we can to provide relevant traffic to you.</string>

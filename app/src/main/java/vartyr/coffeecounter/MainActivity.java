@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
     private AerServBanner banner;               // AS Banner
     private List<DTBAdResponse> responses;      // A9 AD responses
+    private boolean preloadReady;               // Track preload ready state
 
     public FragmentManager fragmentManager;     // For any fragments we need to call / add
     private GlobalClass globalVariable;         // To grab VC or anything we need
@@ -47,7 +48,8 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                     AerServTransactionInformation ti;
                     switch (event) {
                         case PRELOAD_READY:
-                            banner.show();
+                            preloadReady = true;
+                            toggleBannerButtonState(true);
                             Log.d(LOG_TAG, "Preload Ready for banner! A9 supported here:" + globalVariable.getSupportA9());
                             break;
                         case AD_FAILED:
@@ -71,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                             break;
                         case AD_LOADED:
                             Log.d(LOG_TAG, "AD LOADED");
-                            banner.show();
                             break;
                     }
                 }
@@ -127,21 +128,11 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         if (globalVariable.sipAndSwipeMode) {
             Intent intent = new Intent(this, SipAndSwipe.class);
             startActivity(intent);
-        } else {
-            // Preload banner on this activity
-            if (globalVariable.getSupportA9()) {
-                Log.d(LOG_TAG, "Loading A9 as support A9 is set to true");
-                loadA9Banner();
-            } else {
-                Log.d(LOG_TAG, "Not loading A9 as support A9 is set to false");
-                loadBanner();
-            }
         }
-
 
         Log.d(LOG_TAG, "Reached end of onCreate for MainActivity");
 
-        globalVariable.beginPreloadBannerInBGView();   // Attempt to begin preloading a banner in the background
+        // globalVariable.beginPreloadBannerInBGView();   // Attempt to begin preloading a banner in the background
 
     }
 
@@ -228,19 +219,46 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     }
 
 
+    public void toggleBannerButtonState(boolean v){
+        if (v) {
+            Log.d(LOG_TAG, "buttonShowBanner VISIBLE");
+            Button b = findViewById(R.id.buttonShowBanner);
+            b.setVisibility(View.VISIBLE);
+            Button a = findViewById(R.id.buttonLoadBanner);
+            a.setVisibility(View.INVISIBLE);
+        }
+        else {
+            Log.d(LOG_TAG, "buttonShowBanner INVISIBLE");
+            Button b = findViewById(R.id.buttonShowBanner);
+            b.setVisibility(View.INVISIBLE);
+            Button a = findViewById(R.id.buttonLoadBanner);
+            a.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     // Loads a banner into a defined spot
     public void loadBanner() {
 
+        Log.d(LOG_TAG, "CONFIGURING A BANNER NOW");
+        preloadReady = false;
+
+        if (banner != null){
+            Log.d(LOG_TAG, "KILLING PREVIOUS BANNER");
+            banner.kill();
+            banner = null;
+        }
+
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_AD_PLC)
                 .setEventListener(listener)
-                .setRefreshInterval(10)
+                .setRefreshInterval(0)
                 .setA9AdResponses(null)
                 .setPreload(true)
                 .setPubKeys(globalVariable.getPubKeys());
         banner = findViewById(R.id.banner);
         banner.configure(config);
     }
+
 
     // Load an A9 banner, which will call loadBanner after the DTBAdloader returns a response
     public void loadA9Banner() {
@@ -288,6 +306,50 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         textView.setText(message);
 
     }
+
+
+
+
+    // JC: Show the banner after asking politely. It's a demo app.
+    public void onClickLoadBanner(View view) {
+
+        Log.d(LOG_TAG, "onClickLoadBanner");
+
+        if (!preloadReady) {
+
+
+            Log.d(LOG_TAG, "Preload is not ready. Begin loading banner");
+
+
+            // Preload banner on this activity
+            if (globalVariable.getSupportA9()) {
+                Log.d(LOG_TAG, "Loading A9 as support A9 is set to true");
+                loadA9Banner();
+            } else {
+                Log.d(LOG_TAG, "Not loading A9 as support A9 is set to false");
+                loadBanner();
+            }
+        }
+    }
+
+
+    // JC: Show the banner after asking politely. It's a demo app.
+    public void onClickShowBanner(View view) {
+
+
+        Log.d(LOG_TAG, "onClickShowBanner");
+
+        if (preloadReady && banner != null) {
+
+            Log.d(LOG_TAG, "Preload is ready. show banner");
+
+
+            banner.show();
+            preloadReady = false;
+            toggleBannerButtonState(false);
+        }
+    }
+
 
 
     // When we click 'increment coffee count, it should increment the value' and start a new activity to illustrate that, along with a back button.
@@ -379,6 +441,8 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
             banner.kill();
         }
     }
+
+
 
 
     // Required interface method for GDPR fragment
