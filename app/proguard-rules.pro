@@ -1,6 +1,6 @@
 -dontpreverify
 
--repackageclasses 
+-repackageclasses
 
 -allowaccessmodification
 
@@ -130,6 +130,10 @@
 -dontwarn com.flurry.android.**
 -keep class com.flurry.** { *; }
 
-# For MyTarget		
--dontwarn com.my.target.**		
--keep class com.my.target.** { *; }			
+
+# For MyTarget
+-dontwarn com.my.target.**
+-keep class com.my.target.** { *; }
+
+
+-dontwarn com.aerserv.sdk.**
