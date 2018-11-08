@@ -196,6 +196,10 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
     // On back, we want to send the incremented amount back to the MainActivity
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
+        if (interstitial != null && globalVariable.CoffeeIncrementedInterstitialPreloaded) {
+            interstitial.show();
+        }
         Log.d(LOG_TAG, "Back button(hardware) pressed");
         Intent returnIntent = this.getIntent();
         returnIntent.putExtra("INCREMENT_AMT", INCREMENT_AMT);
@@ -209,6 +213,9 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                if (interstitial != null && globalVariable.CoffeeIncrementedInterstitialPreloaded) {
+                    interstitial.show();
+                }
                 Intent returnIntent = this.getIntent();
                 returnIntent.putExtra("INCREMENT_AMT", INCREMENT_AMT);
                 setResult(RESULT_OK, returnIntent);

@@ -141,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     @Override
     protected void onPause(){
         super.onPause();
-        banner.kill();
         toggleBannerButtonState(false);
     }
 
