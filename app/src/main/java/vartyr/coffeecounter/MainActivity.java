@@ -3,6 +3,7 @@ package vartyr.coffeecounter;
 // Defaults imported by Android Studio
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -23,15 +24,21 @@ import java.util.List;
 
 import com.aerserv.sdk.*;
 import com.aerserv.sdk.utils.UrlBuilder;
-import com.amazon.device.ads.*;
+import com.inmobi.sdk.InMobiSdk;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+//import com.amazon.device.ads.*;
 
 
 // Main Activity is the entry point into our application.
 public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnFragmentInteractionListener{
 
     private AerServBanner banner;               // AS Banner
-    private List<DTBAdResponse> responses;      // A9 AD responses
+    private AerServBanner banner_meitu;               // AS Banner
+//    private List<DTBAdResponse> responses;      // A9 AD responses
     private boolean preloadReady;               // Track preload ready state
+    private boolean preloadReady_meitu;               // Track preload ready state
 
     public FragmentManager fragmentManager;     // For any fragments we need to call / add
     private GlobalClass globalVariable;         // To grab VC or anything we need
@@ -49,7 +56,8 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                     switch (event) {
                         case PRELOAD_READY:
                             preloadReady = true;
-                            toggleBannerButtonState(true);
+                            banner.show();
+//                            toggleBannerButtonState(true);
                             Log.d(LOG_TAG, "Preload Ready for banner! A9 supported here:" + globalVariable.getSupportA9());
                             break;
                         case AD_FAILED:
@@ -77,6 +85,54 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                     }
                 }
             });
+
+
+        }
+    };
+
+    // Set up a listener to listen to incoming AS events
+    protected AerServEventListener listener2 = new AerServEventListener() {
+        @Override
+        public void onAerServEvent(final AerServEvent event, final List<Object> args) {
+            MainActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AerServTransactionInformation ti;
+                    switch (event) {
+                        case PRELOAD_READY:
+                            preloadReady_meitu = true;
+                            Log.d(LOG_TAG, "Preload Ready for Meitu banner and we just show! A9 supported here:" + globalVariable.getSupportA9());
+//                            toggleBannerButtonState(true);
+                            banner_meitu.show();
+
+                            break;
+                        case AD_FAILED:
+                            if (args.size() > 0) {
+                                Log.d(LOG_TAG, "AD FAILED / not loaded. A9 supported here?" + globalVariable.getSupportA9()
+                                        + " Error code: " + AerServEventListener.AD_FAILED_CODE + ", reason=" + AerServEventListener.AD_FAILED_REASON);
+                            } else {
+                                Log.d(LOG_TAG, "AD FAILED, no other info");
+                            }
+                            break;
+                        case LOAD_TRANSACTION:
+                            if (args.size() >= 1) {
+                                Log.d(LOG_TAG, "Load Transaction Information PLC has:" + args.get(0));
+                            }
+                            else {
+                                Log.d(LOG_TAG, "Load Transaction Information PLC has no information");
+                            }
+                            break;
+                        case AD_IMPRESSION:
+                            Log.d(LOG_TAG, "AD IMPRESSION");
+                            break;
+                        case AD_LOADED:
+                            Log.d(LOG_TAG, "AD LOADED");
+                            break;
+                    }
+                }
+            });
+
+
         }
     };
 
@@ -98,25 +154,25 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         globalVariable.initSaveFile();                              // Will create a save file if not yet created.
 
 
-        // Check if consent has been given.
-        if (!AerServSdk.getGdprConsentFlag(this)) {
-            if (savedInstanceState == null) {       // TODO: Is this check necessary?
-                fragmentManager
-                        .beginTransaction()
-                        .add(R.id.gdpr_fragment, GDPR_Fragment.newInstance())
-                        .commit();
-                Log.d("[CC", "Created frag");
-
-                // Clean up view (TODO: why is the button bleeding over?)
-                hideDrinkButton();
-
-            }
-        }
-        // Otherwise, if consent has been given, display the rest
-        else {
-            handleGDPRDisplay();
-            showDrinkButton();
-        }
+//        // Check if consent has been given.
+//        if (!AerServSdk.getGdprConsentFlag(this)) {
+//            if (savedInstanceState == null) {       // TODO: Is this check necessary?
+//                fragmentManager
+//                        .beginTransaction()
+//                        .add(R.id.gdpr_fragment, GDPR_Fragment.newInstance())
+//                        .commit();
+//                Log.d("[CC", "Created frag");
+//
+//                // Clean up view (TODO: why is the button bleeding over?)
+//                hideDrinkButton();
+//
+//            }
+//        }
+//        // Otherwise, if consent has been given, display the rest
+//        else {
+//            handleGDPRDisplay();
+//            showDrinkButton();
+//        }
 
         // Call the init function only once and toggle it to false after it has been called.
         // Use this to print the debug state of the application and any other useful pieces of information
@@ -133,16 +189,30 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         Log.d(LOG_TAG, "Reached end of onCreate for MainActivity");
 
         // globalVariable.beginPreloadBannerInBGView();   // Attempt to begin preloading a banner in the background
+        // loadBanner();
+        // loadBannerMeituVersion();
 
     }
 
 
-    // Stop the banner from doing anything
+/*    // Stop the banner from doing anything
     @Override
     protected void onPause(){
         super.onPause();
-        toggleBannerButtonState(false);
+//        toggleBannerButtonState(false);
+        banner.pause();
+        Log.d(LOG_TAG, "OnPause called for banner as well");
     }
+
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+//        toggleBannerButtonState(true);
+//        banner.play();
+        Log.d(LOG_TAG, "OnResume called, but not called for banner");
+
+    }*/
 
 
 
@@ -186,14 +256,28 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     private void initializeSDK() {
 
         // Initialize primary SDK (AerServ)
-        AerServSdk.init(this, globalVariable.APP_ID);
+         AerServSdk.init(this, globalVariable.APP_ID);
+
+
+//        JSONObject consentObject = new JSONObject();
+//        try {
+//            // Provide correct consent value to sdk which is obtained by User
+//            consentObject.put(InMobiSdk.IM_GDPR_CONSENT_AVAILABLE, true);
+//            // Provide 0 if GDPR is not applicable and 1 if applicable
+//            consentObject.put("gdpr", "1");
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+       //  }
+
+//        InMobiSdk.init(this,"b2562f781e3948ba86b439d581b07b1d");
+
 
 
         // Initialize DTB (A9) SDK
-        AdRegistration.getInstance(globalVariable.A9_APP_KEY, this);
-        AdRegistration.enableLogging(true);
-        AdRegistration.enableTesting(true);
-        AdRegistration.useGeoLocation(true);
+//        AdRegistration.getInstance(globalVariable.A9_APP_KEY, this);
+//        AdRegistration.enableLogging(true);
+//        AdRegistration.enableTesting(true);
+//        AdRegistration.useGeoLocation(true);
 
 
         // Any sort of init log messages should be printed here
@@ -261,8 +345,8 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_AD_PLC)
                 .setEventListener(listener)
-                .setRefreshInterval(0)
-                .setA9AdResponses(null)
+//                .setRefreshInterval(0)
+//                .setA9AdResponses(null)
                 .setPreload(true)
                 .setPubKeys(globalVariable.getPubKeys());
         banner = findViewById(R.id.banner);
@@ -270,40 +354,83 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     }
 
 
-    // Load an A9 banner, which will call loadBanner after the DTBAdloader returns a response
+    public void loadBannerMeituVersion() {
+
+        Log.d(LOG_TAG, "MEITU CONFIGURING A BANNER NOW");
+        preloadReady_meitu = false;
+
+        if (banner != null){
+            Log.d(LOG_TAG, "KILLING PREVIOUS BANNER");
+            banner.kill();
+            banner = null;
+        }
+
+
+        final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_AD_PLC2)
+                .setEventListener(listener)
+//                .setRefreshInterval(0)
+//                .setA9AdResponses(null)
+                .setPreload(true)
+                .setPubKeys(globalVariable.getPubKeys());
+        banner = findViewById(R.id.banner);
+        banner.configure(config);
+
+//
+//        final AerServConfig config_meitu = new AerServConfig(this, globalVariable.DEFAULT_AD_PLC2)
+//                .setEventListener(listener2)
+//                .setA9AdResponses(null)
+//                .setPreload(true)
+//                .setPubKeys(globalVariable.getPubKeys());
+//        banner_meitu = findViewById(R.id.banner_meitu);
+//        banner_meitu.configure(config_meitu);
+
+//
+
+//        final AerServConfig config = new AerServConfig(context, globalVariable.DEFAULT_AD_PLC)
+//                .setEventListener(listener)
+////                .setRefreshInterval(0)
+//                .setA9AdResponses(null)
+//                .setPreload(true)
+//                .setPubKeys(globalVariable.getPubKeys());
+//        banner = findViewById(R.id.banner);
+//        banner.configure(config);
+    }
+
+
+     // Load an A9 banner, which will call loadBanner after the DTBAdloader returns a response
     public void loadA9Banner() {
 
-        final DTBAdRequest loader = new DTBAdRequest();
-        loader.setSizes(new DTBAdSize(300, 250, globalVariable.A9_SLOT_300x250));
-        loader.loadAd(new DTBAdCallback() {
-            @Override
-
-            // If A9 fails to fill, call loadBanner
-            public void onFailure(AdError adError) {
-                Log.e(LOG_TAG, "A9 - Failed to get ad from Amazon");
-                loadBanner();
-            }
-
-            @Override
-            public void onSuccess(DTBAdResponse dtbAdResponse) {
-                responses = new ArrayList<DTBAdResponse>();
-                responses.add(dtbAdResponse);
-
-
-                Log.d(LOG_TAG, "A9 - Successfully got " + dtbAdResponse.getDTBAds().size()
-                        + " banner ad from Amazon");
-
-
-                final AerServConfig config = new AerServConfig(MainActivity.this, globalVariable.getDefaultPlc(0))
-                        .setA9AdResponses(responses)
-                         .setEventListener(listener)
-                        .setPreload(true)
-                        .setPubKeys(globalVariable.getPubKeys());
-                banner = findViewById(R.id.banner);
-                banner.configure(config);
-
-            }
-        });
+//        final DTBAdRequest loader = new DTBAdRequest();
+//        loader.setSizes(new DTBAdSize(300, 250, globalVariable.A9_SLOT_300x250));
+//        loader.loadAd(new DTBAdCallback() {
+//            @Override
+//
+//            // If A9 fails to fill, call loadBanner
+//            public void onFailure(AdError adError) {
+//                Log.e(LOG_TAG, "A9 - Failed to get ad from Amazon");
+//                loadBanner();
+//            }
+//
+//            @Override
+//            public void onSuccess(DTBAdResponse dtbAdResponse) {
+//                responses = new ArrayList<DTBAdResponse>();
+//                responses.add(dtbAdResponse);
+//
+//
+//                Log.d(LOG_TAG, "A9 - Successfully got " + dtbAdResponse.getDTBAds().size()
+//                        + " banner ad from Amazon");
+//
+//
+//                final AerServConfig config = new AerServConfig(MainActivity.this, globalVariable.getDefaultPlc(0))
+//                        .setA9AdResponses(responses)
+//                         .setEventListener(listener)
+//                        .setPreload(true)
+//                        .setPubKeys(globalVariable.getPubKeys());
+//                banner = findViewById(R.id.banner);
+//                banner.configure(config);
+//
+//            }
+//        });
     }
 
 

@@ -31,8 +31,9 @@ import java.util.Map;
 public class GlobalClass extends Application {
 
     public final String LOG_TAG = "CoffeeCounter";
-    public final String APP_ID = "380000";
-    public final String DEFAULT_AD_PLC = "380000";
+    public final String APP_ID = "1018760"; // plantsnap: 1018760
+    public final String DEFAULT_AD_PLC = "1060255";
+    public final String DEFAULT_AD_PLC2 = "1048813";
     public String DEFAULT_INTERSTITIAL_PLC = "380004";
     public String DEFAULT_300X250TEST_PLC = "380066";
     public final String A9_APP_KEY = "a9_onboarding_app_id";
@@ -118,7 +119,7 @@ public class GlobalClass extends Application {
         final AerServConfig config = new AerServConfig(this, backgroundPLC)
                 .setEventListener(bListener)        // Use the bListener declared above
                 .setRefreshInterval(0)              // Do not allow refresh
-                .setA9AdResponses(null)             // No A9 support
+//                .setA9AdResponses(null)             // No A9 support
                 .setPreload(true);                  // Support preloading
 
         banner = new AerServBanner(this);
