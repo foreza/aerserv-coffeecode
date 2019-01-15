@@ -31,15 +31,33 @@ import java.util.Map;
 public class GlobalClass extends Application {
 
     public final String LOG_TAG = "CoffeeCounter";
-    public final String APP_ID = "1018760"; // plantsnap: 1018760
-    public final String DEFAULT_AD_PLC = "1060255";
-    public final String DEFAULT_AD_PLC2 = "1048813";
-    public String DEFAULT_INTERSTITIAL_PLC = "380004";
-    public String DEFAULT_300X250TEST_PLC = "380066";
+    public final String APP_ID = "1011139";
+    public final String DEFAULT_AD_PLC = "1042117";
+    public String DEFAULT_INTERSTITIAL_PLC = "1042115";
+    public String DEFAULT_300X250TEST_PLC = "1042114";
     public final String A9_APP_KEY = "a9_onboarding_app_id";
     public final String A9_SLOT_320x50 = "5ab6a4ae-4aa5-43f4-9da4-e30755f2b295";             // Price point(amznslots): o320x50p1
     public final String A9_SLOT_300x250 = "54fb2d08-c222-40b1-8bbe-4879322dc04b";            // Price point(amznslots): o300x250p1
     public final String A9_SLOT_INTERSTITIAL = "4e918ac0-5c68-4fe1-8d26-4e76e8f74831";       // ointerstitialp1
+
+    /*
+
+    The Collection:
+
+    AERSERV QA: 380000
+    * 380000 - 320X50
+    * 380003 - Interstitial / VAST
+    * 380004 - Interstitial / Rewarded (VAST)
+
+
+    ZenoRadio FreshFM Nigeria: 1011139
+    * 1042117 - 320x50, FreshFM Nigeria
+    * 1042114 - 320x250, FreshFM Nigeria
+    * 1042115 - 320x480 (Int), FreshFM Nigeria
+
+
+
+     */
 
     public boolean CoffeeIncrementedInterstitialPreloaded = false;
     public boolean sipAndSwipeMode = false;                                                 // Toggle this for sip and swipe mode to test PLC EASILY
@@ -59,14 +77,6 @@ public class GlobalClass extends Application {
     // Public Test params / datasets
     public String [] dessertDataSet = new String [] {"Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla"};
     public int [] colorDataSet = new int [] {Color.GRAY, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.YELLOW, Color.WHITE, Color.BLACK};
-    public String [] PLC_TEST_SEQUENCE = new String [] {"380004", "380062", "380066", "380078", "380020", "380756", "380049"};
-    public String [] PLC_TEST_SEQUENCE_v0 = new String [] {"380766", "380842", "1048445", "1048445", "1048445", "1048445", "1048445"};
-    public String [] PLC_TEST_SEQUENCE_v1 = new String [] {"1048813", "1048813", "1048813", "1048813", "1048813"};
-    public String [] PLC_TEST_SEQUENCE_v2 = new String [] {"1036754", "380000", "380004", "380066"};
-    public String [] PLC_TEST_SEQUENCE_v3 = new String [] {"380841", "380842", "380843", "380844", "380845"};
-    public String [] PLC_TEST_SEQUENCE_v4 = new String [] {"1041551", "1041551", "1041551", "1041551", "1041551"};
-    public String [] PLC_TEST_SEQUENCE_v5 = new String [] {"380003", "380004"};
-
 
 
     protected AerServEventListener bListener = new AerServEventListener() {
@@ -151,54 +161,6 @@ public class GlobalClass extends Application {
     }
 
 
-    public int PLC_TEST_COUNTER = -1;
-
-    public String getNextPLCForTest() {
-
-        String [] PLC_TESTS = PLC_TEST_SEQUENCE_v5;
-
-        if (PLC_TEST_COUNTER > PLC_TESTS.length-2){
-            return DEFAULT_AD_PLC;
-        }
-        else{
-            PLC_TEST_COUNTER++;     // Increment test counter
-            Log.d(LOG_TAG, "Showing: " + PLC_TESTS[PLC_TEST_COUNTER]);
-            return PLC_TESTS[PLC_TEST_COUNTER];
-        }
-    }
-
-    public int PLC_INT_TEST_COUNTER = -1;
-
-
-    public String getNextInterstitialPLCForTest() {
-
-        String [] PLC_TESTS = PLC_TEST_SEQUENCE_v5;
-
-        if (PLC_INT_TEST_COUNTER > PLC_TESTS.length-2){
-            return DEFAULT_INTERSTITIAL_PLC;
-        }
-        else{
-            PLC_INT_TEST_COUNTER++;     // Increment test counter
-            Log.d(LOG_TAG, "Showing: " + PLC_TESTS[PLC_INT_TEST_COUNTER]);
-            return PLC_TESTS[PLC_INT_TEST_COUNTER];
-        }
-    }
-
-
-
-
-
-    // TODO: Extend this to hit an endpoint to get PLCs
-    public String getDefaultPlc(int i){
-        if (i == 0){
-            return DEFAULT_AD_PLC;
-        } else if (i == 1){
-            return DEFAULT_INTERSTITIAL_PLC;
-        }
-        return DEFAULT_AD_PLC;
-    }
-
-
     // GET METHODS to access private variables
 
 
@@ -246,7 +208,6 @@ public class GlobalClass extends Application {
 
 
     // FILE I/O METHODS
-
 
     public void writeSaveFile (String data) {
         try {

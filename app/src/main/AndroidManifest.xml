@@ -47,47 +47,71 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <!-- AerServ -->
+
+
+        <!-- AdColony Activities -->
         <!--<activity-->
-            <!--android:name="com.aerserv.sdk.view.ASVastInterstitialActivity"-->
-            <!--android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />-->
+            <!--android:name="com.adcolony.sdk.AdColonyInterstitialActivity"-->
+            <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
+            <!--android:hardwareAccelerated="true" />-->
         <!--<activity-->
-            <!--android:name="com.aerserv.sdk.view.ASWebviewInterstitialActivity"-->
-            <!--android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />-->
+            <!--android:name="com.adcolony.sdk.AdColonyAdViewActivity"-->
+            <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
+            <!--android:hardwareAccelerated="true" />-->
+
+        <!-- AppLovin Activities -->
         <!--<activity-->
-            <!--android:name="com.aerserv.sdk.view.ASVpaidInterstitalActivity"-->
-            <!--android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />-->
+            <!--android:name="com.applovin.adview.AppLovinInterstitialActivity"-->
+            <!--android:configChanges="orientation|screenSize" />-->
         <!--<activity-->
-            <!--android:name="com.aerserv.sdk.view.AerServFullScreenAdActivity"-->
-            <!--android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />-->
+            <!--android:name="com.applovin.adview.AppLovinConfirmationActivity"-->
+            <!--android:configChanges="orientation|screenSize" />-->
+
+        <!-- Chartboost Activities -->
         <!--<activity-->
-            <!--android:name="com.google.android.gms.ads.AdActivity"-->
-            <!--android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />-->
-        <!--<activity-->
-            <!--android:name="com.facebook.ads.AudienceNetworkActivity"-->
-            <!--android:configChanges="keyboardHidden|orientation|screenSize" />-->
-        <!--<activity-->
-            <!--android:name="com.mopub.mobileads.MoPubActivity"-->
-            <!--android:configChanges="keyboardHidden|orientation|screenSize" />-->
-        <!--<activity-->
-            <!--android:name="com.mopub.mobileads.MraidActivity"-->
-            <!--android:configChanges="keyboardHidden|orientation|screenSize" />-->
-        <!--<activity-->
-            <!--android:name="com.mopub.common.MoPubBrowser"-->
-            <!--android:configChanges="keyboardHidden|orientation|screenSize" />-->
-        <!--<activity-->
-            <!--android:name="com.mopub.mobileads.MraidVideoPlayerActivity"-->
-            <!--android:configChanges="keyboardHidden|orientation|screenSize" />-->
-        <!--<activity-->
-            <!--android:name="com.mopub.mobileads.RewardedMraidActivity"-->
-            <!--android:configChanges="keyboardHidden|orientation|screenSize" />-->
-        <!--<activity-->
-            <!--android:name="com.inmobi.rendering.InMobiAdActivity"-->
-            <!--android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize|screenLayout"-->
+            <!--android:name="com.chartboost.sdk.CBImpressionActivity"-->
+            <!--android:excludeFromRecents="true"-->
             <!--android:hardwareAccelerated="true"-->
-            <!--android:resizeableActivity="false"-->
-            <!--android:theme="@android:style/Theme.NoTitleBar"-->
-            <!--tools:ignore="UnusedAttribute" />-->
+            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"-->
+            <!--android:configChanges="keyboardHidden|orientation|screenSize" />-->
+
+        <!-- MoPub Activities -->
+        <activity
+            android:name="com.mopub.mobileads.MoPubActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.mopub.mobileads.MraidActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.mopub.common.MoPubBrowser"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.mopub.mobileads.MraidVideoPlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.mopub.mobileads.RewardedMraidActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+
+        <!-- Telaria Activities -->
+        <!--<activity-->
+            <!--android:name="com.tremorvideo.sdk.android.videoad.Playvideo"-->
+            <!--android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"-->
+            <!--android:hardwareAccelerated="false"-->
+            <!--android:exported="false">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="com.tremorvideo.sdk.android.videoad.Playvideo" />-->
+
+        <!-- Vungle Activities -->
+        <!--<activity-->
+            <!--android:name="com.vungle.publisher.VideoFullScreenAdActivity"-->
+            <!--android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"-->
+            <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />-->
+        <!--<activity-->
+            <!--android:name="com.vungle.publisher.MraidFullScreenAdActivity"-->
+            <!--android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"-->
+            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />-->
+
+
 
         <meta-data
             android:name="preloaded_fonts"

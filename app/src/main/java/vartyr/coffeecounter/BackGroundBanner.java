@@ -10,6 +10,13 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+/*
+
+This activity will be used to demonstrate how we can inject a banner into the view from the application context.
+This method is typica
+
+ */
+
 public class BackGroundBanner extends AppCompatActivity {
 
     private GlobalClass globalVariable;                                                 // We'll be accessing the background banner here

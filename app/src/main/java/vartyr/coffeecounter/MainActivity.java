@@ -1,16 +1,10 @@
 package vartyr.coffeecounter;
 
-// Defaults imported by Android Studio
-
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;    // App compatability for minimum / target API versions
-import android.os.Bundle;                           //
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,30 +13,31 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.aerserv.sdk.*;
-import com.aerserv.sdk.utils.UrlBuilder;
-import com.inmobi.sdk.InMobiSdk;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.aerserv.sdk.AerServBanner;
+import com.aerserv.sdk.AerServConfig;
+import com.aerserv.sdk.AerServEvent;
+import com.aerserv.sdk.AerServEventListener;
+import com.aerserv.sdk.AerServSdk;
+import com.aerserv.sdk.AerServTransactionInformation;
+import com.aerserv.sdk.utils.UrlBuilder;
+
+
 //import com.amazon.device.ads.*;
 
 
-// Main Activity is the entry point into our application.
 public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnFragmentInteractionListener{
 
     private AerServBanner banner;               // AS Banner
-    private AerServBanner banner_meitu;               // AS Banner
-//    private List<DTBAdResponse> responses;      // A9 AD responses
     private boolean preloadReady;               // Track preload ready state
-    private boolean preloadReady_meitu;               // Track preload ready state
 
     public FragmentManager fragmentManager;     // For any fragments we need to call / add
     private GlobalClass globalVariable;         // To grab VC or anything we need
     private static String LOG_TAG;              // Log tag
+
+    //    private List<DTBAdResponse> responses;      // A9 AD responses
 
 
     // Set up a listener to listen to incoming AS events
@@ -58,11 +53,11 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                             preloadReady = true;
                             banner.show();
 //                            toggleBannerButtonState(true);
-                            Log.d(LOG_TAG, "Preload Ready for banner! A9 supported here:" + globalVariable.getSupportA9());
+                            Log.d(LOG_TAG, "Preload Ready for banner!");
                             break;
                         case AD_FAILED:
                             if (args.size() > 0) {
-                                Log.d(LOG_TAG, "AD FAILED / not loaded. A9 supported here?" + globalVariable.getSupportA9()
+                                Log.d(LOG_TAG, "AD FAILED / not loaded"
                                         + " Error code: " + AerServEventListener.AD_FAILED_CODE + ", reason=" + AerServEventListener.AD_FAILED_REASON);
                             } else {
                                 Log.d(LOG_TAG, "AD FAILED, no other info");
@@ -89,53 +84,6 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         }
     };
-
-    // Set up a listener to listen to incoming AS events
-    protected AerServEventListener listener2 = new AerServEventListener() {
-        @Override
-        public void onAerServEvent(final AerServEvent event, final List<Object> args) {
-            MainActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    AerServTransactionInformation ti;
-                    switch (event) {
-                        case PRELOAD_READY:
-                            preloadReady_meitu = true;
-                            Log.d(LOG_TAG, "Preload Ready for Meitu banner and we just show! A9 supported here:" + globalVariable.getSupportA9());
-//                            toggleBannerButtonState(true);
-                            banner_meitu.show();
-
-                            break;
-                        case AD_FAILED:
-                            if (args.size() > 0) {
-                                Log.d(LOG_TAG, "AD FAILED / not loaded. A9 supported here?" + globalVariable.getSupportA9()
-                                        + " Error code: " + AerServEventListener.AD_FAILED_CODE + ", reason=" + AerServEventListener.AD_FAILED_REASON);
-                            } else {
-                                Log.d(LOG_TAG, "AD FAILED, no other info");
-                            }
-                            break;
-                        case LOAD_TRANSACTION:
-                            if (args.size() >= 1) {
-                                Log.d(LOG_TAG, "Load Transaction Information PLC has:" + args.get(0));
-                            }
-                            else {
-                                Log.d(LOG_TAG, "Load Transaction Information PLC has no information");
-                            }
-                            break;
-                        case AD_IMPRESSION:
-                            Log.d(LOG_TAG, "AD IMPRESSION");
-                            break;
-                        case AD_LOADED:
-                            Log.d(LOG_TAG, "AD LOADED");
-                            break;
-                    }
-                }
-            });
-
-
-        }
-    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,16 +91,20 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         setContentView(R.layout.activity_main);
         globalVariable = (GlobalClass) getApplicationContext();     // Get an instance of the singleton class before anything else is done
 
-
         fragmentManager = getSupportFragmentManager();
-
-
 
         LOG_TAG = globalVariable.LOG_TAG;                           // Save LOG_TAG since we frequently access
         initializeRecyclerView();                                   // Init the recycler view
         initializeTextView();                                       // Handle Text View loading
         globalVariable.initSaveFile();                              // Will create a save file if not yet created.
 
+
+        // NOTE: This controls the injected banner in view. Enable this to test it.
+        // globalVariable.beginPreloadBannerInBGView();
+
+
+
+        // TODO: Re-implement GDPR consent activity
 
 //        // Check if consent has been given.
 //        if (!AerServSdk.getGdprConsentFlag(this)) {
@@ -175,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 //        }
 
         // Call the init function only once and toggle it to false after it has been called.
-        // Use this to print the debug state of the application and any other useful pieces of information
         if (!globalVariable.getHasInit()) {
             initializeSDK();
         }
@@ -188,32 +139,8 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         Log.d(LOG_TAG, "Reached end of onCreate for MainActivity");
 
-        // globalVariable.beginPreloadBannerInBGView();   // Attempt to begin preloading a banner in the background
         // loadBanner();
-        // loadBannerMeituVersion();
-
     }
-
-
-/*    // Stop the banner from doing anything
-    @Override
-    protected void onPause(){
-        super.onPause();
-//        toggleBannerButtonState(false);
-        banner.pause();
-        Log.d(LOG_TAG, "OnPause called for banner as well");
-    }
-
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-//        toggleBannerButtonState(true);
-//        banner.play();
-        Log.d(LOG_TAG, "OnResume called, but not called for banner");
-
-    }*/
-
 
 
     // Call this function to update the GDPR state
@@ -345,8 +272,6 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_AD_PLC)
                 .setEventListener(listener)
-//                .setRefreshInterval(0)
-//                .setA9AdResponses(null)
                 .setPreload(true)
                 .setPubKeys(globalVariable.getPubKeys());
         banner = findViewById(R.id.banner);
@@ -354,48 +279,9 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     }
 
 
-    public void loadBannerMeituVersion() {
-
-        Log.d(LOG_TAG, "MEITU CONFIGURING A BANNER NOW");
-        preloadReady_meitu = false;
-
-        if (banner != null){
-            Log.d(LOG_TAG, "KILLING PREVIOUS BANNER");
-            banner.kill();
-            banner = null;
-        }
 
 
-        final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_AD_PLC2)
-                .setEventListener(listener)
-//                .setRefreshInterval(0)
-//                .setA9AdResponses(null)
-                .setPreload(true)
-                .setPubKeys(globalVariable.getPubKeys());
-        banner = findViewById(R.id.banner);
-        banner.configure(config);
-
-//
-//        final AerServConfig config_meitu = new AerServConfig(this, globalVariable.DEFAULT_AD_PLC2)
-//                .setEventListener(listener2)
-//                .setA9AdResponses(null)
-//                .setPreload(true)
-//                .setPubKeys(globalVariable.getPubKeys());
-//        banner_meitu = findViewById(R.id.banner_meitu);
-//        banner_meitu.configure(config_meitu);
-
-//
-
-//        final AerServConfig config = new AerServConfig(context, globalVariable.DEFAULT_AD_PLC)
-//                .setEventListener(listener)
-////                .setRefreshInterval(0)
-//                .setA9AdResponses(null)
-//                .setPreload(true)
-//                .setPubKeys(globalVariable.getPubKeys());
-//        banner = findViewById(R.id.banner);
-//        banner.configure(config);
-    }
-
+    // TODO: TEST AND VALIDATE THIS FUNCTION
 
      // Load an A9 banner, which will call loadBanner after the DTBAdloader returns a response
     public void loadA9Banner() {
@@ -498,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     }
 
 
-    // When we click 'getDetailedStats', load the view for detailed stats
+    // When we click 'getDetailedStats', load the view for detailed stats.
     public void getDetailedStats(View view) {
 
         if (globalVariable.checkAdPreloadReady()){
@@ -553,11 +439,13 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
             }
         }
 
+
+        // NOTE: Enable this if you are testing banner injection from app context
         else if (requestCode == 2) {
             Log.d(LOG_TAG, "Returned from background banner, begin loading new ad");
             if (!globalVariable.checkAdPreloadReady()){
                 // Handle case that banner has already played; load new one
-                globalVariable.beginPreloadBannerInBGView();
+                // globalVariable.beginPreloadBannerInBGView();
             } else {
                 Log.d(LOG_TAG, "Banner has not yet played");
             }
@@ -571,8 +459,6 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         Log.d(LOG_TAG, "MAIN ACTIVITY CLEANUP");
         globalVariable.saveCoffeeCount();                     // Save the current coffee count
         super.onDestroy();
-
-        // TODO: Do any sort of cleanup methods here
 
         if (banner != null) {
             banner.kill();
@@ -595,6 +481,5 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         handleGDPRDisplay();
         showDrinkButton();
     }
-
 
 }
