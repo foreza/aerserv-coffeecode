@@ -272,10 +272,10 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_AD_PLC)
                 .setEventListener(listener)
-                .setPreload(true)
+//                .setPreload(true)
                 .setPubKeys(globalVariable.getPubKeys());
         banner = findViewById(R.id.banner);
-        banner.configure(config);
+        banner.configure(config).show();
     }
 
 

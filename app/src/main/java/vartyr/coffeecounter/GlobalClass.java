@@ -31,8 +31,8 @@ import java.util.Map;
 public class GlobalClass extends Application {
 
     public final String LOG_TAG = "CoffeeCounter";
-    public final String APP_ID = "1011139";
-    public final String DEFAULT_AD_PLC = "1042117";
+    public final String APP_ID = "1017456";
+    public final String DEFAULT_AD_PLC = "1059449";
     public String DEFAULT_INTERSTITIAL_PLC = "1042115";
     public String DEFAULT_300X250TEST_PLC = "1042114";
     public final String A9_APP_KEY = "a9_onboarding_app_id";
