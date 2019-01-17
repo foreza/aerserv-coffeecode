@@ -144,14 +144,14 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         // Show the status of the consent above
         globalVariable.setGDPRConsent(AerServSdk.getGdprConsentFlag(this));
 
-        TextView GDPRConsentView = findViewById(R.id.gdprStatus);
-        if (!globalVariable.getGDPRConsent()) {
-            GDPRConsentView.setText(R.string.gdprconsentview_notConsent);
-            GDPRConsentView.setTextColor(Color.parseColor("#C40824"));
-        } else {
-            GDPRConsentView.setText(R.string.gdprconsentview_didConsent);
-            GDPRConsentView.setTextColor(Color.parseColor("#5BB55E"));
-        }
+//        TextView GDPRConsentView = findViewById(R.id.gdprStatus);
+//        if (!globalVariable.getGDPRConsent()) {
+//            GDPRConsentView.setText(R.string.gdprconsentview_notConsent);
+//            GDPRConsentView.setTextColor(Color.parseColor("#C40824"));
+//        } else {
+//            GDPRConsentView.setText(R.string.gdprconsentview_didConsent);
+//            GDPRConsentView.setTextColor(Color.parseColor("#5BB55E"));
+//        }
 
     }
 

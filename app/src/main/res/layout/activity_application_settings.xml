@@ -7,27 +7,55 @@
     tools:context=".ApplicationSettings">
 
 
-    <!--TODO: MOVE GDPR TO THIS ACTIVITY-->
-    <!--android:onClick="modifyGDPRStatus"-->
-
-    <TextView
-        android:id="@+id/gdprStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:textColor="@android:color/holo_red_light"
-        android:textStyle="italic"
+    <LinearLayout
+        android:id="@+id/applicationSettingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="356dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <TextView
-        android:id="@+id/sdkVersion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:textColor="@android:color/holo_green_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
+    <!--&lt;!&ndash;TODO: MOVE GDPR TO THIS ACTIVITY&ndash;&gt;-->
+    <!--&lt;!&ndash;android:onClick="modifyGDPRStatus"&ndash;&gt;-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/googleVersion"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="@android:color/primary_text_dark"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/gdprStatus" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/gdprStatus"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="@android:color/holo_red_light"-->
+        <!--android:textStyle="italic"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/sdkVersion" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/sdkVersion"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:textColor="@android:color/holo_green_dark"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+
+
+
 </android.support.constraint.ConstraintLayout>
