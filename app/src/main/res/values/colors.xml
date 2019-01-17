@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3f51b5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#5C4033</color>
+    <color name="colorPrimaryDark">#261A15</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="coffeeColor">#654321</color>
     <color name="gdprAcceptColor">#5BB55E</color>
     <color name="gdprDenyColor">#C40824</color>
 </resources>

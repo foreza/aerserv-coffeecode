@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         LOG_TAG = globalVariable.LOG_TAG;                           // Save LOG_TAG since we frequently access
 
-        initializeTextView();                                       // Handle Text View loading
+        initializeTextView();
         globalVariable.initSaveFile();                              // Will create a save file if not yet created.
 
 
@@ -197,12 +197,8 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     }
 
 
-    // Handle generic text updates
+    // Handle generic text updates on this view
     public void initializeTextView() {
-
-        TextView version = findViewById(R.id.sdkVersion);
-        version.setText(getString(R.string.aerserv_sdk_version, UrlBuilder.VERSION));
-
         TextView coffeeAmt = findViewById(R.id.coffeeCounterView_Main);
         coffeeAmt.setText(getString(R.string.coffee_bean_count, globalVariable.getCoffeeCount()));
 
@@ -232,9 +228,11 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_AD_PLC)
                 .setEventListener(listener)
+                .setDebug(true)
                 .setPubKeys(globalVariable.getPubKeys());
         banner = findViewById(R.id.banner);
-        banner.configure(config).show();
+        banner.configure(config);
+        banner.show();
     }
 
 
@@ -300,13 +298,13 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     }
 
 
-    // When we click 'increment coffee count, it should increment the value' and start a new activity to illustrate that, along with a back button.
+    // When we click 'get dessert menu', we should be taken to the activity that lets us test performance with recycler view
     public void getDessertMenu(View view) {
         Intent intent = new Intent(this, DessertMenuRecycler.class);
         startActivityForResult(intent, 3);  // Request code 3 will be returned (may not be used) from finishing the dessert menu.
     }
 
-    // When we click 'getDetailedStats', load the view for detailed stats.
+    // When we click 'getDetailedStats', load the view for detailed stats - for MREC testing
     public void getDetailedStats(View view) {
 
         if (globalVariable.checkAdPreloadReady()){
@@ -315,6 +313,14 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         }
 
     }
+
+    public void viewSettings(View view) {
+
+        Intent intent = new Intent(this, ApplicationSettings.class);
+        startActivityForResult(intent, 4);
+
+    }
+
 
     // Update the GDPR status view
     public void modifyGDPRStatus(View view) {

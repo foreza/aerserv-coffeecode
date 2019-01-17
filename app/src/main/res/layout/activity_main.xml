@@ -21,17 +21,31 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 
-
     <Button
         android:id="@+id/button2"
         android:layout_width="332dp"
         android:layout_height="64dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/coffeeColor"
         android:onClick="incrementCoffeeCount"
         android:text="@string/button_coffee"
+        android:textColor="@color/browser_actions_bg_grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/button5" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/common_google_signin_btn_text_dark_focused"
+        android:onClick="viewSettings"
+        android:text="@string/button_settings"
+        android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gdpr_fragment" />
 
     <Button
         android:id="@+id/button3"
@@ -72,28 +86,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button2" />
-
-    <TextView
-        android:id="@+id/gdprStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:textColor="@android:color/holo_red_light"
-        android:textStyle="italic"
-        android:onClick="modifyGDPRStatus"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/sdkVersion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:textColor="@android:color/holo_green_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/gdpr_fragment"
