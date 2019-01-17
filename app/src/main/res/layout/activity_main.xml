@@ -12,91 +12,64 @@
         android:id="@+id/banner"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
         android:gravity="center_horizontal"
-        />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/dessert_recycler"
-        android:layout_width="340dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_horizontal"
-        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coffeeCounterView_Main" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+
 
     <Button
-    android:id="@+id/button2"
-    android:layout_width="332dp"
-    android:layout_height="61dp"
-    android:layout_marginTop="70dp"
-    android:onClick="incrementCoffeeCount"
-    android:text="@string/button_coffee"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/button2"
+        android:layout_width="332dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="50dp"
+        android:onClick="incrementCoffeeCount"
+        android:text="@string/button_coffee"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button3"
-        android:layout_width="93dp"
-        android:layout_height="48dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:onClick="getDetailedStats"
         android:text="@string/button_stats"
         android:textSize="8sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintBottom_toTopOf="@+id/banner"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/buttonShowBanner"
-        android:layout_width="93dp"
-        android:layout_height="48dp"
+        android:id="@+id/button4"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="10dp"
-        android:onClick="onClickShowBanner"
-        android:text="@string/button_showBanner"
-        android:visibility="invisible"
+        android:layout_marginBottom="8dp"
+        android:onClick="getDessertMenu"
+        android:text="@string/button_dessert"
         android:textSize="8sp"
-        app:layout_constraintEnd_toStartOf="@+id/button3"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
-
-    <Button
-        android:id="@+id/buttonLoadBanner"
-        android:layout_width="93dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="10dp"
-        android:onClick="onClickLoadBanner"
-        android:text="@string/button_loadBanner"
-        android:visibility="visible"
-        android:textSize="8sp"
-        app:layout_constraintEnd_toStartOf="@+id/button3"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintBottom_toTopOf="@+id/banner"
+        app:layout_constraintEnd_toStartOf="@+id/button3" />
 
     <TextView
         android:id="@+id/coffeeCounterView_Main"
         android:layout_width="263dp"
         android:layout_height="43dp"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:text="Beans!"
         android:textSize="18sp"
         app:fontFamily="monospace"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button2" />
 

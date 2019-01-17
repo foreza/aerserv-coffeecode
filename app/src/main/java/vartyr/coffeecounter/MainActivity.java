@@ -5,8 +5,6 @@ import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,8 +29,6 @@ import com.aerserv.sdk.utils.UrlBuilder;
 public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnFragmentInteractionListener{
 
     private AerServBanner banner;               // AS Banner
-    private boolean preloadReady;               // Track preload ready state
-
     public FragmentManager fragmentManager;     // For any fragments we need to call / add
     private GlobalClass globalVariable;         // To grab VC or anything we need
     private static String LOG_TAG;              // Log tag
@@ -49,15 +45,13 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                 public void run() {
                     AerServTransactionInformation ti;
                     switch (event) {
-                        case PRELOAD_READY:
-                            preloadReady = true;
+                        case PRELOAD_READY: // This should never be invoked.
                             banner.show();
-//                            toggleBannerButtonState(true);
                             Log.d(LOG_TAG, "Preload Ready for banner!");
                             break;
                         case AD_FAILED:
                             if (args.size() > 0) {
-                                Log.d(LOG_TAG, "AD FAILED / not loaded"
+                                Log.d(LOG_TAG, "AD FAILED"
                                         + " Error code: " + AerServEventListener.AD_FAILED_CODE + ", reason=" + AerServEventListener.AD_FAILED_REASON);
                             } else {
                                 Log.d(LOG_TAG, "AD FAILED, no other info");
@@ -94,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         fragmentManager = getSupportFragmentManager();
 
         LOG_TAG = globalVariable.LOG_TAG;                           // Save LOG_TAG since we frequently access
-        initializeRecyclerView();                                   // Init the recycler view
+
         initializeTextView();                                       // Handle Text View loading
         globalVariable.initSaveFile();                              // Will create a save file if not yet created.
 
@@ -139,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         Log.d(LOG_TAG, "Reached end of onCreate for MainActivity");
 
-        // loadBanner();
+        loadBanner();
     }
 
 
@@ -161,22 +155,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
     }
 
-    // TODO: COMMENT
-    private void initializeRecyclerView() {
 
-        // Set up the recycler view, use a linear layoutmanager, feed data sets
-        RecyclerView mRecyclerView = findViewById(R.id.dessert_recycler);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        final RecyclerView.Adapter mAdapter = new CustomViewAdapter(globalVariable.dessertDataSet, globalVariable.colorDataSet);
-        mRecyclerView.setAdapter(mAdapter);
-        runOnUiThread(new Runnable() {
-            public void run() {
-                mAdapter.notifyDataSetChanged();
-            }
-        });
-
-    }
 
 
     // Call the init function only once for each SDK and toggle this to false after it has been called.
@@ -240,29 +219,10 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     }
 
 
-    public void toggleBannerButtonState(boolean v){
-        if (v) {
-            Log.d(LOG_TAG, "buttonShowBanner VISIBLE");
-            Button b = findViewById(R.id.buttonShowBanner);
-            b.setVisibility(View.VISIBLE);
-            Button a = findViewById(R.id.buttonLoadBanner);
-            a.setVisibility(View.INVISIBLE);
-        }
-        else {
-            Log.d(LOG_TAG, "buttonShowBanner INVISIBLE");
-            Button b = findViewById(R.id.buttonShowBanner);
-            b.setVisibility(View.INVISIBLE);
-            Button a = findViewById(R.id.buttonLoadBanner);
-            a.setVisibility(View.VISIBLE);
-        }
-    }
-
-
     // Loads a banner into a defined spot
     public void loadBanner() {
 
         Log.d(LOG_TAG, "CONFIGURING A BANNER NOW");
-        preloadReady = false;
 
         if (banner != null){
             Log.d(LOG_TAG, "KILLING PREVIOUS BANNER");
@@ -272,7 +232,6 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_AD_PLC)
                 .setEventListener(listener)
-//                .setPreload(true)
                 .setPubKeys(globalVariable.getPubKeys());
         banner = findViewById(R.id.banner);
         banner.configure(config).show();
@@ -332,49 +291,6 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
 
 
-
-    // JC: Show the banner after asking politely. It's a demo app.
-    public void onClickLoadBanner(View view) {
-
-        Log.d(LOG_TAG, "onClickLoadBanner");
-
-        if (!preloadReady) {
-
-
-            Log.d(LOG_TAG, "Preload is not ready. Begin loading banner");
-
-
-            // Preload banner on this activity
-            if (globalVariable.getSupportA9()) {
-                Log.d(LOG_TAG, "Loading A9 as support A9 is set to true");
-                loadA9Banner();
-            } else {
-                Log.d(LOG_TAG, "Not loading A9 as support A9 is set to false");
-                loadBanner();
-            }
-        }
-    }
-
-
-    // JC: Show the banner after asking politely. It's a demo app.
-    public void onClickShowBanner(View view) {
-
-
-        Log.d(LOG_TAG, "onClickShowBanner");
-
-        if (preloadReady && banner != null) {
-
-            Log.d(LOG_TAG, "Preload is ready. show banner");
-
-
-            banner.show();
-            preloadReady = false;
-            toggleBannerButtonState(false);
-        }
-    }
-
-
-
     // When we click 'increment coffee count, it should increment the value' and start a new activity to illustrate that, along with a back button.
     public void incrementCoffeeCount(View view) {
 
@@ -383,6 +299,12 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
     }
 
+
+    // When we click 'increment coffee count, it should increment the value' and start a new activity to illustrate that, along with a back button.
+    public void getDessertMenu(View view) {
+        Intent intent = new Intent(this, DessertMenuRecycler.class);
+        startActivityForResult(intent, 3);  // Request code 3 will be returned (may not be used) from finishing the dessert menu.
+    }
 
     // When we click 'getDetailedStats', load the view for detailed stats.
     public void getDetailedStats(View view) {

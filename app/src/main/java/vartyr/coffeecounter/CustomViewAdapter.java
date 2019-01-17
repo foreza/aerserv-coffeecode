@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import com.aerserv.sdk.AerServBanner;
 import com.aerserv.sdk.AerServConfig;
+
+import org.w3c.dom.Text;
+
 import java.util.Random;
 
 /**
@@ -21,7 +24,9 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
 
     private static final String TAG = "CustomViewAdapter";
     private int[] placementDataSet;
+    private final String plc;
     private String[] mDataSet;
+
     private int[] mColorSet;
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
@@ -33,10 +38,10 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
 
         private final Button buttonView;
         private final TextView placeholderView;
+        private final TextView dessertTextView;
         private final Context context;
         private AerServBanner banner = null;
         public int color = Color.TRANSPARENT;
-        public String plc = "380000";
         public Boolean bannerDisplaying = false;
 
         public ViewHolder(View v) {
@@ -54,9 +59,11 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
                 }
             });
             placeholderView = (TextView) v.findViewById(R.id.banner_placeholder);
+            dessertTextView = (TextView) v.findViewById(R.id.dessertTextView);
             buttonView = (Button) v.findViewById(R.id.button_send);
             banner = (AerServBanner) v.findViewById(R.id.banner_recycle);
             context = (Context) v.getContext();
+
         }
 
         /** Called when the user touches the button */
@@ -68,6 +75,11 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
         public TextView getPlaceholderView() {
             return placeholderView;
         }
+
+        public TextView getDessertTextView() {
+            return dessertTextView;
+        }
+
 
         public Button getButtonView(){ return buttonView;}
 
@@ -90,10 +102,11 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public CustomViewAdapter(String[] dataSet, int[] colorSet) {
+    public CustomViewAdapter(String[] dataSet, int[] colorSet, String bannerPLC) {
         mDataSet = dataSet;
         placementDataSet = new int[dataSet.length];
         mColorSet = colorSet;
+        plc = bannerPLC;
         Log.d(TAG, "DataSet created of size: " + placementDataSet.length);
 
     }
@@ -114,16 +127,17 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
     }
 
     public void showBanner(ViewHolder viewHolder) {
-        AerServConfig config = new AerServConfig(viewHolder.getContext(), viewHolder.plc);
+        AerServConfig config = new AerServConfig(viewHolder.getContext(), plc);
         AerServBanner banner = (AerServBanner) viewHolder.getBanner();
+
         viewHolder.bannerDisplaying = true;
-//        banner.configure(config).show();
+        banner.configure(config).show();
     }
 
     public void killBanner(ViewHolder viewHolder) {
         AerServBanner banner = (AerServBanner) viewHolder.getBanner();
         viewHolder.bannerDisplaying = false;
-//        banner.kill();
+        banner.kill();
     }
 
 
@@ -147,13 +161,15 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
         if (position % 10 == 0)
         {
             Log.d(TAG, "This spot should have an ad and no color");
-            viewHolder.getPlaceholderView().setText("");
+            viewHolder.getDessertTextView().setText("");
+            viewHolder.getPlaceholderView().setVisibility(View.INVISIBLE);
             viewHolder.getButtonView().setVisibility(View.INVISIBLE);
 
             if (!viewHolder.bannerDisplaying){
                 Log.d(TAG, "ADDING AD");
                 placementDataSet[position] = -1;
                 showBanner(viewHolder);
+                viewHolder.getBanner().setVisibility(View.VISIBLE);
             }
         } else {
 
@@ -161,12 +177,14 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.Vi
 
             if (viewHolder.bannerDisplaying) {
                 Log.d(TAG, "KILLING AD");
+                viewHolder.getPlaceholderView().setVisibility(View.VISIBLE);
+                viewHolder.getBanner().setVisibility(View.INVISIBLE);
                 placementDataSet[position] = 0;
                 killBanner(viewHolder);
             }
 
 
-            viewHolder.getPlaceholderView().setText(mDataSet[position]);
+            viewHolder.getDessertTextView().setText(mDataSet[position]);
             viewHolder.getButtonView().setVisibility(View.VISIBLE);
             viewHolder.getPlaceholderView().setBackgroundColor(placementDataSet[position]);
             viewHolder.getButtonView().setOnClickListener(new View.OnClickListener() {
