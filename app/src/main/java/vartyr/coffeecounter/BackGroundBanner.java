@@ -30,17 +30,32 @@ public class BackGroundBanner extends AppCompatActivity {
 
         globalVariable = (GlobalClass) getApplicationContext();                         // Get an instance of the singleton class before anything else is done
         LOG_TAG = globalVariable.LOG_TAG;
-        RelativeLayout parent = (RelativeLayout) findViewById(R.id.bgbannerholder);     // Get a reference to the relative layout
+        attemptCreateBanner();                              // Show the ad
+    }
 
-        Resources r = getResources();
-        float height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
 
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, Math.round(height)); // Note: doc says layoutparam, missing the 's'
-        lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        lp.bottomMargin = 50;
+    private void attemptCreateBanner(){
 
-        parent.addView(globalVariable.injectBanner(), lp);                              // Inject our banner into the view
-        globalVariable.attemptShowAd();                                                 // Show the ad
+        if (globalVariable.checkAdPreloadReady()){
+
+            RelativeLayout parent = (RelativeLayout) findViewById(R.id.bgbannerholder);     // Get a reference to the relative layout
+
+            Resources r = getResources();
+            float height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 400, r.getDisplayMetrics());
+
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, Math.round(height)); // Note: doc says layoutparam, missing the 's'
+            lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            lp.bottomMargin = 50;
+
+            parent.addView(globalVariable.injectBanner(), lp);                              // Inject our banner into the view
+            globalVariable.attemptShowAd();
+        } else {
+
+            // Do something here.
+
+        }
+
+
     }
 
 

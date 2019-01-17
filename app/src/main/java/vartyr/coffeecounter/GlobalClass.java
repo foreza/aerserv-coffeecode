@@ -67,7 +67,6 @@ public class GlobalClass extends Application {
 
 
     private AerServBanner banner;                              // AS Banner, which we will load in the background
-    private String backgroundPLC = "380004";                   // TEMP: the PLC that we need
     private Boolean preloadReady = false;
 
 
@@ -121,9 +120,9 @@ public class GlobalClass extends Application {
     };
 
     // Preload the ad using the backgroundPLC
-    public void beginPreloadBannerInBGView(){
+    public void beginPreloadBannerInBGView(String plc){
 
-        final AerServConfig config = new AerServConfig(this, backgroundPLC)
+        final AerServConfig config = new AerServConfig(this, plc)
                 .setEventListener(bListener)        // Use the bListener declared above
                 .setRefreshInterval(0)              // Do not allow refresh
 //                .setA9AdResponses(null)             // No A9 support

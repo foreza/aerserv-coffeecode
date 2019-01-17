@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.List;
 import com.aerserv.sdk.AerServBanner;
 import com.aerserv.sdk.AerServConfig;
@@ -86,11 +88,6 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         initializeTextView();
         globalVariable.initSaveFile();                              // Will create a save file if not yet created.
-
-
-        // NOTE: This controls the injected banner in view. Enable this to test it.
-        // globalVariable.beginPreloadBannerInBGView();
-
 
 
         // TODO: Re-implement GDPR consent activity
@@ -299,13 +296,21 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         startActivityForResult(intent, 3);  // Request code 3 will be returned (may not be used) from finishing the dessert menu.
     }
 
-    // When we click 'getDetailedStats', load the view for detailed stats - for MREC testing
+    // When we click 'getDetailedStats', load the view for detailed stats - for loading with application context testing
     public void getDetailedStats(View view) {
 
+
         if (globalVariable.checkAdPreloadReady()){
-            Intent intent = new Intent(this, BackGroundBanner.class);
-            startActivityForResult(intent, 2);
+            Toast.makeText(this, (String)"Background thread has loaded an ad.",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, (String)"Background thread has not loaded an ad.",
+                    Toast.LENGTH_LONG).show();
+            globalVariable.beginPreloadBannerInBGView(globalVariable.DEFAULT_300X250TEST_PLC);
         }
+        Intent intent = new Intent(this, BackGroundBanner.class);
+        startActivityForResult(intent, 2);
+
 
     }
 
