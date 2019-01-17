@@ -1,7 +1,6 @@
 package vartyr.coffeecounter;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,11 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-
 import java.util.List;
-
-
 import com.aerserv.sdk.AerServBanner;
 import com.aerserv.sdk.AerServConfig;
 import com.aerserv.sdk.AerServEvent;
@@ -142,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         // Get the GDPR consent flag and save it to the singleton class
         // Show the status of the consent above
-        globalVariable.setGDPRConsent(AerServSdk.getGdprConsentFlag(this));
+//        globalVariable.setGDPRConsent(AerServSdk.getGdprConsentFlag(this));
 
 //        TextView GDPRConsentView = findViewById(R.id.gdprStatus);
 //        if (!globalVariable.getGDPRConsent()) {

@@ -10,15 +10,30 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aerserv.sdk.AerServSdk;
 import com.aerserv.sdk.utils.ReflectionUtils;
 import com.aerserv.sdk.utils.UrlBuilder;
 
 //ADMOB
+
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.GoogleApiAvailability;
+
+//import com.google.android.gms.common.GoogleApiAvailability;
+
+// MOPUB
+import com.mopub.common.MoPub;
+import com.mopub.mobileads.MoPubErrorCode;
+import com.mopub.mobileads.MoPubView;
+
+// FACEBOOK
+import com.facebook.ads.AudienceNetworkActivity;
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -55,6 +70,8 @@ public class ApplicationSettings extends AppCompatActivity {
         versionStrings.put("Google Play Services:", getGoogleSDKVersionString());
 
         // TODO: Do others
+        versionStrings.put("MoPub SDK:", getMopubSDKVersionString());
+        versionStrings.put("Facebook SDK:", getFANSDKVersionString());
 
     }
 
@@ -101,7 +118,6 @@ public class ApplicationSettings extends AppCompatActivity {
     private String getGDPRComplianceStatus() {
 
         // TextView GDPRConsentView = findViewById(R.id.gdprStatus);
-
         if (!globalVariable.getGDPRConsent()) {
 //            GDPRConsentView.setText(R.string.gdprconsentview_notConsent);
 //            GDPRConsentView.setTextColor(Color.parseColor("#C40824"));
@@ -130,14 +146,72 @@ public class ApplicationSettings extends AppCompatActivity {
 
     private String getGoogleSDKVersionString(){
 
-        String gmsClassName = "com.google.android.gms.ads.AdView";
+        String className = "com.google.android.gms.ads.AdView";
         int test = GoogleApiAvailability.GOOGLE_PLAY_SERVICES_VERSION_CODE;
 
-        return "boop";
+        try {
 
-//        TextView gmsVersion = findViewById(R.id.googleVersion);
-//        gmsVersion.setText(Integer.toString(v2));
-//
+            if (util_checkIfDependency(className)){
+                return Integer.toString(test);
+            }
+
+            return "Not loaded";
+
+        } catch (Exception e) {
+            // This will catch any exception, because they are all descended from Exception
+
+            return "Could not retrieve";
+        }
+    }
+
+
+    private String getMopubSDKVersionString(){
+
+        String className = "com.mopub.common.MoPub";
+
+
+        try {
+
+            if (util_checkIfDependency(className)){
+
+                // Decorate / format the string further if needed
+                return MoPub.SDK_VERSION;
+            }
+
+            return "Not loaded";
+
+        } catch (Exception e) {
+            // This will catch any exception, because they are all descended from Exception
+
+            return "Could not retrieve";
+        }
+
+
+
+    }
+
+
+    private String getFANSDKVersionString(){
+
+        String className = "com.facebook.ads.AdView";
+
+        try {
+
+            if (util_checkIfDependency(className)){
+
+                // Decorate / format the string further if needed
+                return "not supported, todo";
+            }
+
+            return "Not loaded";
+
+        } catch (Exception e) {
+            // This will catch any exception, because they are all descended from Exception
+
+            return "Could not retrieve";
+        }
+
+
     }
 
 }
