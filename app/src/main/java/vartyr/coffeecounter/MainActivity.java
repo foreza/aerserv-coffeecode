@@ -298,8 +298,6 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
     // When we click 'getDetailedStats', load the view for detailed stats - for loading with application context testing
     public void getDetailedStats(View view) {
-
-
         if (globalVariable.checkAdPreloadReady()){
             Toast.makeText(this, (String)"Background thread has loaded an ad.",
                     Toast.LENGTH_LONG).show();
@@ -310,16 +308,23 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         }
         Intent intent = new Intent(this, BackGroundBanner.class);
         startActivityForResult(intent, 2);
-
-
     }
 
+    // When we click 'view settings', show the various sdk versions and (future) allow me to modify other various settings
     public void viewSettings(View view) {
-
         Intent intent = new Intent(this, ApplicationSettings.class);
         startActivityForResult(intent, 4);
+    }
+
+
+    // This should load a test activity which will have 2 banners with the same refresh timer to test potential adapter conflicts
+    public void viewAndListenToRadio(View view) {
+
+        Intent intent = new Intent(this, CoffeeRadio.class);
+        startActivityForResult(intent, 5);
 
     }
+
 
 
     // Update the GDPR status view

@@ -2,8 +2,9 @@
     <string name="app_name">Coffee Counter</string>
     <string name="button_settings">Modify / View App Settings</string>
     <string name="button_coffee">Break time! Drink Coffee!</string>
-    <string name="button_stats">Stats (MREC Test)</string>
-    <string name="button_dessert">Dessert Menu (Recycler Test) </string>
+    <string name="button_stats">Stats (Context Test)</string>
+    <string name="button_dessert">Dessert (Recycler Test) </string>
+    <string name="button_radio">Radio (Multi Adapter Test) </string>
     <string name="button_loadBanner">PreLoad Banner</string>
     <string name="button_showBanner">Show Preloaded Banner</string>
 
