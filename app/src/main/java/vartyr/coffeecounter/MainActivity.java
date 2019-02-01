@@ -296,15 +296,15 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         startActivityForResult(intent, 3);  // Request code 3 will be returned (may not be used) from finishing the dessert menu.
     }
 
-    // When we click 'getDetailedStats', load the view for detailed stats - for loading with application context testing
+    // When we click 'getDetailedStats', load the view for detailed stats - for testing loading with application context testing for banners
     public void getDetailedStats(View view) {
-        if (globalVariable.checkAdPreloadReady()){
-            Toast.makeText(this, (String)"Background thread has loaded an ad.",
+        if (globalVariable.checkBannerAdPreloadReady()){
+            Toast.makeText(this, (String)"Background thread has loaded a banner ad.",
                     Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, (String)"Background thread has not loaded an ad.",
+            Toast.makeText(this, (String)"Background thread has not loaded a banner ad.",
                     Toast.LENGTH_LONG).show();
-            globalVariable.beginPreloadBannerInBGView(globalVariable.DEFAULT_300X250TEST_PLC);
+            globalVariable.beginPreloadBannerInBG(globalVariable.DEFAULT_300X250TEST_PLC);
         }
         Intent intent = new Intent(this, BackGroundBanner.class);
         startActivityForResult(intent, 2);
@@ -323,6 +323,20 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         Intent intent = new Intent(this, CoffeeRadio.class);
         startActivityForResult(intent, 5);
 
+    }
+
+    // When we click 'getShocked', load a shocking view - for testing loading with application context testing for interstitials
+    public void getShocked(View view) {
+        if (globalVariable.checkInterstitialAdPreloadReady()){
+            Toast.makeText(this, (String)"Background thread has loaded a interstitial ad.",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, (String)"Background thread has not loaded a interstitial ad.",
+                    Toast.LENGTH_LONG).show();
+            globalVariable.beginPreloadInterstitialInBG(globalVariable.DEFAULT_INTERSTITIAL_PLC);
+        }
+        Intent intent = new Intent(this, BackgroundInterstitial.class);
+        startActivityForResult(intent, 6);
     }
 
 
@@ -376,13 +390,24 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         // NOTE: Enable this if you are testing banner injection from app context
         else if (requestCode == 2) {
             Log.d(LOG_TAG, "Returned from background banner, begin loading new ad");
-            if (!globalVariable.checkAdPreloadReady()){
+            if (!globalVariable.checkBannerAdPreloadReady()){
                 // Handle case that banner has already played; load new one
-                // globalVariable.beginPreloadBannerInBGView();
+                // globalVariable.beginPreloadBannerInBG();
             } else {
                 Log.d(LOG_TAG, "Banner has not yet played");
             }
         }
+
+        // NOTE: Enable this if you are testing interstitial preloading from bg
+        else if (requestCode == 6) {
+            Log.d(LOG_TAG, "Returned from background interstitial, begin loading new ad");
+            if (!globalVariable.checkInterstitialAdPreloadReady()){
+                // Handle case that int has already played; load new one?
+            } else {
+                Log.d(LOG_TAG, "Interstitial has not yet played");
+            }
+        }
+
     }
 
 

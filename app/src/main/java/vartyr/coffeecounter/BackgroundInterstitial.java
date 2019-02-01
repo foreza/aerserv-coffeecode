@@ -1,58 +1,30 @@
 package vartyr.coffeecounter;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
-/*
+import com.aerserv.sdk.AerServInterstitial;
 
-This activity will be used to demonstrate how we can inject a banner into the view from the application context.
-This method is typica
+public class BackgroundInterstitial extends AppCompatActivity {
 
- */
-
-public class BackGroundBanner extends AppCompatActivity {
 
     private GlobalClass globalVariable;                                                 // We'll be accessing the background banner here
     private static String LOG_TAG;                                                      // Log tag
-
+    private AerServInterstitial interstitial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_back_ground_banner);
+        setContentView(R.layout.activity_background_interstitial);
 
         globalVariable = (GlobalClass) getApplicationContext();                         // Get an instance of the singleton class before anything else is done
         LOG_TAG = globalVariable.LOG_TAG;
-        attemptCreateBanner();                              // Show the ad
-    }
 
-
-    private void attemptCreateBanner(){
-
-        if (globalVariable.checkBannerAdPreloadReady()){
-
-            RelativeLayout parent = (RelativeLayout) findViewById(R.id.bgbannerholder);     // Get a reference to the relative layout
-
-            Resources r = getResources();
-            float height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 400, r.getDisplayMetrics());
-
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, Math.round(height)); // Note: doc says layoutparam, missing the 's'
-            lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            lp.bottomMargin = 50;
-
-            parent.addView(globalVariable.getBackgroundBannerToInject(), lp);                              // Inject our banner into the view
-            globalVariable.attemptShowPreloadedBannerAdFromBG();
-        } else {
-
-            // Do something here.
-
+        if (globalVariable.checkInterstitialAdPreloadReady()){
+            globalVariable.attemptShowPreloadedInterstitialAdFromBG();
         }
 
 
@@ -81,6 +53,5 @@ public class BackGroundBanner extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
 }
