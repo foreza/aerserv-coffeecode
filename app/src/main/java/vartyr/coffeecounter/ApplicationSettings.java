@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.aerserv.sdk.AerServSdk;
 import com.aerserv.sdk.utils.ReflectionUtils;
-import com.aerserv.sdk.utils.UrlBuilder;
 
 //ADMOB
 
@@ -25,6 +24,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 //import com.google.android.gms.common.GoogleApiAvailability;
 
 // MOPUB
+import com.inmobi.sdk.InMobiSdk;
 import com.mopub.common.MoPub;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
@@ -109,7 +109,7 @@ public class ApplicationSettings extends AppCompatActivity {
 
 //        TextView version = findViewById(R.id.sdkVersion);
 //        version.setText(getString(R.string.aerserv_sdk_version, UrlBuilder.VERSION));
-        return getString(R.string.aerserv_sdk_version, UrlBuilder.VERSION);
+        return getString(R.string.aerserv_sdk_version, InMobiSdk.getVersion());
 
     }
 

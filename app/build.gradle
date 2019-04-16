@@ -34,6 +34,8 @@ dependencies {
 
     // AdMob Mediation
     implementation 'com.google.android.gms:play-services-ads:15.0.1'
+//    implementation 'com.google.android.gms:play-services-basement:15.0.1'
+//    implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 
     // Facebook Audience Network Mediation

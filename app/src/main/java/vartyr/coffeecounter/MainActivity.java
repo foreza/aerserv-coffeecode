@@ -1,6 +1,7 @@
 package vartyr.coffeecounter;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import com.aerserv.sdk.AerServEvent;
 import com.aerserv.sdk.AerServEventListener;
 import com.aerserv.sdk.AerServSdk;
 import com.aerserv.sdk.AerServTransactionInformation;
-import com.aerserv.sdk.utils.UrlBuilder;
+
 import com.inmobi.ads.InMobiBanner;
 import com.inmobi.sdk.InMobiSdk;
 
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         Log.d(LOG_TAG, "Reached end of onCreate for MainActivity, loading banner");
 
-        loadBanner();
+        // loadBanner();
     }
 
 
@@ -136,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         // Get the GDPR consent flag and save it to the singleton class
         // Show the status of the consent above
-//        globalVariable.setGDPRConsent(AerServSdk.getGdprConsentFlag(this));
+        globalVariable.setGDPRConsent(AerServSdk.getGdprConsentFlag(this));
 
 //        TextView GDPRConsentView = findViewById(R.id.gdprStatus);
 //        if (!globalVariable.getGDPRConsent()) {
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
         // Any sort of init log messages should be printed here
         Log.d(LOG_TAG, "Running init with site app ID: " + globalVariable.APP_ID);
-        Log.d(LOG_TAG, "Currently running SDK version: " + UrlBuilder.VERSION);
+        Log.d(LOG_TAG, "Currently running SDK version: " + InMobiSdk.getVersion());
         Log.d(LOG_TAG, "GDPR consent has been given to AerServ SDK: " + Boolean.toString(globalVariable.getGDPRConsent()));
 
 
@@ -317,7 +318,8 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     // When we click 'view settings', show the various sdk versions and (future) allow me to modify other various settings
     public void viewSettings(View view) {
         Intent intent = new Intent(this, ApplicationSettings.class);
-        startActivityForResult(intent, 4);
+        loadBanner();
+        // startActivityForResult(intent, 4);
     }
 
 
