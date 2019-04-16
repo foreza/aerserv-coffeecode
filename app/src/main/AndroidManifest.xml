@@ -48,6 +48,10 @@
                 android:value=".MainActivity" />
         </activity>
 
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+
         <!-- AdColony Activities -->
         <!-- <activity -->
         <!-- android:name="com.adcolony.sdk.AdColonyInterstitialActivity" -->

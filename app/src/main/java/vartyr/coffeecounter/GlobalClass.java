@@ -20,21 +20,34 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class GlobalClass extends Application {
 
-    public final String LOG_TAG = "CoffeeCounter";
-    public final String APP_ID = "1011139";
-    public final String DEFAULT_AD_PLC = "1042117";
-    public String DEFAULT_INTERSTITIAL_PLC = "1042115";
-    public String DEFAULT_300X250TEST_PLC = "1042114";
+//    public final String LOG_TAG = "CoffeeCounter";
+//    public final String APP_ID = "1011139";
+//    public final String DEFAULT_AD_PLC = "1042117";
+//    public String DEFAULT_INTERSTITIAL_PLC = "1042115";
+//    public String DEFAULT_300X250TEST_PLC = "1042114";
     public final String A9_APP_KEY = "a9_onboarding_app_id";
     public final String A9_SLOT_320x50 = "5ab6a4ae-4aa5-43f4-9da4-e30755f2b295";             // Price point(amznslots): o320x50p1
     public final String A9_SLOT_300x250 = "54fb2d08-c222-40b1-8bbe-4879322dc04b";            // Price point(amznslots): o300x250p1
     public final String A9_SLOT_INTERSTITIAL = "4e918ac0-5c68-4fe1-8d26-4e76e8f74831";       // ointerstitialp1
+
+
+    public final String LOG_TAG = "CoffeeCounter";
+    public final String APP_ID = "1010277";
+    public final String DEFAULT_AD_PLC = "1042117";         // CoffeeBanner
+    public String DEFAULT_INTERSTITIAL_PLC = "1048445";     // CAFFEINE TRIGGER
+    public String DEFAULT_300X250TEST_PLC = "1063612";      // CoffeeMREC
+
+//        public final String APP_ID = "1019630";
+//    public final String DEFAULT_AD_PLC = "1062630";         // CoffeeBanner
+//    public String DEFAULT_INTERSTITIAL_PLC = "1062630";     // CAFFEINE TRIGGER
+//    public String DEFAULT_300X250TEST_PLC = "1062630";      // CoffeeMREC
 
     /*
 
@@ -68,6 +81,8 @@ public class GlobalClass extends Application {
     private AerServInterstitial interstitial;
     private Boolean interstitialPreloadReady = false;
 
+    private AerServEventListener tempListener;
+
 
     // Public Test params / datasets
     public String [] dessertDataSet = new String [] {"Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla", "Raspberry","Mint","Cherry Vanilla","Butter Pecan","Peanut Butter Cup","Chocolate Chip","Chocolate Chip Cookie Dough","Chocolate Almond","Chocolate","Mint Chocolate Chip","Caramel","Moose Tracks","Fudge Brownie","Pistachio","M&M's","Vanilla","Cherry","Lemon","Cookie Dough","Coffee","Banana","Praline Pecan","Chocolate Marshmallow","Neopolitan","Cookies N' Cream","Rocky Road","Strawberry","Birthday Cake","French Vanilla"};
@@ -98,6 +113,10 @@ public class GlobalClass extends Application {
                         case LOAD_TRANSACTION:
                             if (args.size() >= 1) {
                                 Log.d(LOG_TAG, "Load Transaction Information PLC has:" + args.get(0));
+
+                                AerServTransactionInformation vc = (AerServTransactionInformation) args.get(0);
+                                String buyerName = vc.getBuyerName();
+                                BigDecimal buyerPrice = vc.getBuyerPrice();
                             }
                             else {
                                 Log.d(LOG_TAG, "Load Transaction Information PLC has no information");
@@ -119,7 +138,7 @@ public class GlobalClass extends Application {
     };
 
 
-    protected AerServEventListener interstitialListener = new AerServEventListener() {
+     AerServEventListener interstitialListener = new AerServEventListener() {
         @Override
         public void onAerServEvent(final AerServEvent event, final List<Object> args) {
 
@@ -130,22 +149,22 @@ public class GlobalClass extends Application {
                     AerServTransactionInformation ti;
                     switch (event) {
                         case PRELOAD_READY:
-                            Log.d(LOG_TAG, "Preload Ready for Interstitial!");
+                            Log.d(LOG_TAG, "interstitialListener - Preload Ready for Interstitial!");
                             interstitialPreloadReady = true;
                             break;
                         case AD_FAILED:
                             if (args.size() > 0) {
-                                Log.d(LOG_TAG, "AD FAILED / not loaded. Error code: " + AerServEventListener.AD_FAILED_CODE + ", reason=" + AerServEventListener.AD_FAILED_REASON);
+                                Log.d(LOG_TAG, "interstitialListener - AD FAILED / not loaded. Error code: " + AerServEventListener.AD_FAILED_CODE + ", reason=" + AerServEventListener.AD_FAILED_REASON);
                             } else {
-                                Log.d(LOG_TAG, "AD FAILED, no other info");
+                                Log.d(LOG_TAG, "interstitialListener - AD FAILED, no other info");
                             }
                             break;
                         case LOAD_TRANSACTION:
                             if (args.size() >= 1) {
-                                Log.d(LOG_TAG, "Load Transaction Information PLC has:" + args.get(0));
+                                Log.d(LOG_TAG, "interstitialListener - Load Transaction Information PLC has:" + args.get(0));
                             }
                             else {
-                                Log.d(LOG_TAG, "Load Transaction Information PLC has no information");
+                                Log.d(LOG_TAG, "interstitialListener - Load Transaction Information PLC has no information");
                             }
                             break;
                         case AD_IMPRESSION:
@@ -180,11 +199,14 @@ public class GlobalClass extends Application {
     // Preload the banner ad using the backgroundPLC
     public void beginPreloadInterstitialInBG(String plc){
 
-        final AerServConfig config = new AerServConfig(this, plc)
-                .setEventListener(interstitialListener)        // Use the interstitialListener declared above
+        AerServConfig config = new AerServConfig(this, plc)
+//                .setEventListener(interstitialListener)        // Use the interstitialListener declared above
+                .setEventListener(getInterstitialListener())                 // Test: Use the tempListener declared above
                 .setPreload(true);                             // Support preloading
 
-        interstitial = new AerServInterstitial(config);        // Provide the config. Can't dynamically set the event listener.
+
+        tempListener = interstitialListener;                // set the tempListener to the interstitial listener
+        interstitial = new AerServInterstitial(config);        // Provide the config.
     }
 
 
@@ -196,6 +218,17 @@ public class GlobalClass extends Application {
     // Provide the interstitial in case we somehow need it.
     public Object getBackgroundInterstitial(){
         return interstitial;
+    }
+
+    public AerServEventListener getInterstitialListener(){
+        return tempListener;
+    }
+
+    public void setInterstitialListener(AerServEventListener listener){
+        Log.d(LOG_TAG, "setInterstitialListener invoked");
+        tempListener = null;
+        tempListener = listener;
+
     }
 
 

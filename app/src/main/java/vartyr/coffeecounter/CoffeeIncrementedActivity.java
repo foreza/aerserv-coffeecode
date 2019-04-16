@@ -44,7 +44,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
                         case PRELOAD_READY:
                             globalVariable.CoffeeIncrementedInterstitialPreloaded = true;
                             setLoadedButtonVisible();
-                            Log.d(LOG_TAG, "Listener heard preload ready for interstitial");
+                            Log.d(LOG_TAG, "CoffeeIncrementedActivity - Listener heard preload ready for interstitial");
                             break;
                         case VC_REWARDED:
                             AerServVirtualCurrency vc = (AerServVirtualCurrency) args.get(0);
@@ -76,10 +76,10 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
         // Check to see if an interstitial is loaded already
         if (globalVariable.CoffeeIncrementedInterstitialPreloaded) {
-            Log.d(LOG_TAG, "Interstitial is already loaded do not load another");
+            Log.d(LOG_TAG, "CoffeeIncrementedActivity - Interstitial is already loaded do not load another");
             setLoadedButtonVisible();
         } else {
-            Log.d(LOG_TAG, "Interstitial is not loaded");
+            Log.d(LOG_TAG, "CoffeeIncrementedActivity - Interstitial is not loaded");
             setLoadedButtonInvisible();
             // Begin routine to load Interstitial.
             if (globalVariable.getSupportA9()) {
@@ -112,6 +112,9 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
 
     public void preloadInterstitial() {
+
+        Log.d(LOG_TAG, "CoffeeIncrementedActivity - preloadInterstitial called");
+
 
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_INTERSTITIAL_PLC)
                 .setDebug(true)

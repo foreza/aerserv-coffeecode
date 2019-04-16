@@ -20,6 +20,7 @@ android {
 dependencies {
     // Unified dependencies (IM + AerServ)
     implementation files('libs/InMobiSDK.aar')
+
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation('com.google.android.gms:play-services-plus:15.0.1') {
         exclude group: 'com.android.support'

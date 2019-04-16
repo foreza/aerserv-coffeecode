@@ -18,6 +18,8 @@ import com.aerserv.sdk.AerServEventListener;
 import com.aerserv.sdk.AerServSdk;
 import com.aerserv.sdk.AerServTransactionInformation;
 import com.aerserv.sdk.utils.UrlBuilder;
+import com.inmobi.ads.InMobiBanner;
+import com.inmobi.sdk.InMobiSdk;
 
 
 //import com.amazon.device.ads.*;
@@ -123,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
             startActivity(intent);
         }
 
-        Log.d(LOG_TAG, "Reached end of onCreate for MainActivity");
+        Log.d(LOG_TAG, "Reached end of onCreate for MainActivity, loading banner");
 
         loadBanner();
     }
@@ -153,8 +155,11 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     // Call the init function only once for each SDK and toggle this to false after it has been called.
     private void initializeSDK() {
 
+        Log.d(LOG_TAG, "Running init with site app ID: " + AerServSdk.getSiteId());
         // Initialize primary SDK (AerServ)
+
          AerServSdk.init(this, globalVariable.APP_ID);
+
 
 
 //        JSONObject consentObject = new JSONObject();
@@ -221,13 +226,12 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_AD_PLC)
                 .setEventListener(listener)
                 .setDebug(true)
+                .setVerbose(true)
                 .setPubKeys(globalVariable.getPubKeys());
         banner = findViewById(R.id.banner);
         banner.configure(config);
         banner.show();
     }
-
-
 
 
     // TODO: TEST AND VALIDATE THIS FUNCTION

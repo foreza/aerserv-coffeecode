@@ -130,6 +130,7 @@ public class CoffeeRadio extends AppCompatActivity {
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_300X250TEST_PLC)
                 .setEventListener(listenerMREC)
                 .setDebug(true)
+                .setRefreshInterval(15)
                 .setPubKeys(globalVariable.getPubKeys());
         bannerMREC = findViewById(R.id.top_radio_banner);
         bannerMREC.configure(config);

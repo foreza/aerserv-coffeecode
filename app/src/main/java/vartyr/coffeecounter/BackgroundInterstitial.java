@@ -6,7 +6,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.aerserv.sdk.AerServEvent;
+import com.aerserv.sdk.AerServEventListener;
 import com.aerserv.sdk.AerServInterstitial;
+import com.aerserv.sdk.AerServTransactionInformation;
+
+import java.util.List;
 
 public class BackgroundInterstitial extends AppCompatActivity {
 
@@ -14,6 +19,8 @@ public class BackgroundInterstitial extends AppCompatActivity {
     private GlobalClass globalVariable;                                                 // We'll be accessing the background banner here
     private static String LOG_TAG;                                                      // Log tag
     private AerServInterstitial interstitial;
+
+    public AerServEventListener testInterstitialListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +31,11 @@ public class BackgroundInterstitial extends AppCompatActivity {
         LOG_TAG = globalVariable.LOG_TAG;
 
         if (globalVariable.checkInterstitialAdPreloadReady()){
+            Log.d(LOG_TAG, "checkInterstitialAdPreloadReady - found ad was ready");
+            setNewListenerTest();
             globalVariable.attemptShowPreloadedInterstitialAdFromBG();
+        } else {
+            Log.d(LOG_TAG, "checkInterstitialAdPreloadReady - found ad was not ready. do nothing");
         }
 
 
@@ -52,6 +63,35 @@ public class BackgroundInterstitial extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // This function will set a new listener
+    public void setNewListenerTest(){
+
+        Log.d(LOG_TAG, "setNewListenerTest invoked");
+
+        // Make a new test listener
+        testInterstitialListener = new AerServEventListener() {
+            @Override
+            public void onAerServEvent(final AerServEvent event, final List<Object> args) {
+                BackgroundInterstitial.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (event) {
+                            case AD_IMPRESSION:
+                                Log.d(LOG_TAG, "testInterstitialListener - AD IMPRESSION! It worked!");
+                                break;
+                            case AD_LOADED:
+                                Log.d(LOG_TAG, "testInterstitialListener - AD loaded! It worked!");
+                                break;
+                        }
+                    }
+                });
+            }
+        };
+
+
+        globalVariable.setInterstitialListener(testInterstitialListener);
     }
 
 }
