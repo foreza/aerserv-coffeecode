@@ -42,7 +42,7 @@ dependencies {
     implementation files('libs/AudienceNetwork.aar')
 
     // APS Mediation
-    // implementation files('libs/DTBAndroidSDK-7.3.jar')
+     // implementation files('libs/DTBAndroidSDK-7.3.jar'
 
     // MoPub Mediation
     implementation files('libs/mopub-sdk-4.18.0.jar')

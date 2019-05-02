@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aerserv.sdk.AerServSdk;
-import com.aerserv.sdk.utils.ReflectionUtils;
+//import com.aerserv.sdk.utils.ReflectionUtils;
 
 //ADMOB
 
@@ -133,13 +133,15 @@ public class ApplicationSettings extends AppCompatActivity {
 
     // Utility method use for checking mediated SDK dependencies
     protected static boolean util_checkIfDependency(String adClassName) {
-        if (!ReflectionUtils.canFindClass(adClassName)) {
+//        if (!ReflectionUtils.canFindClass(adClassName)) {
+//
+//            Log.d(LOG_TAG, "ReflectionUtils failed, reflection did not find string name: " + adClassName);
+//
+//
+//            return false;
+//        } else return true;
 
-            Log.d(LOG_TAG, "ReflectionUtils failed, reflection did not find string name: " + adClassName);
-
-
-            return false;
-        } else return true;
+        return false;
 
     }
 
