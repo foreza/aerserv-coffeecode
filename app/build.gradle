@@ -39,7 +39,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 
     // Facebook Audience Network Mediation
-    implementation files('libs/AudienceNetwork.aar')
+//    implementation files('libs/AudienceNetwork.aar')
 
     // APS Mediation
      // implementation files('libs/DTBAndroidSDK-7.3.jar'

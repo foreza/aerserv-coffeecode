@@ -15,11 +15,11 @@ import com.aerserv.sdk.AerServSdk;
 
 //ADMOB
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.common.GoogleApiAvailability;
+//import com.google.android.gms.ads.AdListener;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.AdSize;
+//import com.google.android.gms.ads.AdView;
+//import com.google.android.gms.common.GoogleApiAvailability;
 
 //import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -30,16 +30,16 @@ import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
 
 // FACEBOOK
-import com.facebook.ads.AudienceNetworkActivity;
-import com.facebook.ads.Ad;
-import com.facebook.ads.AdError;
+//import com.facebook.ads.AudienceNetworkActivity;
+//import com.facebook.ads.Ad;
+//import com.facebook.ads.AdError;
 
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import static com.google.android.gms.common.GoogleApiAvailability.GOOGLE_PLAY_SERVICES_VERSION_CODE;
+//import static com.google.android.gms.common.GoogleApiAvailability.GOOGLE_PLAY_SERVICES_VERSION_CODE;
 
 public class ApplicationSettings extends AppCompatActivity {
 
@@ -79,26 +79,26 @@ public class ApplicationSettings extends AppCompatActivity {
     private void generateStringMapDisplay(){
 
 
-        LinearLayout layout = (LinearLayout) this.findViewById(R.id.applicationSettingLayout);
-
-        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
-                ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
-        lparams.setMargins(0, 5, 0, 0);
-
-        Iterator it = versionStrings.entrySet().iterator();
-        while (it.hasNext()) {
-
-            Map.Entry pair = (Map.Entry)it.next();
-
-            Log.d(LOG_TAG, pair.getKey() + " = " + pair.getValue());
-
-            TextView tv=new TextView(this);
-            tv.setLayoutParams(lparams);
-            tv.setText(pair.getKey() + " " + pair.getValue());
-            layout.addView(tv);
-
-            it.remove(); // avoids a ConcurrentModificationException
-        }
+//        LinearLayout layout = (LinearLayout) this.findViewById(R.id.applicationSettingLayout);
+//
+//        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
+//                ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+//        lparams.setMargins(0, 5, 0, 0);
+//
+//        Iterator it = versionStrings.entrySet().iterator();
+//        while (it.hasNext()) {
+//
+//            Map.Entry pair = (Map.Entry)it.next();
+//
+//            Log.d(LOG_TAG, pair.getKey() + " = " + pair.getValue());
+//
+//            TextView tv=new TextView(this);
+//            tv.setLayoutParams(lparams);
+//            tv.setText(pair.getKey() + " " + pair.getValue());
+//            layout.addView(tv);
+//
+//            it.remove(); // avoids a ConcurrentModificationException
+//        }
 
 
     }
@@ -148,22 +148,24 @@ public class ApplicationSettings extends AppCompatActivity {
 
     private String getGoogleSDKVersionString(){
 
-        String className = "com.google.android.gms.ads.AdView";
-        int test = GoogleApiAvailability.GOOGLE_PLAY_SERVICES_VERSION_CODE;
+//        String className = "com.google.android.gms.ads.AdView";
+//        int test = GoogleApiAvailability.GOOGLE_PLAY_SERVICES_VERSION_CODE;
+//
+//        try {
+//
+//            if (util_checkIfDependency(className)){
+//                return Integer.toString(test);
+//            }
+//
+//            return "Not loaded";
+//
+//        } catch (Exception e) {
+//            // This will catch any exception, because they are all descended from Exception
+//
+//            return "Could not retrieve";
+//        }
 
-        try {
-
-            if (util_checkIfDependency(className)){
-                return Integer.toString(test);
-            }
-
-            return "Not loaded";
-
-        } catch (Exception e) {
-            // This will catch any exception, because they are all descended from Exception
-
-            return "Could not retrieve";
-        }
+        return "nah";
     }
 
 

@@ -1,9 +1,10 @@
 package vartyr.coffeecounter;
 
 import android.content.Intent;
-import android.graphics.Color;
+
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
 
     private AerServBanner banner;               // AS Banner
     public FragmentManager fragmentManager;     // For any fragments we need to call / add
+
+
     private GlobalClass globalVariable;         // To grab VC or anything we need
     private static String LOG_TAG;              // Log tag
 
@@ -85,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         setContentView(R.layout.activity_main);
         globalVariable = (GlobalClass) getApplicationContext();     // Get an instance of the singleton class before anything else is done
 
+        fragmentManager = getSupportFragmentManager();
         fragmentManager = getSupportFragmentManager();
 
         LOG_TAG = globalVariable.LOG_TAG;                           // Save LOG_TAG since we frequently access

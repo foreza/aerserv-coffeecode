@@ -202,6 +202,7 @@ public class GlobalClass extends Application {
         AerServConfig config = new AerServConfig(this, plc)
 //                .setEventListener(interstitialListener)        // Use the interstitialListener declared above
                 .setEventListener(getInterstitialListener())                 // Test: Use the tempListener declared above
+                .
                 .setPreload(true);                             // Support preloading
 
 
