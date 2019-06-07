@@ -1,4 +1,4 @@
-package vartyr.coffeecounter;
+package vartyr.coffeecounter.recycler;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -13,9 +13,9 @@ import android.widget.Toast;
 import com.aerserv.sdk.AerServBanner;
 import com.aerserv.sdk.AerServConfig;
 
-import org.w3c.dom.Text;
-
 import java.util.Random;
+
+import vartyr.coffeecounter.R;
 
 /**
  * Provide views to RecyclerView with data from mDataSet.

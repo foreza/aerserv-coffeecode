@@ -20,8 +20,10 @@ import com.aerserv.sdk.AerServEventListener;
 import com.aerserv.sdk.AerServSdk;
 import com.aerserv.sdk.AerServTransactionInformation;
 
-import com.inmobi.ads.InMobiBanner;
 import com.inmobi.sdk.InMobiSdk;
+
+import vartyr.coffeecounter.fragments.GDPR_Fragment;
+import vartyr.coffeecounter.recycler.DessertMenuRecycler;
 
 
 //import com.amazon.device.ads.*;
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     public FragmentManager fragmentManager;     // For any fragments we need to call / add
 
 
-    private GlobalClass globalVariable;         // To grab VC or anything we need
+    private AdManager globalVariable;         // To grab VC or anything we need
     private static String LOG_TAG;              // Log tag
 
     //    private List<DTBAdResponse> responses;      // A9 AD responses
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        globalVariable = (GlobalClass) getApplicationContext();     // Get an instance of the singleton class before anything else is done
+        globalVariable = (AdManager) getApplicationContext();     // Get an instance of the singleton class before anything else is done
 
         fragmentManager = getSupportFragmentManager();
         fragmentManager = getSupportFragmentManager();
@@ -123,12 +125,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         if (!globalVariable.getHasInit()) {
             initializeSDK();
         }
-
-        // For automated testing, change the value of the globalVariable
-        if (globalVariable.sipAndSwipeMode) {
-            Intent intent = new Intent(this, SipAndSwipe.class);
-            startActivity(intent);
-        }
+        
 
         Log.d(LOG_TAG, "Reached end of onCreate for MainActivity, loading banner");
 
@@ -293,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
     // When we click 'increment coffee count, it should increment the value' and start a new activity to illustrate that, along with a back button.
     public void incrementCoffeeCount(View view) {
 
-        Intent intent = new Intent(this, CoffeeIncrementedActivity.class);
+        Intent intent = new Intent(this, PreloadInterstitialActivity.class);
         startActivityForResult(intent, 1);
 
     }
@@ -315,41 +312,26 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
                     Toast.LENGTH_LONG).show();
             globalVariable.beginPreloadBannerInBG(globalVariable.DEFAULT_300X250TEST_PLC);
         }
-        Intent intent = new Intent(this, BackGroundBanner.class);
+        Intent intent = new Intent(this, InjectedBannerActivity.class);
         startActivityForResult(intent, 2);
     }
 
     // When we click 'view settings', show the various sdk versions and (future) allow me to modify other various settings
     public void viewSettings(View view) {
-        Intent intent = new Intent(this, ApplicationSettings.class);
-        loadBanner();
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
         // startActivityForResult(intent, 4);
     }
 
 
-    // This should load a test activity which will have 2 banners with the same refresh timer to test potential adapter conflicts
+    // This should load a test  activity which will have 2 banners with the same refresh timer to test potential adapter conflicts
     public void viewAndListenToRadio(View view) {
 
-        Intent intent = new Intent(this, CoffeeRadio.class);
+        Intent intent = new Intent(this, SampleRadioActivity.class);
         startActivityForResult(intent, 5);
 
     }
-
-    // When we click 'getShocked', load a shocking view - for testing loading with application context testing for interstitials
-    public void getShocked(View view) {
-        if (globalVariable.checkInterstitialAdPreloadReady()){
-            Toast.makeText(this, (String)"Background thread has loaded a interstitial ad.",
-                    Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, (String)"Background thread has not loaded a interstitial ad.",
-                    Toast.LENGTH_LONG).show();
-            globalVariable.beginPreloadInterstitialInBG(globalVariable.DEFAULT_INTERSTITIAL_PLC);
-        }
-        Intent intent = new Intent(this, BackgroundInterstitial.class);
-        startActivityForResult(intent, 6);
-    }
-
-
+    
 
     // Update the GDPR status view
     public void modifyGDPRStatus(View view) {
@@ -384,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements GDPR_Fragment.OnF
         }
 
 
-        // If the request code is 1, the CoffeeIncrementedActivity is providing a result.
+        // If the request code is 1, the PreloadInterstitialActivity is providing a result.
         else if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 int amt = data.getIntExtra("INCREMENT_AMT", 0);

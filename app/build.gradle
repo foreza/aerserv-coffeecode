@@ -42,14 +42,14 @@ dependencies {
 //    implementation files('libs/AudienceNetwork.aar')
 
     // APS Mediation
-     // implementation files('libs/DTBAndroidSDK-7.3.jar'
+    // implementation files('libs/DTBAndroidSDK-7.3.jar'
 
     // MoPub Mediation
     implementation files('libs/mopub-sdk-4.18.0.jar')
     implementation files('libs/mopub-volley-1.1.0.jar')
 
     // ?? check
-    implementation 'com.android.support:customtabs:27.1.1'
+    //implementation 'com.android.support:customtabs:27.1.1'
 
 
 }

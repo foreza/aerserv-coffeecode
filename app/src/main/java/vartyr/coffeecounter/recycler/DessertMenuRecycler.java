@@ -1,10 +1,12 @@
-package vartyr.coffeecounter;
+package vartyr.coffeecounter.recycler;
 
-import android.app.Application;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import vartyr.coffeecounter.AdManager;
+import vartyr.coffeecounter.R;
 
 /*
 
@@ -15,14 +17,14 @@ There are often some implementations by publishers where they will include banne
 
 public class DessertMenuRecycler extends AppCompatActivity {
 
-    private GlobalClass globalVariable;         // To grab VC or anything we need
+    private AdManager globalVariable;         // To grab VC or anything we need
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dessert_menu_recycler);
 
-        globalVariable = (GlobalClass) getApplicationContext();
+        globalVariable = (AdManager) getApplicationContext();
         initializeRecyclerView();                                   // Init the recycler view
     }
 

@@ -3,28 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="vartyr.coffeecounter">
 
+    <!-- Required Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- Optional.  Excluding these can negatively affect fill rate. -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Optional Permissions. Excluding these can negatively affect fill rate. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- Optional.  If excluded, ads will not be cached. -->
+    <!-- Optional Permissions. If excluded, ads will not be cached. -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <!-- For InMobi rich media ads -->
-    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <application
-        android:name=".GlobalClass"
-        android:allowBackup="true"
+        android:name=".AdManager"
+        android:allowBackup="false"
         android:icon="@mipmap/coffee_launcher"
         android:installLocation="preferExternal"
-        android:label="@string/app_name"
-        android:minSdkVersion="15"
+        android:minSdkVersion="16"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/coffee_launcher_round"
         android:supportsRtl="true"
@@ -33,21 +29,15 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".CoffeeIncrementedActivity"
+            android:name=".PreloadInterstitialActivity"
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".MainActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
         </activity>
-
 
         <!-- AdColony Activities -->
         <!-- <activity -->
@@ -69,15 +59,6 @@
         <!-- android:configChanges="orientation|screenSize" /> -->
 
 
-        <!-- Chartboost Activities -->
-        <!-- <activity -->
-        <!-- android:name="com.chartboost.sdk.CBImpressionActivity" -->
-        <!-- android:excludeFromRecents="true" -->
-        <!-- android:hardwareAccelerated="true" -->
-        <!-- android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" -->
-        <!-- android:configChanges="keyboardHidden|orientation|screenSize" /> -->
-
-
         <!-- MoPub Activities -->
         <activity
             android:name="com.mopub.mobileads.MoPubActivity"
@@ -95,15 +76,6 @@
             android:name="com.mopub.mobileads.RewardedMraidActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
 
-        <!-- Telaria Activities -->
-        <!-- <activity -->
-        <!-- android:name="com.tremorvideo.sdk.android.videoad.Playvideo" -->
-        <!-- android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize" -->
-        <!-- android:hardwareAccelerated="false" -->
-        <!-- android:exported="false"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="com.tremorvideo.sdk.android.videoad.Playvideo" /> -->
-
 
         <!-- Vungle Activities -->
         <!-- <activity -->
@@ -119,28 +91,22 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".SipAndSwipe" />
-        <activity android:name=".BackGroundBanner">
+        <activity android:name=".InjectedBannerActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".DessertMenuRecycler">
+        <activity android:name=".recycler.DessertMenuRecycler">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".ApplicationSettings">
+        <activity android:name=".SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".CoffeeRadio">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity android:name=".BackgroundInterstitial">
+        <activity android:name=".SampleRadioActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

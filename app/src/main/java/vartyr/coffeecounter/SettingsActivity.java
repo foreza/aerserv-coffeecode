@@ -1,16 +1,8 @@
 package vartyr.coffeecounter;
 
-import android.graphics.Color;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Layout;
-import android.util.Log;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.aerserv.sdk.AerServSdk;
 //import com.aerserv.sdk.utils.ReflectionUtils;
 
 //ADMOB
@@ -26,8 +18,6 @@ import com.aerserv.sdk.AerServSdk;
 // MOPUB
 import com.inmobi.sdk.InMobiSdk;
 import com.mopub.common.MoPub;
-import com.mopub.mobileads.MoPubErrorCode;
-import com.mopub.mobileads.MoPubView;
 
 // FACEBOOK
 //import com.facebook.ads.AudienceNetworkActivity;
@@ -36,14 +26,13 @@ import com.mopub.mobileads.MoPubView;
 
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 //import static com.google.android.gms.common.GoogleApiAvailability.GOOGLE_PLAY_SERVICES_VERSION_CODE;
 
-public class ApplicationSettings extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
-    private GlobalClass globalVariable;         // To grab VC or anything we need
+    private AdManager globalVariable;         // To grab VC or anything we need
     private static String LOG_TAG;              // Log tag
 
     private Map<String,String> versionStrings;  // Store our version strings here.
@@ -53,7 +42,7 @@ public class ApplicationSettings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_application_settings);
-        globalVariable = (GlobalClass) getApplicationContext();
+        globalVariable = (AdManager) getApplicationContext();
 
         initializeTextViews();
         generateStringMapDisplay();

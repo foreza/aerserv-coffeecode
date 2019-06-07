@@ -1,6 +1,5 @@
 package vartyr.coffeecounter;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,24 +18,23 @@ import com.aerserv.sdk.AerServVirtualCurrency;
 
 //import com.amazon.device.ads.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class CoffeeIncrementedActivity extends AppCompatActivity {
+public class PreloadInterstitialActivity extends AppCompatActivity {
 
     private AerServInterstitial interstitial;   // AS Interstitial
 //    private List<DTBAdResponse> responses;      // A9 AD responses
 
     private int INCREMENT_AMT = 0;
     private static String LOG_TAG;
-    private GlobalClass globalVariable;
+    private AdManager globalVariable;
 
 
     // Set up a listener to listen to incoming events.
     private AerServEventListener listener = new AerServEventListener(){
         @Override
         public void onAerServEvent(final AerServEvent event, final List<Object> args){
-            CoffeeIncrementedActivity.this.runOnUiThread(new Runnable() {
+            PreloadInterstitialActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     String msg = "[coffeeIncrement]";
@@ -44,7 +42,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
                         case PRELOAD_READY:
                             globalVariable.CoffeeIncrementedInterstitialPreloaded = true;
                             setLoadedButtonVisible();
-                            Log.d(LOG_TAG, "CoffeeIncrementedActivity - Listener heard preload ready for interstitial");
+                            Log.d(LOG_TAG, "PreloadInterstitialActivity - Listener heard preload ready for interstitial");
                             break;
                         case VC_REWARDED:
                             AerServVirtualCurrency vc = (AerServVirtualCurrency) args.get(0);
@@ -52,7 +50,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
                             INCREMENT_AMT = vc.getAmount().intValueExact();
                             setMessageOfCounter(INCREMENT_AMT);
                             msg = "You've obtained beans (" + INCREMENT_AMT+ ")";
-                            Toast.makeText(CoffeeIncrementedActivity.this, msg, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PreloadInterstitialActivity.this, msg, Toast.LENGTH_SHORT).show();
                             break;
                     }
                 }
@@ -71,15 +69,15 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
 
         // Save an instance of our singleton
-        globalVariable = (GlobalClass) getApplicationContext();
+        globalVariable = (AdManager) getApplicationContext();
         LOG_TAG = globalVariable.LOG_TAG;
 
         // Check to see if an interstitial is loaded already
         if (globalVariable.CoffeeIncrementedInterstitialPreloaded) {
-            Log.d(LOG_TAG, "CoffeeIncrementedActivity - Interstitial is already loaded do not load another");
+            Log.d(LOG_TAG, "PreloadInterstitialActivity - Interstitial is already loaded do not load another");
             setLoadedButtonVisible();
         } else {
-            Log.d(LOG_TAG, "CoffeeIncrementedActivity - Interstitial is not loaded");
+            Log.d(LOG_TAG, "PreloadInterstitialActivity - Interstitial is not loaded");
             setLoadedButtonInvisible();
             // Begin routine to load Interstitial.
             if (globalVariable.getSupportA9()) {
@@ -113,7 +111,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 
     public void preloadInterstitial() {
 
-        Log.d(LOG_TAG, "CoffeeIncrementedActivity - preloadInterstitial called");
+        Log.d(LOG_TAG, "PreloadInterstitialActivity - preloadInterstitial called");
 
 
         final AerServConfig config = new AerServConfig(this, globalVariable.DEFAULT_INTERSTITIAL_PLC)
@@ -158,7 +156,7 @@ public class CoffeeIncrementedActivity extends AppCompatActivity {
 //                        + " interstitial ad from Amazon");
 //
 //
-//                final AerServConfig config = new AerServConfig(CoffeeIncrementedActivity.this, globalVariable.DEFAULT_INTERSTITIAL_PLC)
+//                final AerServConfig config = new AerServConfig(PreloadInterstitialActivity.this, globalVariable.DEFAULT_INTERSTITIAL_PLC)
 //                        .setA9AdResponses(responses)
 //                        .setEventListener(listener)
 //                        .setPreload(true)

@@ -1,4 +1,4 @@
-package vartyr.coffeecounter;
+package vartyr.coffeecounter.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.aerserv.sdk.AerServSdk;
+
+import vartyr.coffeecounter.R;
 
 
 public class GDPR_Fragment extends Fragment {

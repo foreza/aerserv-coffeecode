@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GlobalClass extends Application {
+public class AdManager extends Application {
 
 //    public final String LOG_TAG = "CoffeeCounter";
 //    public final String APP_ID = "1011139";
@@ -202,7 +202,6 @@ public class GlobalClass extends Application {
         AerServConfig config = new AerServConfig(this, plc)
 //                .setEventListener(interstitialListener)        // Use the interstitialListener declared above
                 .setEventListener(getInterstitialListener())                 // Test: Use the tempListener declared above
-                .
                 .setPreload(true);                             // Support preloading
 
 

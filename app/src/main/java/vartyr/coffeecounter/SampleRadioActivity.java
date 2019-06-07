@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class CoffeeRadio extends AppCompatActivity {
+public class SampleRadioActivity extends AppCompatActivity {
 
     private AerServBanner bannerMREC;               // AS Banner
     private AerServBanner bannerBottom;               // AS Banner
-    private GlobalClass globalVariable;         // To grab VC or anything we need
+    private AdManager globalVariable;         // To grab VC or anything we need
     private static String LOG_TAG;              // Log tag
     private Boolean isActivityCreated = false;          // to know whether we've just created the activity
     private Boolean isOnScreen;                 // to let us control the delay
@@ -30,7 +30,7 @@ public class CoffeeRadio extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee_radio);
 
-        globalVariable = (GlobalClass) getApplicationContext();     // Get an instance of the singleton class before anything else is done
+        globalVariable = (AdManager) getApplicationContext();     // Get an instance of the singleton class before anything else is done
         LOG_TAG = globalVariable.LOG_TAG;                           // Save LOG_TAG since we frequently access
 
         loadMRECBanner();
@@ -45,7 +45,7 @@ public class CoffeeRadio extends AppCompatActivity {
     protected AerServEventListener listenerMREC = new AerServEventListener() {
         @Override
         public void onAerServEvent(final AerServEvent event, final List<Object> args) {
-            CoffeeRadio.this.runOnUiThread(new Runnable() {
+            SampleRadioActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     AerServTransactionInformation ti;
@@ -83,7 +83,7 @@ public class CoffeeRadio extends AppCompatActivity {
     protected AerServEventListener listenerBanner = new AerServEventListener() {
         @Override
         public void onAerServEvent(final AerServEvent event, final List<Object> args) {
-            CoffeeRadio.this.runOnUiThread(new Runnable() {
+            SampleRadioActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     AerServTransactionInformation ti;

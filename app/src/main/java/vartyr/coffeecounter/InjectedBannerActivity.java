@@ -17,9 +17,9 @@ This method is typica
 
  */
 
-public class BackGroundBanner extends AppCompatActivity {
+public class InjectedBannerActivity extends AppCompatActivity {
 
-    private GlobalClass globalVariable;                                                 // We'll be accessing the background banner here
+    private AdManager globalVariable;                                                 // We'll be accessing the background banner here
     private static String LOG_TAG;                                                      // Log tag
 
 
@@ -28,7 +28,7 @@ public class BackGroundBanner extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_back_ground_banner);
 
-        globalVariable = (GlobalClass) getApplicationContext();                         // Get an instance of the singleton class before anything else is done
+        globalVariable = (AdManager) getApplicationContext();                         // Get an instance of the singleton class before anything else is done
         LOG_TAG = globalVariable.LOG_TAG;
         attemptCreateBanner();                              // Show the ad
     }
