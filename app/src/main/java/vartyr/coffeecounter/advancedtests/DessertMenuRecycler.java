@@ -1,11 +1,11 @@
-package vartyr.coffeecounter.recycler;
+package vartyr.coffeecounter.advancedtests;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import vartyr.coffeecounter.AdManager;
+import vartyr.coffeecounter.managers.AdManager;
 import vartyr.coffeecounter.R;
 
 /*
@@ -24,7 +24,7 @@ public class DessertMenuRecycler extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dessert_menu_recycler);
 
-        globalVariable = (AdManager) getApplicationContext();
+        // globalVariable = (AdManager) getApplicationContext();
         initializeRecyclerView();                                   // Init the recycler view
     }
 

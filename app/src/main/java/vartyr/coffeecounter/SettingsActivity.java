@@ -17,7 +17,7 @@ import android.os.Bundle;
 
 // MOPUB
 import com.inmobi.sdk.InMobiSdk;
-import com.mopub.common.MoPub;
+// import com.mopub.common.MoPub;
 
 // FACEBOOK
 //import com.facebook.ads.AudienceNetworkActivity;
@@ -27,6 +27,8 @@ import com.mopub.common.MoPub;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import vartyr.coffeecounter.managers.AdManager;
 
 //import static com.google.android.gms.common.GoogleApiAvailability.GOOGLE_PLAY_SERVICES_VERSION_CODE;
 
@@ -42,7 +44,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_application_settings);
-        globalVariable = (AdManager) getApplicationContext();
+        globalVariable = AdManager.getInstance();
 
         initializeTextViews();
         generateStringMapDisplay();
@@ -168,7 +170,8 @@ public class SettingsActivity extends AppCompatActivity {
             if (util_checkIfDependency(className)){
 
                 // Decorate / format the string further if needed
-                return MoPub.SDK_VERSION;
+                // return MoPub.SDK_VERSION;
+                return "";
             }
 
             return "Not loaded";

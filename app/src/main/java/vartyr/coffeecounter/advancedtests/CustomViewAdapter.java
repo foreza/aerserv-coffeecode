@@ -1,4 +1,4 @@
-package vartyr.coffeecounter.recycler;
+package vartyr.coffeecounter.advancedtests;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;

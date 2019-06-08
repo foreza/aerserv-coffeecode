@@ -1,6 +1,5 @@
-package vartyr.coffeecounter;
+package vartyr.coffeecounter.managers;
 
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -11,21 +10,30 @@ import com.aerserv.sdk.AerServConfig;
 import com.aerserv.sdk.AerServEvent;
 import com.aerserv.sdk.AerServEventListener;
 import com.aerserv.sdk.AerServInterstitial;
+import com.aerserv.sdk.AerServSdk;
 import com.aerserv.sdk.AerServTransactionInformation;
+import com.inmobi.sdk.InMobiSdk;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AdManager extends Application {
+public class AdManager {
+
+    private static final AdManager instance = new AdManager();
+
+    public static AdManager getInstance() {
+        return instance;
+    }
+
+    private AdManager() {
+    }
+
+
+    public Context AdManagerContext;
+
 
 //    public final String LOG_TAG = "CoffeeCounter";
 //    public final String APP_ID = "1011139";
@@ -49,26 +57,9 @@ public class AdManager extends Application {
 //    public String DEFAULT_INTERSTITIAL_PLC = "1062630";     // CAFFEINE TRIGGER
 //    public String DEFAULT_300X250TEST_PLC = "1062630";      // CoffeeMREC
 
-    /*
-
-    The Collection:
-
-    AERSERV QA: 380000
-    * 380000 - 320X50
-    * 380003 - Interstitial / VAST
-    * 380004 - Interstitial / Rewarded (VAST)
-
-
-    ZenoRadio FreshFM Nigeria: 1011139
-    * 1042117 - 320x50, FreshFM Nigeria
-    * 1042114 - 320x250, FreshFM Nigeria
-    * 1042115 - 320x480 (Int), FreshFM Nigeria
-     */
 
     public boolean CoffeeIncrementedInterstitialPreloaded = false;
-    public boolean sipAndSwipeMode = false;                                                 // Toggle this for sip and swipe mode to test PLC EASILY
 
-    private int CoffeeCount = 0;
     private boolean hasInit = false;
     private boolean hasGDPRConsent = false;
     private boolean supportA9 = false;
@@ -138,97 +129,39 @@ public class AdManager extends Application {
     };
 
 
-     AerServEventListener interstitialListener = new AerServEventListener() {
-        @Override
-        public void onAerServEvent(final AerServEvent event, final List<Object> args) {
+    public void initializeAdSDKWithContext(Context ctx){
 
-            // Make a new runnable since we're using the application context
-            Runnable interstitialRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    AerServTransactionInformation ti;
-                    switch (event) {
-                        case PRELOAD_READY:
-                            Log.d(LOG_TAG, "interstitialListener - Preload Ready for Interstitial!");
-                            interstitialPreloadReady = true;
-                            break;
-                        case AD_FAILED:
-                            if (args.size() > 0) {
-                                Log.d(LOG_TAG, "interstitialListener - AD FAILED / not loaded. Error code: " + AerServEventListener.AD_FAILED_CODE + ", reason=" + AerServEventListener.AD_FAILED_REASON);
-                            } else {
-                                Log.d(LOG_TAG, "interstitialListener - AD FAILED, no other info");
-                            }
-                            break;
-                        case LOAD_TRANSACTION:
-                            if (args.size() >= 1) {
-                                Log.d(LOG_TAG, "interstitialListener - Load Transaction Information PLC has:" + args.get(0));
-                            }
-                            else {
-                                Log.d(LOG_TAG, "interstitialListener - Load Transaction Information PLC has no information");
-                            }
-                            break;
-                        case AD_IMPRESSION:
-                            Log.d(LOG_TAG, "interstitialListener - AD IMPRESSION");
-                            break;
-                        case AD_LOADED:
-                            Log.d(LOG_TAG, "interstitialListener - AD loaded");
-                            break;
-                    }
-                }
-            };
+        AerServSdk.init(ctx, APP_ID);
+        AdManagerContext = ctx;
+        hasInit = true;
 
-            // Run the .. runnable.
-            interstitialRunnable.run();
-        }
-    };
+        Log.d(LOG_TAG, "Running init with site app ID: " + AerServSdk.getSiteId());
+        Log.d(LOG_TAG, "Currently running SDK version: " + InMobiSdk.getVersion());
+
+    }
+
+    public Context getAdManagerContext(){
+        return AdManagerContext;
+    }
 
 
     // Preload the banner ad using the backgroundPLC
     public void beginPreloadBannerInBG(String plc){
 
-        final AerServConfig config = new AerServConfig(this, plc)
+        final AerServConfig config = new AerServConfig(getAdManagerContext(), plc)
                 .setEventListener(bannerListener)        // Use the bannerListener declared above
                 .setRefreshInterval(0)              // Do not allow refresh
                 .setPreload(true);                  // Support preloading
 
-        banner = new AerServBanner(this);
+        banner = new AerServBanner(getAdManagerContext());
         banner.configure(config);
     }
 
-
-    // Preload the banner ad using the backgroundPLC
-    public void beginPreloadInterstitialInBG(String plc){
-
-        AerServConfig config = new AerServConfig(this, plc)
-//                .setEventListener(interstitialListener)        // Use the interstitialListener declared above
-                .setEventListener(getInterstitialListener())                 // Test: Use the tempListener declared above
-                .setPreload(true);                             // Support preloading
-
-
-        tempListener = interstitialListener;                // set the tempListener to the interstitial listener
-        interstitial = new AerServInterstitial(config);        // Provide the config.
-    }
 
 
     // Provide the banner for injection into the view
     public View getBackgroundBannerToInject() {
         return banner;
-    }
-
-    // Provide the interstitial in case we somehow need it.
-    public Object getBackgroundInterstitial(){
-        return interstitial;
-    }
-
-    public AerServEventListener getInterstitialListener(){
-        return tempListener;
-    }
-
-    public void setInterstitialListener(AerServEventListener listener){
-        Log.d(LOG_TAG, "setInterstitialListener invoked");
-        tempListener = null;
-        tempListener = listener;
-
     }
 
 
@@ -246,44 +179,21 @@ public class AdManager extends Application {
 
     }
 
-    public void attemptShowPreloadedInterstitialAdFromBG(){
-
-        if (interstitialPreloadReady){
-            interstitial.show();
-            interstitialPreloadReady = false;
-            Log.d(LOG_TAG, "PreloadReady is true, showing interstitial");
-        }
-        else {
-            Log.d(LOG_TAG, "PreloadReady is false, NOT showing interstitial");
-        }
-
-    }
-
     public boolean checkBannerAdPreloadReady(){
         return bannerPreloadReady;
     }
-
-    public boolean checkInterstitialAdPreloadReady(){
-        return interstitialPreloadReady;
-    }
-
-
 
 
 
     // GET METHODS to access private variables
 
 
-    public int getCoffeeCount(){
-        return CoffeeCount;
-    }
     public boolean getHasInit(){
         return hasInit;
     }
     public boolean getGDPRConsent(){
         return hasGDPRConsent;
     }
-    public boolean getSupportA9() {return supportA9; }
     public Map<String, String> getPubKeys(){
         return pubKeys;
     }
@@ -294,89 +204,16 @@ public class AdManager extends Application {
     // MUTATOR METHODS to access private variables
 
 
-    public void setCoffeeCount(int amt) {CoffeeCount = amt;}
     public void setInit(){
         hasInit = true;
     }
     public void setGDPRConsent(boolean v) {
         hasGDPRConsent = v;
     }
-    public void setSupportA9(boolean v) {supportA9 = v; }
-    public void setPubKeys() {
-        pubKeys.put("type",  "expresso");
-        pubKeys.put("content_rating",  "5 stars");
-    }
-
-    public void saveCoffeeCount() {
-        writeSaveFile(String.valueOf(CoffeeCount));
-    }
-    public void incrementCOFFEE_COUNT(int amt){
-        CoffeeCount += amt;
-    }
 
 
 
 
-    // FILE I/O METHODS
-
-    public void writeSaveFile (String data) {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("db.txt", Context.MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
-
-    public void createSaveFile(){
-        File directory = this.getFilesDir();
-        File file = new File(directory, "db.txt");
-    }
-
-    public void initSaveFile(){
-        // If the save file is empty
-        if (readSaveFile().equals("")) {
-            Log.d(LOG_TAG, "File not found, making new one");
-            createSaveFile();
-            writeSaveFile("0");     // For now, we'll just store the counter there and parse out the string / convert it
-        } else {
-            String output = readSaveFile();
-            Log.d(LOG_TAG, "Contained in file: " + output);
-            CoffeeCount = Integer.parseInt(output);
-        }
-    }
-
-    public String readSaveFile() {
-
-        String ret = "";
-
-        try {
-            InputStream inputStream = this.openFileInput("db.txt");
-
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString;
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append(receiveString);
-                }
-
-                inputStream.close();
-                ret = stringBuilder.toString();
-            }
-        }
-        catch (FileNotFoundException e) {
-            Log.e("Read amt activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("Read ant activity", "Can not read file: " + e.toString());
-        }
-
-        return ret;
-    }
 
 
 

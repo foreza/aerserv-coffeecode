@@ -1,4 +1,4 @@
-package vartyr.coffeecounter;
+package vartyr.coffeecounter.basictests;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -10,11 +10,11 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import vartyr.coffeecounter.R;
+import vartyr.coffeecounter.managers.AdManager;
+
 /*
-
 This activity will be used to demonstrate how we can inject a banner into the view from the application context.
-This method is typica
-
  */
 
 public class InjectedBannerActivity extends AppCompatActivity {
@@ -27,14 +27,12 @@ public class InjectedBannerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_back_ground_banner);
-
-        globalVariable = (AdManager) getApplicationContext();                         // Get an instance of the singleton class before anything else is done
-        LOG_TAG = globalVariable.LOG_TAG;
-        attemptCreateBanner();                              // Show the ad
+        globalVariable = AdManager.getInstance();
+        attemptInjectBanner();
     }
 
 
-    private void attemptCreateBanner(){
+    private void attemptInjectBanner(){
 
         if (globalVariable.checkBannerAdPreloadReady()){
 
@@ -49,6 +47,7 @@ public class InjectedBannerActivity extends AppCompatActivity {
 
             parent.addView(globalVariable.getBackgroundBannerToInject(), lp);                              // Inject our banner into the view
             globalVariable.attemptShowPreloadedBannerAdFromBG();
+
         } else {
 
             // Do something here.

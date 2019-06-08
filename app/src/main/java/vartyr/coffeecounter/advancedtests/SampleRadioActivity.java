@@ -1,4 +1,4 @@
-package vartyr.coffeecounter;
+package vartyr.coffeecounter.advancedtests;
 
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import vartyr.coffeecounter.R;
+import vartyr.coffeecounter.managers.AdManager;
+
 public class SampleRadioActivity extends AppCompatActivity {
 
     private AerServBanner bannerMREC;               // AS Banner
@@ -30,7 +33,7 @@ public class SampleRadioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee_radio);
 
-        globalVariable = (AdManager) getApplicationContext();     // Get an instance of the singleton class before anything else is done
+        globalVariable = AdManager.getInstance();     // Get an instance of the singleton class before anything else is done
         LOG_TAG = globalVariable.LOG_TAG;                           // Save LOG_TAG since we frequently access
 
         loadMRECBanner();

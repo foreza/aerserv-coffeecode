@@ -1,4 +1,4 @@
-package vartyr.coffeecounter;
+package vartyr.coffeecounter.basictests;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -14,20 +14,19 @@ import com.aerserv.sdk.AerServEvent;
 import com.aerserv.sdk.AerServEventListener;
 import com.aerserv.sdk.AerServInterstitial;
 import com.aerserv.sdk.AerServVirtualCurrency;
-
-
-//import com.amazon.device.ads.*;
-
 import java.util.List;
+import vartyr.coffeecounter.R;
+import vartyr.coffeecounter.managers.AdManager;
+import vartyr.coffeecounter.managers.StateManager;
 
 public class PreloadInterstitialActivity extends AppCompatActivity {
 
     private AerServInterstitial interstitial;   // AS Interstitial
-//    private List<DTBAdResponse> responses;      // A9 AD responses
 
     private int INCREMENT_AMT = 0;
     private static String LOG_TAG;
     private AdManager globalVariable;
+    private StateManager stateManager;
 
 
     // Set up a listener to listen to incoming events.
@@ -69,7 +68,9 @@ public class PreloadInterstitialActivity extends AppCompatActivity {
 
 
         // Save an instance of our singleton
-        globalVariable = (AdManager) getApplicationContext();
+        globalVariable = AdManager.getInstance();
+        stateManager = StateManager.getInstance();
+
         LOG_TAG = globalVariable.LOG_TAG;
 
         // Check to see if an interstitial is loaded already
@@ -79,34 +80,10 @@ public class PreloadInterstitialActivity extends AppCompatActivity {
         } else {
             Log.d(LOG_TAG, "PreloadInterstitialActivity - Interstitial is not loaded");
             setLoadedButtonInvisible();
-            // Begin routine to load Interstitial.
-            if (globalVariable.getSupportA9()) {
-                preloadA9Interstitial();
-            } else {
-                preloadInterstitial();
+             preloadInterstitial();
             }
-        }
-
-
-
 
     }
-
-
-    // Stop the banner from doing anything
-    @Override
-    protected void onPause(){
-        super.onPause();
-
-        if (interstitial != null){
-            interstitial.kill();
-        }
-        interstitial = null;
-        globalVariable.CoffeeIncrementedInterstitialPreloaded = false;
-        setLoadedButtonInvisible();
-
-    }
-
 
 
     public void preloadInterstitial() {
@@ -131,43 +108,6 @@ public class PreloadInterstitialActivity extends AppCompatActivity {
     public void setLoadedButtonInvisible() {
         findViewById(R.id.button_coffee_showInterstitial).setVisibility(View.INVISIBLE);
     }
-
-
-
-    public void preloadA9Interstitial() {
-//
-//        final DTBAdRequest loader = new DTBAdRequest();
-//        loader.setSizes(new DTBAdSize.DTBInterstitialAdSize(globalVariable.A9_SLOT_INTERSTITIAL));
-//        loader.loadAd(new DTBAdCallback() {
-//            @Override
-//
-//            // If A9 fails to fill, call preloadInterstitial
-//            public void onFailure(AdError adError) {
-//                Log.e(LOG_TAG, "A9 - Failed to get interstitial ad from Amazon");
-//                preloadInterstitial();
-//            }
-//
-//            @Override
-//            public void onSuccess(DTBAdResponse dtbAdResponse) {
-//                responses = new ArrayList<DTBAdResponse>();
-//                responses.add(dtbAdResponse);
-//
-//                Log.d(LOG_TAG, "A9 - Successfully got " + dtbAdResponse.getDTBAds().size()
-//                        + " interstitial ad from Amazon");
-//
-//
-//                final AerServConfig config = new AerServConfig(PreloadInterstitialActivity.this, globalVariable.DEFAULT_INTERSTITIAL_PLC)
-//                        .setA9AdResponses(responses)
-//                        .setEventListener(listener)
-//                        .setPreload(true)
-//                        .setPubKeys(globalVariable.getPubKeys());
-//                interstitial = new AerServInterstitial(config);
-//
-//            }
-//        });
-
-    }
-
 
 
     // Show the interstitial only if the flag is set to true
@@ -234,7 +174,7 @@ public class PreloadInterstitialActivity extends AppCompatActivity {
         super.onDestroy();
 
         // Save the current coffee count
-        globalVariable.saveCoffeeCount();
+        stateManager.saveCoffeeCount();
 
     }
 
