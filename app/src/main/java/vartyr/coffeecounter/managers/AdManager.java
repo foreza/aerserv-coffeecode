@@ -9,7 +9,6 @@ import com.aerserv.sdk.AerServBanner;
 import com.aerserv.sdk.AerServConfig;
 import com.aerserv.sdk.AerServEvent;
 import com.aerserv.sdk.AerServEventListener;
-import com.aerserv.sdk.AerServInterstitial;
 import com.aerserv.sdk.AerServSdk;
 import com.aerserv.sdk.AerServTransactionInformation;
 import com.inmobi.sdk.InMobiSdk;
@@ -32,23 +31,15 @@ public class AdManager {
     }
 
 
-    public Context AdManagerContext;
-
-
 //    public final String LOG_TAG = "CoffeeCounter";
 //    public final String APP_ID = "1011139";
 //    public final String DEFAULT_AD_PLC = "1042117";
 //    public String DEFAULT_INTERSTITIAL_PLC = "1042115";
 //    public String DEFAULT_300X250TEST_PLC = "1042114";
-    public final String A9_APP_KEY = "a9_onboarding_app_id";
-    public final String A9_SLOT_320x50 = "5ab6a4ae-4aa5-43f4-9da4-e30755f2b295";             // Price point(amznslots): o320x50p1
-    public final String A9_SLOT_300x250 = "54fb2d08-c222-40b1-8bbe-4879322dc04b";            // Price point(amznslots): o300x250p1
-    public final String A9_SLOT_INTERSTITIAL = "4e918ac0-5c68-4fe1-8d26-4e76e8f74831";       // ointerstitialp1
-
 
     public final String LOG_TAG = "CoffeeCounter";
-    public final String APP_ID = "1010277";
-    public final String DEFAULT_AD_PLC = "1042117";         // CoffeeBanner
+    public final String APP_ID = "380000";
+    public final String DEFAULT_AD_PLC = "380000";         // CoffeeBanner
     public String DEFAULT_INTERSTITIAL_PLC = "1048445";     // CAFFEINE TRIGGER
     public String DEFAULT_300X250TEST_PLC = "1063612";      // CoffeeMREC
 
@@ -62,17 +53,11 @@ public class AdManager {
 
     private boolean hasInit = false;
     private boolean hasGDPRConsent = false;
-    private boolean supportA9 = false;
     private static Map<String, String> pubKeys = new HashMap<String, String>();
 
 
     private AerServBanner banner;                              // AS Banner, which we will load in the background
     private Boolean bannerPreloadReady = false;
-
-    private AerServInterstitial interstitial;
-    private Boolean interstitialPreloadReady = false;
-
-    private AerServEventListener tempListener;
 
 
     // Public Test params / datasets
@@ -132,7 +117,6 @@ public class AdManager {
     public void initializeAdSDKWithContext(Context ctx){
 
         AerServSdk.init(ctx, APP_ID);
-        AdManagerContext = ctx;
         hasInit = true;
 
         Log.d(LOG_TAG, "Running init with site app ID: " + AerServSdk.getSiteId());
@@ -140,20 +124,16 @@ public class AdManager {
 
     }
 
-    public Context getAdManagerContext(){
-        return AdManagerContext;
-    }
-
 
     // Preload the banner ad using the backgroundPLC
-    public void beginPreloadBannerInBG(String plc){
+    public void beginPreloadBannerInBG(Context ctx, String plc){
 
-        final AerServConfig config = new AerServConfig(getAdManagerContext(), plc)
+        final AerServConfig config = new AerServConfig(ctx, plc)
                 .setEventListener(bannerListener)        // Use the bannerListener declared above
                 .setRefreshInterval(0)              // Do not allow refresh
                 .setPreload(true);                  // Support preloading
 
-        banner = new AerServBanner(getAdManagerContext());
+        banner = new AerServBanner(ctx);
         banner.configure(config);
     }
 
@@ -197,23 +177,6 @@ public class AdManager {
     public Map<String, String> getPubKeys(){
         return pubKeys;
     }
-
-
-
-
-    // MUTATOR METHODS to access private variables
-
-
-    public void setInit(){
-        hasInit = true;
-    }
-    public void setGDPRConsent(boolean v) {
-        hasGDPRConsent = v;
-    }
-
-
-
-
 
 
 

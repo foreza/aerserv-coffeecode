@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity{
             adManager.initializeAdSDKWithContext(getApplicationContext());
         }
 
-//        stateManager.setStateManagerContext(getApplicationContext());
+
         stateManager.initSaveFile(this);                              // Will create a save file if not yet created.
 
         // Load the UI
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity{
         } else {
             Toast.makeText(this, (String)"Background thread has not loaded a banner ad. Will begin preloading now.",
                     Toast.LENGTH_LONG).show();
-            adManager.beginPreloadBannerInBG(adManager.DEFAULT_300X250TEST_PLC);
+            adManager.beginPreloadBannerInBG(getApplicationContext(), adManager.DEFAULT_AD_PLC);
         }
         Intent intent = new Intent(this, InjectedBannerActivity.class);
         startActivity(intent);
