@@ -22,11 +22,8 @@
     <string name="sip_welcome">Welcome to CoffeeCounter!</string>
     <string name="begin_drink">Begin Caffeination Sequence</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="element_text">Coffee</string>
-
-    <!--GDPR Specific, credits to https://github.com/MFlisar/GDPRDialog -->
 
     <string name="gdpr_dialog_title">Hold on, partner...</string>
     <string name="gdpr_dialog_text1_part1">We care about your privacy and data security.</string>

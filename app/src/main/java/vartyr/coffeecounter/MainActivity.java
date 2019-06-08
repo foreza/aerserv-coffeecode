@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity{
             adManager.initializeAdSDKWithContext(getApplicationContext());
         }
 
-        stateManager.setStateManagerContext(getApplicationContext());
-        stateManager.initSaveFile();                              // Will create a save file if not yet created.
+//        stateManager.setStateManagerContext(getApplicationContext());
+        stateManager.initSaveFile(this);                              // Will create a save file if not yet created.
 
         // Load the UI
         initializeUI();
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onDestroy() {
 
         Log.d(stateManager.LOG_TAG, "MAIN ACTIVITY CLEANUP");
-        stateManager.saveCoffeeCount();
+        stateManager.saveCoffeeCount(this);
         super.onDestroy();
     }
 

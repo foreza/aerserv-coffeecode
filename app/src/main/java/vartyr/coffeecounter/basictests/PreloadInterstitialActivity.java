@@ -174,7 +174,7 @@ public class PreloadInterstitialActivity extends AppCompatActivity {
         super.onDestroy();
 
         // Save the current coffee count
-        stateManager.saveCoffeeCount();
+        stateManager.saveCoffeeCount(this);
 
     }
 
